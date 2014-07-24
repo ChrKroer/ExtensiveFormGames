@@ -36,7 +36,7 @@ public class Game {
 		private boolean publicSignal;
 		private int playerReceivingSignal;
 		private int informationSet;
-		private int signalGroupPlayer1;
+		private int signalGroupPlayer1; // Signal groups not yet implemented
 		private int signalGroupPlayer2;
 		private Action[] actions;
 		private int value;
@@ -69,6 +69,9 @@ public class Game {
 		}
 		public int getValue() {
 			return value;
+		}
+		public boolean isLeaf() {
+			return player == -2;
 		}
 	}
 	
@@ -107,6 +110,41 @@ public class Game {
 		this();
 		createGameFromFile(filename);
 	}
+	
+	public void createGameFromFileZerosumPackageFormat(String filename) {
+		//BufferedReader in = null;
+		CSVReader in = null;
+		try {
+			in= new CSVReader(new FileReader(filename), ' ', '\'');
+			//in = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println("ExtensiveFormGame::CreateGameFromFile: File not found");
+			System.exit(0);
+		}
+		
+		String[] splitLine;
+		try {
+			while ((splitLine = in.readNext()) != null) {
+				if (splitLine[0].equals("#")) {
+					continue;
+				} else if (splitLine[0].charAt(0) == '\'') {
+					readGameInfoLine(splitLine);
+				} else {
+					if (splitLine.length == 3) {
+						CreateLeafNode(splitLine);
+					} else if (Integer.parseInt(splitLine[0]) < numChanceHistories) {
+						CreateNatureNode(splitLine);
+					} else {
+						CreatePlayerNode(splitLine);
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("ExtensiveFormGame::CreateGameFromFile: Read exception");
+		}
+		
+	}
+	
 	
 	public void createGameFromFile(String filename) {
 		//BufferedReader in = null;
