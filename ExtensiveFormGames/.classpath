@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="/Users/ckroer/Applications/IBM/ILOG/CPLEX_Studio124/cplex/lib/cplex.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/trove-3.1a1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

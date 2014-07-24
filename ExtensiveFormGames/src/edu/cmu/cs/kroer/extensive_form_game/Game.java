@@ -10,6 +10,8 @@ import gnu.trove.map.*;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
+import org.apache.commons.lang3.*;
+
 public class Game {
 	public class Action {
 		private String name;
@@ -127,13 +129,13 @@ public class Game {
 			while ((splitLine = in.readNext()) != null) {
 				if (splitLine[0].equals("#")) {
 					continue;
-				} else if (splitLine[0].charAt(0) == '\'') {
+				} else if (!StringUtils.isNumeric(splitLine[0])) {
 					readGameInfoLine(splitLine);
 				} else {
 					if (splitLine.length == 3) {
 						CreateLeafNode(splitLine);
 					} else if (Integer.parseInt(splitLine[0]) < numChanceHistories) {
-						CreateNatureNode(splitLine);
+						CreateZeroSumPackageStyleNatureNode(splitLine);
 					} else {
 						CreatePlayerNode(splitLine);
 					}
@@ -228,6 +230,7 @@ public class Game {
 		}
 	}
 	
+	// CreateLeafNode handles both Zerosum format files, and the more heavily annotated files of this package
 	private void CreateLeafNode(String[] line) {
 		Node node = new Node();
 		node.nodeId= Integer.parseInt(line[0]);
@@ -240,7 +243,8 @@ public class Game {
 		}
 		nodes[node.nodeId] = node;
 	}
-	
+
+	// The format is the same for player nodes in the Zerosum package and our format 
 	private void CreatePlayerNode(String[] line) {
 		Node node = new Node();
 		node.nodeId = Integer.parseInt(line[0]);
@@ -269,6 +273,33 @@ public class Game {
 		nodes[node.nodeId] = node;
 	}
 	
+	private void CreateZeroSumPackageStyleNatureNode(String[] line) {
+		Node node = new Node();
+		node.nodeId = Integer.parseInt(line[0]);
+		node.name = line[1];
+		node.player = 0;
+		int numActions = Integer.parseInt(line[2]);
+		node.actions = new Action[numActions];
+		double sum = 0;
+		for (int i = 0; i < numActions; i++) {
+			Action action = new Action();
+			action.name = line[3+3*i];
+			action.childId = Integer.parseInt(line[4+3*i]);
+			action.rem = Integer.parseInt(line[5+3*i]);
+			sum += action.rem;
+			node.actions[i] = action;			
+		}
+		for (int i = 0; i < numActions; i++) {
+			node.actions[i].probability = (double) node.actions[i].rem / sum;
+		}
+		
+		if (node.name.equals("/")) {
+			root = node.nodeId;
+		}
+		nodes[node.nodeId] = node;
+	}
+
+	// There is some code duplication between this and the method above for handling the Zerosum package format
 	private void CreateNatureNode(String[] line) {
 		Node node = new Node();
 		node.nodeId = Integer.parseInt(line[0]);
