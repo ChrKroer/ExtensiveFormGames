@@ -90,6 +90,7 @@ public class Game {
 	private int numNodes;
 	private int numInformationSetsPlayer1;
 	private int numInformationSetsPlayer2;
+	private int smallestInformationSetId[];
 	private int [] numSequences;
 	
 	private String [] signals;
@@ -106,6 +107,9 @@ public class Game {
 		numSequences = new int[2];
 		numSequences[0] = 1;
 		numSequences[1] = 1;
+		smallestInformationSetId = new int[2];
+		smallestInformationSetId[0] = Integer.MAX_VALUE;
+		smallestInformationSetId[1] = Integer.MAX_VALUE;
 	}
 	
 	public Game(String filename) {
@@ -250,6 +254,10 @@ public class Game {
 		node.nodeId = Integer.parseInt(line[0]);
 		node.player = Integer.parseInt(line[2]) + 1;
 		node.informationSet = Integer.parseInt(line[3]);
+		if (node.informationSet < smallestInformationSetId[node.player-1]) {
+			smallestInformationSetId[node.player-1] = node.informationSet;
+		}
+		
 		node.name = line[1];
 		//System.out.println("Player: " + (node.player-1) + ", info set: " + node.informationSet);
 		informationSets[node.player-1][node.informationSet].add(node.nodeId);
@@ -423,6 +431,18 @@ public class Game {
 
 	public Node getNodeById(int currentNodeId) {
 		return nodes[currentNodeId];
+	}
+
+	public int getSmallestInformationSetIdPlayer1() {
+		return smallestInformationSetId[0];
+	}
+
+	public int getSmallestInformationSetIdPlayer2() {
+		return smallestInformationSetId[1];
+	}
+	
+	public int getSmallestInformationSetId(int player) {
+		return smallestInformationSetId[player-1];
 	}
 	
 	
