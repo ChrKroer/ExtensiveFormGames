@@ -12,9 +12,11 @@ import gnu.trove.list.TDoubleList;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntDoubleMap;
+import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import gnu.trove.set.TIntSet;
@@ -45,6 +47,8 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	int numPrimalSequences;
 	int numDualSequences;
 	
+	TIntObjectMap<IloConstraint> primalConstraints;
+	TIntObjectMap<IloConstraint> dualConstraints;
 
 	public SequenceFormLPSolver(Game game, int playerToSolveFor) {
 		super(game);
@@ -116,7 +120,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		} else {
 			strategyVarsBySequenceId = new IloNumVar[game.getNumSequencesP2()];
 		}
-
+		
+		primalConstraints = new TIntObjectHashMap<IloConstraint>();
+		dualConstraints = new TIntObjectHashMap<IloConstraint>();
 	}
 	
 	@Override
@@ -260,7 +266,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		if (node.getPlayer() == playerToSolveFor && !visited.contains(node.getInformationSet())) {
 			visited.add(node.getInformationSet());
 			IloLinearNumExpr sum = cplex.linearNumExpr();
-			sum.addTerm(-1, parentSequence);
+			//sum.addTerm(-1, parentSequence);
 			for (Action action : node.getActions()) {
 				IloNumVar v = cplex.numVar(0, 1, "X" + node.getInformationSet() + ";" + action.getName());
 				strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
@@ -269,7 +275,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 				sum.addTerm(1, v);
 				CreateSequenceFormVariablesAndConstraints(action.getChildId(), v, visited);
 			}
-			cplex.addEq(sum, 0);
+			primalConstraints.put(node.getInformationSet(), cplex.addEq(sum, parentSequence,"Primal"+node.getInformationSet()));
 		} else {
 			for (Action action : node.getActions()) {
 				CreateSequenceFormVariablesAndConstraints(action.getChildId(), parentSequence, visited);
@@ -281,9 +287,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	private void CreateDualVariablesAndConstraints() throws IloException {
 		int numVars = 0;
 		if (playerToSolveFor == 1) {
-			numVars = game.getNumInformationSetsPlayer1() + 1;
-		} else {
 			numVars = game.getNumInformationSetsPlayer2() + 1;
+		} else {
+			numVars = game.getNumInformationSetsPlayer1() + 1;
 		}
 		String[] names = new String[numVars];
 		for (int i = 0; i < numVars; i++) names[i] = "Y" + i;
@@ -364,7 +370,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 		
 				
-		cplex.addGe(lhs, rhs);
+		dualConstraints.put(sequenceId, cplex.addGe(lhs, rhs, "Dual"+sequenceId));
 	}
 	
 	private int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
@@ -391,6 +397,70 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	
 	public void SolveWithCuts(TDoubleList coefficients, TIntList vars) {
 		// TODO
+	}
+
+	public int getPlayerToSolveFor() {
+		return playerToSolveFor;
+	}
+
+	public int getPlayerNotToSolveFor() {
+		return playerNotToSolveFor;
+	}
+
+	public IloCplex getCplex() {
+		return cplex;
+	}
+
+	public IloNumVar[] getDualVars() {
+		return dualVars;
+	}
+
+	public HashMap<String, IloNumVar>[] getStrategyVarsByInformationSet() {
+		return strategyVarsByInformationSet;
+	}
+
+	public TIntList[] getSequenceFormDualMatrix() {
+		return sequenceFormDualMatrix;
+	}
+
+	public TIntDoubleMap[] getDualPayoffMatrix() {
+		return dualPayoffMatrix;
+	}
+
+	public TObjectIntMap<String>[] getSequenceIdByInformationSetAndActionP1() {
+		return sequenceIdByInformationSetAndActionP1;
+	}
+
+	public TObjectIntMap<String>[] getSequenceIdByInformationSetAndActionP2() {
+		return sequenceIdByInformationSetAndActionP2;
+	}
+
+	public IloNumVar[] getStrategyVarsBySequenceId() {
+		return strategyVarsBySequenceId;
+	}
+
+	public int getNumSequencesP1() {
+		return numSequencesP1;
+	}
+
+	public int getNumSequencesP2() {
+		return numSequencesP2;
+	}
+
+	public int getNumPrimalSequences() {
+		return numPrimalSequences;
+	}
+
+	public int getNumDualSequences() {
+		return numDualSequences;
+	}
+
+	public TIntObjectMap<IloConstraint> getPrimalConstraints() {
+		return primalConstraints;
+	}
+
+	public TIntObjectMap<IloConstraint> getDualConstraints() {
+		return dualConstraints;
 	}
 }
 

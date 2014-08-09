@@ -3,8 +3,10 @@ package edu.cmu.cs.kroer.extensive_form_game;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import au.com.bytecode.opencsv.CSVReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import au.com.bytecode.opencsv.CSVReader;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.*;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -131,7 +133,16 @@ public class Game {
 		String[] splitLine;
 		try {
 			while ((splitLine = in.readNext()) != null) {
-				if (splitLine[0].equals("#")) {
+				List<String> filtered = new ArrayList<String>();
+				for(String s : splitLine) {
+					if(!s.equals("")) {
+						filtered.add(s);
+					}
+				}
+				splitLine = filtered.toArray(new String[0]);
+				if (splitLine.length == 0) {
+					continue;
+				} else if (splitLine[0].equals("#")) {
 					continue;
 				} else if (!StringUtils.isNumeric(splitLine[0])) {
 					readGameInfoLine(splitLine);
