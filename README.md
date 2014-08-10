@@ -19,7 +19,7 @@ One or more solvers in this library require CPLEX to run. In order to use these,
 References
 ==========
 
-SequenceFormLPSolver is an implementation of the sequence form LP described in:
+`SequenceFormLPSolver` is an implementation of the sequence form linear program described in:
 Efficient Computation of Behavior Strategies. Bernhard von Stengel. In _Games and Economic Behavior_, 1996
 
 
