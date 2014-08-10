@@ -1,0 +1,22 @@
+# mini-Kuhn poker
+#
+# each player antes 1 chip
+# first player dealt Q or K in private
+# first player can bet or fold
+# second player can call or fold
+# K wins at showdown
+#
+
+'mini-Kuhn poker' 1 4 6 0 10 2 2 1
+
+0 '/' 2 'Q' 1 1 'K' 2 1
+1 '/Q' 0 0 2 'r' 3 'f' 5
+2 '/K' 0 1 2 'r' 4 'f' 6
+3 '/Q/r' 1 0 2 'c' 7 'f' 8
+4 '/K/r' 1 0 2 'c' 9 'f' 10
+5 '/Q/f' -1
+6 '/K/f' -1
+7 '/Q/r/c' -3
+8 '/Q/r/f' 1
+9 '/K/r/c' 3
+10 '/K/r/f' 1

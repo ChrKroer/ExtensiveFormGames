@@ -8,7 +8,7 @@ import edu.cmu.cs.kroer.extensive_form_game.Game;
 
 public class TestGameClass {
 	private static final String gamesFolder = "/Users/ckroer/Documents/research/zerosum/games/";
-	private static final String originalGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
+	private static final String zerosumGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
 
 	@Test
 	public void readMiniDeckQLeducFromFile() {
@@ -21,7 +21,7 @@ public class TestGameClass {
 	@Test
 	public void testZerosumPackageFormatFileReaderMiniKuhn() {
 		Game game = new Game();
-		game.createGameFromFileZerosumPackageFormat(originalGamesFolder + "mini_kuhn.txt");
+		game.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "mini_kuhn.txt");
 		assertEquals(1, game.getNumChanceHistories());
 		assertEquals(11, game.getNodes().length);
 		assertNotNull(game.getNodes()[0]);
@@ -31,7 +31,7 @@ public class TestGameClass {
 	@Test
 	public void testZerosumPackageFormatFileReaderLeducKj() {
 		Game game = new Game();
-		game.createGameFromFileZerosumPackageFormat(originalGamesFolder + "leduc_KJ.txt");
+		game.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "leduc_KJ.txt");
 		assertEquals(21, game.getNumChanceHistories());
 		assertEquals(511, game.getNodes().length);
 		assertNotNull(game.getNodes()[0]);
@@ -43,7 +43,7 @@ public class TestGameClass {
 	@Test
 	public void testZerosumPackageFormatFileReaderLeducKj1Raise() {
 		Game game = new Game();
-		game.createGameFromFileZerosumPackageFormat(originalGamesFolder + "leduc_Kj1Raise.txt");
+		game.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "leduc_Kj1Raise.txt");
 		assertEquals(13, game.getNumChanceHistories());
 		assertEquals(199, game.getNodes().length);
 		assertNotNull(game.getNodes()[0]);
@@ -55,7 +55,7 @@ public class TestGameClass {
 	@Test
 	public void testZerosumPackageFormatFileReader() {
 		Game game = new Game();
-		game.createGameFromFileZerosumPackageFormat(originalGamesFolder + "kuhn.txt");
+		game.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "kuhn.txt");
 		assertEquals(1, game.getNumChanceHistories());
 		assertEquals(55, game.getNodes().length);
 		assertNotNull(game.getNodes()[0]);
@@ -65,7 +65,7 @@ public class TestGameClass {
 	@Test
 	public void testZerosumPackageFormatFileReaderCoin() {
 		Game game = new Game();
-		game.createGameFromFileZerosumPackageFormat(originalGamesFolder + "coin.txt");
+		game.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "coin.txt");
 		assertEquals(0, game.getNumChanceHistories());
 		assertEquals(23, game.getNodes().length);
 		assertNotNull(game.getNodes()[0]);

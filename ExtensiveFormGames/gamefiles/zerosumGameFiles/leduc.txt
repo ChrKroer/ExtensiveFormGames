@@ -1,0 +1,1938 @@
+# automatically generated on 2011-02-25 13:47:26.758640
+'Leduc poker' 46 774 1116 45 1935 129 144 144
+820 '/JJ/rrc/Q/rrc' 0
+821 '/JJ/rrc/Q/rrf' -9
+46 '/JJ/rrc/Q/rr' 0 0 2 'c' 820 'f' 821
+822 '/JJ/rrc/Q/rc' 0
+823 '/JJ/rrc/Q/rf' 5
+47 '/JJ/rrc/Q/r' 1 0 3 'r' 46 'c' 822 'f' 823
+824 '/JJ/rrc/Q/crrc' 0
+825 '/JJ/rrc/Q/crrf' 9
+48 '/JJ/rrc/Q/crr' 1 1 2 'c' 824 'f' 825
+826 '/JJ/rrc/Q/crc' 0
+827 '/JJ/rrc/Q/crf' -5
+49 '/JJ/rrc/Q/cr' 0 1 3 'r' 48 'c' 826 'f' 827
+828 '/JJ/rrc/Q/cc' 0
+50 '/JJ/rrc/Q/c' 1 2 2 'r' 49 'c' 828
+51 '/JJ/rrc/Q/' 0 2 2 'r' 47 'c' 50
+829 '/JJ/rrc/K/rrc' 0
+830 '/JJ/rrc/K/rrf' -9
+52 '/JJ/rrc/K/rr' 0 3 2 'c' 829 'f' 830
+831 '/JJ/rrc/K/rc' 0
+832 '/JJ/rrc/K/rf' 5
+53 '/JJ/rrc/K/r' 1 3 3 'r' 52 'c' 831 'f' 832
+833 '/JJ/rrc/K/crrc' 0
+834 '/JJ/rrc/K/crrf' 9
+54 '/JJ/rrc/K/crr' 1 4 2 'c' 833 'f' 834
+835 '/JJ/rrc/K/crc' 0
+836 '/JJ/rrc/K/crf' -5
+55 '/JJ/rrc/K/cr' 0 4 3 'r' 54 'c' 835 'f' 836
+837 '/JJ/rrc/K/cc' 0
+56 '/JJ/rrc/K/c' 1 5 2 'r' 55 'c' 837
+57 '/JJ/rrc/K/' 0 5 2 'r' 53 'c' 56
+0 '/JJ/rrc' 2 'Q' 51 2 'K' 57 2
+838 '/JJ/rrf' -3
+58 '/JJ/rr' 0 6 2 'c' 0 'f' 838
+839 '/JJ/rc/Q/rrc' 0
+840 '/JJ/rc/Q/rrf' -7
+59 '/JJ/rc/Q/rr' 0 7 2 'c' 839 'f' 840
+841 '/JJ/rc/Q/rc' 0
+842 '/JJ/rc/Q/rf' 3
+60 '/JJ/rc/Q/r' 1 6 3 'r' 59 'c' 841 'f' 842
+843 '/JJ/rc/Q/crrc' 0
+844 '/JJ/rc/Q/crrf' 7
+61 '/JJ/rc/Q/crr' 1 7 2 'c' 843 'f' 844
+845 '/JJ/rc/Q/crc' 0
+846 '/JJ/rc/Q/crf' -3
+62 '/JJ/rc/Q/cr' 0 8 3 'r' 61 'c' 845 'f' 846
+847 '/JJ/rc/Q/cc' 0
+63 '/JJ/rc/Q/c' 1 8 2 'r' 62 'c' 847
+64 '/JJ/rc/Q/' 0 9 2 'r' 60 'c' 63
+848 '/JJ/rc/K/rrc' 0
+849 '/JJ/rc/K/rrf' -7
+65 '/JJ/rc/K/rr' 0 10 2 'c' 848 'f' 849
+850 '/JJ/rc/K/rc' 0
+851 '/JJ/rc/K/rf' 3
+66 '/JJ/rc/K/r' 1 9 3 'r' 65 'c' 850 'f' 851
+852 '/JJ/rc/K/crrc' 0
+853 '/JJ/rc/K/crrf' 7
+67 '/JJ/rc/K/crr' 1 10 2 'c' 852 'f' 853
+854 '/JJ/rc/K/crc' 0
+855 '/JJ/rc/K/crf' -3
+68 '/JJ/rc/K/cr' 0 11 3 'r' 67 'c' 854 'f' 855
+856 '/JJ/rc/K/cc' 0
+69 '/JJ/rc/K/c' 1 11 2 'r' 68 'c' 856
+70 '/JJ/rc/K/' 0 12 2 'r' 66 'c' 69
+1 '/JJ/rc' 2 'Q' 64 2 'K' 70 2
+857 '/JJ/rf' 1
+71 '/JJ/r' 1 12 3 'r' 58 'c' 1 'f' 857
+858 '/JJ/crrc/Q/rrc' 0
+859 '/JJ/crrc/Q/rrf' -9
+72 '/JJ/crrc/Q/rr' 0 13 2 'c' 858 'f' 859
+860 '/JJ/crrc/Q/rc' 0
+861 '/JJ/crrc/Q/rf' 5
+73 '/JJ/crrc/Q/r' 1 13 3 'r' 72 'c' 860 'f' 861
+862 '/JJ/crrc/Q/crrc' 0
+863 '/JJ/crrc/Q/crrf' 9
+74 '/JJ/crrc/Q/crr' 1 14 2 'c' 862 'f' 863
+864 '/JJ/crrc/Q/crc' 0
+865 '/JJ/crrc/Q/crf' -5
+75 '/JJ/crrc/Q/cr' 0 14 3 'r' 74 'c' 864 'f' 865
+866 '/JJ/crrc/Q/cc' 0
+76 '/JJ/crrc/Q/c' 1 15 2 'r' 75 'c' 866
+77 '/JJ/crrc/Q/' 0 15 2 'r' 73 'c' 76
+867 '/JJ/crrc/K/rrc' 0
+868 '/JJ/crrc/K/rrf' -9
+78 '/JJ/crrc/K/rr' 0 16 2 'c' 867 'f' 868
+869 '/JJ/crrc/K/rc' 0
+870 '/JJ/crrc/K/rf' 5
+79 '/JJ/crrc/K/r' 1 16 3 'r' 78 'c' 869 'f' 870
+871 '/JJ/crrc/K/crrc' 0
+872 '/JJ/crrc/K/crrf' 9
+80 '/JJ/crrc/K/crr' 1 17 2 'c' 871 'f' 872
+873 '/JJ/crrc/K/crc' 0
+874 '/JJ/crrc/K/crf' -5
+81 '/JJ/crrc/K/cr' 0 17 3 'r' 80 'c' 873 'f' 874
+875 '/JJ/crrc/K/cc' 0
+82 '/JJ/crrc/K/c' 1 18 2 'r' 81 'c' 875
+83 '/JJ/crrc/K/' 0 18 2 'r' 79 'c' 82
+2 '/JJ/crrc' 2 'Q' 77 2 'K' 83 2
+876 '/JJ/crrf' 3
+84 '/JJ/crr' 1 19 2 'c' 2 'f' 876
+877 '/JJ/crc/Q/rrc' 0
+878 '/JJ/crc/Q/rrf' -7
+85 '/JJ/crc/Q/rr' 0 19 2 'c' 877 'f' 878
+879 '/JJ/crc/Q/rc' 0
+880 '/JJ/crc/Q/rf' 3
+86 '/JJ/crc/Q/r' 1 20 3 'r' 85 'c' 879 'f' 880
+881 '/JJ/crc/Q/crrc' 0
+882 '/JJ/crc/Q/crrf' 7
+87 '/JJ/crc/Q/crr' 1 21 2 'c' 881 'f' 882
+883 '/JJ/crc/Q/crc' 0
+884 '/JJ/crc/Q/crf' -3
+88 '/JJ/crc/Q/cr' 0 20 3 'r' 87 'c' 883 'f' 884
+885 '/JJ/crc/Q/cc' 0
+89 '/JJ/crc/Q/c' 1 22 2 'r' 88 'c' 885
+90 '/JJ/crc/Q/' 0 21 2 'r' 86 'c' 89
+886 '/JJ/crc/K/rrc' 0
+887 '/JJ/crc/K/rrf' -7
+91 '/JJ/crc/K/rr' 0 22 2 'c' 886 'f' 887
+888 '/JJ/crc/K/rc' 0
+889 '/JJ/crc/K/rf' 3
+92 '/JJ/crc/K/r' 1 23 3 'r' 91 'c' 888 'f' 889
+890 '/JJ/crc/K/crrc' 0
+891 '/JJ/crc/K/crrf' 7
+93 '/JJ/crc/K/crr' 1 24 2 'c' 890 'f' 891
+892 '/JJ/crc/K/crc' 0
+893 '/JJ/crc/K/crf' -3
+94 '/JJ/crc/K/cr' 0 23 3 'r' 93 'c' 892 'f' 893
+894 '/JJ/crc/K/cc' 0
+95 '/JJ/crc/K/c' 1 25 2 'r' 94 'c' 894
+96 '/JJ/crc/K/' 0 24 2 'r' 92 'c' 95
+3 '/JJ/crc' 2 'Q' 90 2 'K' 96 2
+895 '/JJ/crf' -1
+97 '/JJ/cr' 0 25 3 'r' 84 'c' 3 'f' 895
+896 '/JJ/cc/Q/rrc' 0
+897 '/JJ/cc/Q/rrf' -5
+98 '/JJ/cc/Q/rr' 0 26 2 'c' 896 'f' 897
+898 '/JJ/cc/Q/rc' 0
+899 '/JJ/cc/Q/rf' 1
+99 '/JJ/cc/Q/r' 1 26 3 'r' 98 'c' 898 'f' 899
+900 '/JJ/cc/Q/crrc' 0
+901 '/JJ/cc/Q/crrf' 5
+100 '/JJ/cc/Q/crr' 1 27 2 'c' 900 'f' 901
+902 '/JJ/cc/Q/crc' 0
+903 '/JJ/cc/Q/crf' -1
+101 '/JJ/cc/Q/cr' 0 27 3 'r' 100 'c' 902 'f' 903
+904 '/JJ/cc/Q/cc' 0
+102 '/JJ/cc/Q/c' 1 28 2 'r' 101 'c' 904
+103 '/JJ/cc/Q/' 0 28 2 'r' 99 'c' 102
+905 '/JJ/cc/K/rrc' 0
+906 '/JJ/cc/K/rrf' -5
+104 '/JJ/cc/K/rr' 0 29 2 'c' 905 'f' 906
+907 '/JJ/cc/K/rc' 0
+908 '/JJ/cc/K/rf' 1
+105 '/JJ/cc/K/r' 1 29 3 'r' 104 'c' 907 'f' 908
+909 '/JJ/cc/K/crrc' 0
+910 '/JJ/cc/K/crrf' 5
+106 '/JJ/cc/K/crr' 1 30 2 'c' 909 'f' 910
+911 '/JJ/cc/K/crc' 0
+912 '/JJ/cc/K/crf' -1
+107 '/JJ/cc/K/cr' 0 30 3 'r' 106 'c' 911 'f' 912
+913 '/JJ/cc/K/cc' 0
+108 '/JJ/cc/K/c' 1 31 2 'r' 107 'c' 913
+109 '/JJ/cc/K/' 0 31 2 'r' 105 'c' 108
+4 '/JJ/cc' 2 'Q' 103 2 'K' 109 2
+110 '/JJ/c' 1 32 2 'r' 97 'c' 4
+111 '/JJ/' 0 32 2 'r' 71 'c' 110
+914 '/JQ/rrc/J/rrc' 13
+915 '/JQ/rrc/J/rrf' -9
+112 '/JQ/rrc/J/rr' 0 33 2 'c' 914 'f' 915
+916 '/JQ/rrc/J/rc' 9
+917 '/JQ/rrc/J/rf' 5
+113 '/JQ/rrc/J/r' 1 33 3 'r' 112 'c' 916 'f' 917
+918 '/JQ/rrc/J/crrc' 13
+919 '/JQ/rrc/J/crrf' 9
+114 '/JQ/rrc/J/crr' 1 34 2 'c' 918 'f' 919
+920 '/JQ/rrc/J/crc' 9
+921 '/JQ/rrc/J/crf' -5
+115 '/JQ/rrc/J/cr' 0 34 3 'r' 114 'c' 920 'f' 921
+922 '/JQ/rrc/J/cc' 5
+116 '/JQ/rrc/J/c' 1 35 2 'r' 115 'c' 922
+117 '/JQ/rrc/J/' 0 35 2 'r' 113 'c' 116
+923 '/JQ/rrc/Q/rrc' -13
+924 '/JQ/rrc/Q/rrf' -9
+118 '/JQ/rrc/Q/rr' 0 0 2 'c' 923 'f' 924
+925 '/JQ/rrc/Q/rc' -9
+926 '/JQ/rrc/Q/rf' 5
+119 '/JQ/rrc/Q/r' 1 36 3 'r' 118 'c' 925 'f' 926
+927 '/JQ/rrc/Q/crrc' -13
+928 '/JQ/rrc/Q/crrf' 9
+120 '/JQ/rrc/Q/crr' 1 37 2 'c' 927 'f' 928
+929 '/JQ/rrc/Q/crc' -9
+930 '/JQ/rrc/Q/crf' -5
+121 '/JQ/rrc/Q/cr' 0 1 3 'r' 120 'c' 929 'f' 930
+931 '/JQ/rrc/Q/cc' -5
+122 '/JQ/rrc/Q/c' 1 38 2 'r' 121 'c' 931
+123 '/JQ/rrc/Q/' 0 2 2 'r' 119 'c' 122
+932 '/JQ/rrc/K/rrc' -13
+933 '/JQ/rrc/K/rrf' -9
+124 '/JQ/rrc/K/rr' 0 3 2 'c' 932 'f' 933
+934 '/JQ/rrc/K/rc' -9
+935 '/JQ/rrc/K/rf' 5
+125 '/JQ/rrc/K/r' 1 39 3 'r' 124 'c' 934 'f' 935
+936 '/JQ/rrc/K/crrc' -13
+937 '/JQ/rrc/K/crrf' 9
+126 '/JQ/rrc/K/crr' 1 40 2 'c' 936 'f' 937
+938 '/JQ/rrc/K/crc' -9
+939 '/JQ/rrc/K/crf' -5
+127 '/JQ/rrc/K/cr' 0 4 3 'r' 126 'c' 938 'f' 939
+940 '/JQ/rrc/K/cc' -5
+128 '/JQ/rrc/K/c' 1 41 2 'r' 127 'c' 940
+129 '/JQ/rrc/K/' 0 5 2 'r' 125 'c' 128
+5 '/JQ/rrc' 3 'J' 117 1 'Q' 123 1 'K' 129 2
+941 '/JQ/rrf' -3
+130 '/JQ/rr' 0 6 2 'c' 5 'f' 941
+942 '/JQ/rc/J/rrc' 11
+943 '/JQ/rc/J/rrf' -7
+131 '/JQ/rc/J/rr' 0 36 2 'c' 942 'f' 943
+944 '/JQ/rc/J/rc' 7
+945 '/JQ/rc/J/rf' 3
+132 '/JQ/rc/J/r' 1 42 3 'r' 131 'c' 944 'f' 945
+946 '/JQ/rc/J/crrc' 11
+947 '/JQ/rc/J/crrf' 7
+133 '/JQ/rc/J/crr' 1 43 2 'c' 946 'f' 947
+948 '/JQ/rc/J/crc' 7
+949 '/JQ/rc/J/crf' -3
+134 '/JQ/rc/J/cr' 0 37 3 'r' 133 'c' 948 'f' 949
+950 '/JQ/rc/J/cc' 3
+135 '/JQ/rc/J/c' 1 44 2 'r' 134 'c' 950
+136 '/JQ/rc/J/' 0 38 2 'r' 132 'c' 135
+951 '/JQ/rc/Q/rrc' -11
+952 '/JQ/rc/Q/rrf' -7
+137 '/JQ/rc/Q/rr' 0 7 2 'c' 951 'f' 952
+953 '/JQ/rc/Q/rc' -7
+954 '/JQ/rc/Q/rf' 3
+138 '/JQ/rc/Q/r' 1 45 3 'r' 137 'c' 953 'f' 954
+955 '/JQ/rc/Q/crrc' -11
+956 '/JQ/rc/Q/crrf' 7
+139 '/JQ/rc/Q/crr' 1 46 2 'c' 955 'f' 956
+957 '/JQ/rc/Q/crc' -7
+958 '/JQ/rc/Q/crf' -3
+140 '/JQ/rc/Q/cr' 0 8 3 'r' 139 'c' 957 'f' 958
+959 '/JQ/rc/Q/cc' -3
+141 '/JQ/rc/Q/c' 1 47 2 'r' 140 'c' 959
+142 '/JQ/rc/Q/' 0 9 2 'r' 138 'c' 141
+960 '/JQ/rc/K/rrc' -11
+961 '/JQ/rc/K/rrf' -7
+143 '/JQ/rc/K/rr' 0 10 2 'c' 960 'f' 961
+962 '/JQ/rc/K/rc' -7
+963 '/JQ/rc/K/rf' 3
+144 '/JQ/rc/K/r' 1 48 3 'r' 143 'c' 962 'f' 963
+964 '/JQ/rc/K/crrc' -11
+965 '/JQ/rc/K/crrf' 7
+145 '/JQ/rc/K/crr' 1 49 2 'c' 964 'f' 965
+966 '/JQ/rc/K/crc' -7
+967 '/JQ/rc/K/crf' -3
+146 '/JQ/rc/K/cr' 0 11 3 'r' 145 'c' 966 'f' 967
+968 '/JQ/rc/K/cc' -3
+147 '/JQ/rc/K/c' 1 50 2 'r' 146 'c' 968
+148 '/JQ/rc/K/' 0 12 2 'r' 144 'c' 147
+6 '/JQ/rc' 3 'J' 136 1 'Q' 142 1 'K' 148 2
+969 '/JQ/rf' 1
+149 '/JQ/r' 1 51 3 'r' 130 'c' 6 'f' 969
+970 '/JQ/crrc/J/rrc' 13
+971 '/JQ/crrc/J/rrf' -9
+150 '/JQ/crrc/J/rr' 0 39 2 'c' 970 'f' 971
+972 '/JQ/crrc/J/rc' 9
+973 '/JQ/crrc/J/rf' 5
+151 '/JQ/crrc/J/r' 1 52 3 'r' 150 'c' 972 'f' 973
+974 '/JQ/crrc/J/crrc' 13
+975 '/JQ/crrc/J/crrf' 9
+152 '/JQ/crrc/J/crr' 1 53 2 'c' 974 'f' 975
+976 '/JQ/crrc/J/crc' 9
+977 '/JQ/crrc/J/crf' -5
+153 '/JQ/crrc/J/cr' 0 40 3 'r' 152 'c' 976 'f' 977
+978 '/JQ/crrc/J/cc' 5
+154 '/JQ/crrc/J/c' 1 54 2 'r' 153 'c' 978
+155 '/JQ/crrc/J/' 0 41 2 'r' 151 'c' 154
+979 '/JQ/crrc/Q/rrc' -13
+980 '/JQ/crrc/Q/rrf' -9
+156 '/JQ/crrc/Q/rr' 0 13 2 'c' 979 'f' 980
+981 '/JQ/crrc/Q/rc' -9
+982 '/JQ/crrc/Q/rf' 5
+157 '/JQ/crrc/Q/r' 1 55 3 'r' 156 'c' 981 'f' 982
+983 '/JQ/crrc/Q/crrc' -13
+984 '/JQ/crrc/Q/crrf' 9
+158 '/JQ/crrc/Q/crr' 1 56 2 'c' 983 'f' 984
+985 '/JQ/crrc/Q/crc' -9
+986 '/JQ/crrc/Q/crf' -5
+159 '/JQ/crrc/Q/cr' 0 14 3 'r' 158 'c' 985 'f' 986
+987 '/JQ/crrc/Q/cc' -5
+160 '/JQ/crrc/Q/c' 1 57 2 'r' 159 'c' 987
+161 '/JQ/crrc/Q/' 0 15 2 'r' 157 'c' 160
+988 '/JQ/crrc/K/rrc' -13
+989 '/JQ/crrc/K/rrf' -9
+162 '/JQ/crrc/K/rr' 0 16 2 'c' 988 'f' 989
+990 '/JQ/crrc/K/rc' -9
+991 '/JQ/crrc/K/rf' 5
+163 '/JQ/crrc/K/r' 1 58 3 'r' 162 'c' 990 'f' 991
+992 '/JQ/crrc/K/crrc' -13
+993 '/JQ/crrc/K/crrf' 9
+164 '/JQ/crrc/K/crr' 1 59 2 'c' 992 'f' 993
+994 '/JQ/crrc/K/crc' -9
+995 '/JQ/crrc/K/crf' -5
+165 '/JQ/crrc/K/cr' 0 17 3 'r' 164 'c' 994 'f' 995
+996 '/JQ/crrc/K/cc' -5
+166 '/JQ/crrc/K/c' 1 60 2 'r' 165 'c' 996
+167 '/JQ/crrc/K/' 0 18 2 'r' 163 'c' 166
+7 '/JQ/crrc' 3 'J' 155 1 'Q' 161 1 'K' 167 2
+997 '/JQ/crrf' 3
+168 '/JQ/crr' 1 61 2 'c' 7 'f' 997
+998 '/JQ/crc/J/rrc' 11
+999 '/JQ/crc/J/rrf' -7
+169 '/JQ/crc/J/rr' 0 42 2 'c' 998 'f' 999
+1000 '/JQ/crc/J/rc' 7
+1001 '/JQ/crc/J/rf' 3
+170 '/JQ/crc/J/r' 1 62 3 'r' 169 'c' 1000 'f' 1001
+1002 '/JQ/crc/J/crrc' 11
+1003 '/JQ/crc/J/crrf' 7
+171 '/JQ/crc/J/crr' 1 63 2 'c' 1002 'f' 1003
+1004 '/JQ/crc/J/crc' 7
+1005 '/JQ/crc/J/crf' -3
+172 '/JQ/crc/J/cr' 0 43 3 'r' 171 'c' 1004 'f' 1005
+1006 '/JQ/crc/J/cc' 3
+173 '/JQ/crc/J/c' 1 64 2 'r' 172 'c' 1006
+174 '/JQ/crc/J/' 0 44 2 'r' 170 'c' 173
+1007 '/JQ/crc/Q/rrc' -11
+1008 '/JQ/crc/Q/rrf' -7
+175 '/JQ/crc/Q/rr' 0 19 2 'c' 1007 'f' 1008
+1009 '/JQ/crc/Q/rc' -7
+1010 '/JQ/crc/Q/rf' 3
+176 '/JQ/crc/Q/r' 1 65 3 'r' 175 'c' 1009 'f' 1010
+1011 '/JQ/crc/Q/crrc' -11
+1012 '/JQ/crc/Q/crrf' 7
+177 '/JQ/crc/Q/crr' 1 66 2 'c' 1011 'f' 1012
+1013 '/JQ/crc/Q/crc' -7
+1014 '/JQ/crc/Q/crf' -3
+178 '/JQ/crc/Q/cr' 0 20 3 'r' 177 'c' 1013 'f' 1014
+1015 '/JQ/crc/Q/cc' -3
+179 '/JQ/crc/Q/c' 1 67 2 'r' 178 'c' 1015
+180 '/JQ/crc/Q/' 0 21 2 'r' 176 'c' 179
+1016 '/JQ/crc/K/rrc' -11
+1017 '/JQ/crc/K/rrf' -7
+181 '/JQ/crc/K/rr' 0 22 2 'c' 1016 'f' 1017
+1018 '/JQ/crc/K/rc' -7
+1019 '/JQ/crc/K/rf' 3
+182 '/JQ/crc/K/r' 1 68 3 'r' 181 'c' 1018 'f' 1019
+1020 '/JQ/crc/K/crrc' -11
+1021 '/JQ/crc/K/crrf' 7
+183 '/JQ/crc/K/crr' 1 69 2 'c' 1020 'f' 1021
+1022 '/JQ/crc/K/crc' -7
+1023 '/JQ/crc/K/crf' -3
+184 '/JQ/crc/K/cr' 0 23 3 'r' 183 'c' 1022 'f' 1023
+1024 '/JQ/crc/K/cc' -3
+185 '/JQ/crc/K/c' 1 70 2 'r' 184 'c' 1024
+186 '/JQ/crc/K/' 0 24 2 'r' 182 'c' 185
+8 '/JQ/crc' 3 'J' 174 1 'Q' 180 1 'K' 186 2
+1025 '/JQ/crf' -1
+187 '/JQ/cr' 0 25 3 'r' 168 'c' 8 'f' 1025
+1026 '/JQ/cc/J/rrc' 9
+1027 '/JQ/cc/J/rrf' -5
+188 '/JQ/cc/J/rr' 0 45 2 'c' 1026 'f' 1027
+1028 '/JQ/cc/J/rc' 5
+1029 '/JQ/cc/J/rf' 1
+189 '/JQ/cc/J/r' 1 71 3 'r' 188 'c' 1028 'f' 1029
+1030 '/JQ/cc/J/crrc' 9
+1031 '/JQ/cc/J/crrf' 5
+190 '/JQ/cc/J/crr' 1 72 2 'c' 1030 'f' 1031
+1032 '/JQ/cc/J/crc' 5
+1033 '/JQ/cc/J/crf' -1
+191 '/JQ/cc/J/cr' 0 46 3 'r' 190 'c' 1032 'f' 1033
+1034 '/JQ/cc/J/cc' 1
+192 '/JQ/cc/J/c' 1 73 2 'r' 191 'c' 1034
+193 '/JQ/cc/J/' 0 47 2 'r' 189 'c' 192
+1035 '/JQ/cc/Q/rrc' -9
+1036 '/JQ/cc/Q/rrf' -5
+194 '/JQ/cc/Q/rr' 0 26 2 'c' 1035 'f' 1036
+1037 '/JQ/cc/Q/rc' -5
+1038 '/JQ/cc/Q/rf' 1
+195 '/JQ/cc/Q/r' 1 74 3 'r' 194 'c' 1037 'f' 1038
+1039 '/JQ/cc/Q/crrc' -9
+1040 '/JQ/cc/Q/crrf' 5
+196 '/JQ/cc/Q/crr' 1 75 2 'c' 1039 'f' 1040
+1041 '/JQ/cc/Q/crc' -5
+1042 '/JQ/cc/Q/crf' -1
+197 '/JQ/cc/Q/cr' 0 27 3 'r' 196 'c' 1041 'f' 1042
+1043 '/JQ/cc/Q/cc' -1
+198 '/JQ/cc/Q/c' 1 76 2 'r' 197 'c' 1043
+199 '/JQ/cc/Q/' 0 28 2 'r' 195 'c' 198
+1044 '/JQ/cc/K/rrc' -9
+1045 '/JQ/cc/K/rrf' -5
+200 '/JQ/cc/K/rr' 0 29 2 'c' 1044 'f' 1045
+1046 '/JQ/cc/K/rc' -5
+1047 '/JQ/cc/K/rf' 1
+201 '/JQ/cc/K/r' 1 77 3 'r' 200 'c' 1046 'f' 1047
+1048 '/JQ/cc/K/crrc' -9
+1049 '/JQ/cc/K/crrf' 5
+202 '/JQ/cc/K/crr' 1 78 2 'c' 1048 'f' 1049
+1050 '/JQ/cc/K/crc' -5
+1051 '/JQ/cc/K/crf' -1
+203 '/JQ/cc/K/cr' 0 30 3 'r' 202 'c' 1050 'f' 1051
+1052 '/JQ/cc/K/cc' -1
+204 '/JQ/cc/K/c' 1 79 2 'r' 203 'c' 1052
+205 '/JQ/cc/K/' 0 31 2 'r' 201 'c' 204
+9 '/JQ/cc' 3 'J' 193 1 'Q' 199 1 'K' 205 2
+206 '/JQ/c' 1 80 2 'r' 187 'c' 9
+207 '/JQ/' 0 32 2 'r' 149 'c' 206
+1053 '/JK/rrc/J/rrc' 13
+1054 '/JK/rrc/J/rrf' -9
+208 '/JK/rrc/J/rr' 0 33 2 'c' 1053 'f' 1054
+1055 '/JK/rrc/J/rc' 9
+1056 '/JK/rrc/J/rf' 5
+209 '/JK/rrc/J/r' 1 81 3 'r' 208 'c' 1055 'f' 1056
+1057 '/JK/rrc/J/crrc' 13
+1058 '/JK/rrc/J/crrf' 9
+210 '/JK/rrc/J/crr' 1 82 2 'c' 1057 'f' 1058
+1059 '/JK/rrc/J/crc' 9
+1060 '/JK/rrc/J/crf' -5
+211 '/JK/rrc/J/cr' 0 34 3 'r' 210 'c' 1059 'f' 1060
+1061 '/JK/rrc/J/cc' 5
+212 '/JK/rrc/J/c' 1 83 2 'r' 211 'c' 1061
+213 '/JK/rrc/J/' 0 35 2 'r' 209 'c' 212
+1062 '/JK/rrc/Q/rrc' -13
+1063 '/JK/rrc/Q/rrf' -9
+214 '/JK/rrc/Q/rr' 0 0 2 'c' 1062 'f' 1063
+1064 '/JK/rrc/Q/rc' -9
+1065 '/JK/rrc/Q/rf' 5
+215 '/JK/rrc/Q/r' 1 84 3 'r' 214 'c' 1064 'f' 1065
+1066 '/JK/rrc/Q/crrc' -13
+1067 '/JK/rrc/Q/crrf' 9
+216 '/JK/rrc/Q/crr' 1 85 2 'c' 1066 'f' 1067
+1068 '/JK/rrc/Q/crc' -9
+1069 '/JK/rrc/Q/crf' -5
+217 '/JK/rrc/Q/cr' 0 1 3 'r' 216 'c' 1068 'f' 1069
+1070 '/JK/rrc/Q/cc' -5
+218 '/JK/rrc/Q/c' 1 86 2 'r' 217 'c' 1070
+219 '/JK/rrc/Q/' 0 2 2 'r' 215 'c' 218
+1071 '/JK/rrc/K/rrc' -13
+1072 '/JK/rrc/K/rrf' -9
+220 '/JK/rrc/K/rr' 0 3 2 'c' 1071 'f' 1072
+1073 '/JK/rrc/K/rc' -9
+1074 '/JK/rrc/K/rf' 5
+221 '/JK/rrc/K/r' 1 87 3 'r' 220 'c' 1073 'f' 1074
+1075 '/JK/rrc/K/crrc' -13
+1076 '/JK/rrc/K/crrf' 9
+222 '/JK/rrc/K/crr' 1 88 2 'c' 1075 'f' 1076
+1077 '/JK/rrc/K/crc' -9
+1078 '/JK/rrc/K/crf' -5
+223 '/JK/rrc/K/cr' 0 4 3 'r' 222 'c' 1077 'f' 1078
+1079 '/JK/rrc/K/cc' -5
+224 '/JK/rrc/K/c' 1 89 2 'r' 223 'c' 1079
+225 '/JK/rrc/K/' 0 5 2 'r' 221 'c' 224
+10 '/JK/rrc' 3 'J' 213 1 'Q' 219 2 'K' 225 1
+1080 '/JK/rrf' -3
+226 '/JK/rr' 0 6 2 'c' 10 'f' 1080
+1081 '/JK/rc/J/rrc' 11
+1082 '/JK/rc/J/rrf' -7
+227 '/JK/rc/J/rr' 0 36 2 'c' 1081 'f' 1082
+1083 '/JK/rc/J/rc' 7
+1084 '/JK/rc/J/rf' 3
+228 '/JK/rc/J/r' 1 90 3 'r' 227 'c' 1083 'f' 1084
+1085 '/JK/rc/J/crrc' 11
+1086 '/JK/rc/J/crrf' 7
+229 '/JK/rc/J/crr' 1 91 2 'c' 1085 'f' 1086
+1087 '/JK/rc/J/crc' 7
+1088 '/JK/rc/J/crf' -3
+230 '/JK/rc/J/cr' 0 37 3 'r' 229 'c' 1087 'f' 1088
+1089 '/JK/rc/J/cc' 3
+231 '/JK/rc/J/c' 1 92 2 'r' 230 'c' 1089
+232 '/JK/rc/J/' 0 38 2 'r' 228 'c' 231
+1090 '/JK/rc/Q/rrc' -11
+1091 '/JK/rc/Q/rrf' -7
+233 '/JK/rc/Q/rr' 0 7 2 'c' 1090 'f' 1091
+1092 '/JK/rc/Q/rc' -7
+1093 '/JK/rc/Q/rf' 3
+234 '/JK/rc/Q/r' 1 93 3 'r' 233 'c' 1092 'f' 1093
+1094 '/JK/rc/Q/crrc' -11
+1095 '/JK/rc/Q/crrf' 7
+235 '/JK/rc/Q/crr' 1 94 2 'c' 1094 'f' 1095
+1096 '/JK/rc/Q/crc' -7
+1097 '/JK/rc/Q/crf' -3
+236 '/JK/rc/Q/cr' 0 8 3 'r' 235 'c' 1096 'f' 1097
+1098 '/JK/rc/Q/cc' -3
+237 '/JK/rc/Q/c' 1 95 2 'r' 236 'c' 1098
+238 '/JK/rc/Q/' 0 9 2 'r' 234 'c' 237
+1099 '/JK/rc/K/rrc' -11
+1100 '/JK/rc/K/rrf' -7
+239 '/JK/rc/K/rr' 0 10 2 'c' 1099 'f' 1100
+1101 '/JK/rc/K/rc' -7
+1102 '/JK/rc/K/rf' 3
+240 '/JK/rc/K/r' 1 96 3 'r' 239 'c' 1101 'f' 1102
+1103 '/JK/rc/K/crrc' -11
+1104 '/JK/rc/K/crrf' 7
+241 '/JK/rc/K/crr' 1 97 2 'c' 1103 'f' 1104
+1105 '/JK/rc/K/crc' -7
+1106 '/JK/rc/K/crf' -3
+242 '/JK/rc/K/cr' 0 11 3 'r' 241 'c' 1105 'f' 1106
+1107 '/JK/rc/K/cc' -3
+243 '/JK/rc/K/c' 1 98 2 'r' 242 'c' 1107
+244 '/JK/rc/K/' 0 12 2 'r' 240 'c' 243
+11 '/JK/rc' 3 'J' 232 1 'Q' 238 2 'K' 244 1
+1108 '/JK/rf' 1
+245 '/JK/r' 1 99 3 'r' 226 'c' 11 'f' 1108
+1109 '/JK/crrc/J/rrc' 13
+1110 '/JK/crrc/J/rrf' -9
+246 '/JK/crrc/J/rr' 0 39 2 'c' 1109 'f' 1110
+1111 '/JK/crrc/J/rc' 9
+1112 '/JK/crrc/J/rf' 5
+247 '/JK/crrc/J/r' 1 100 3 'r' 246 'c' 1111 'f' 1112
+1113 '/JK/crrc/J/crrc' 13
+1114 '/JK/crrc/J/crrf' 9
+248 '/JK/crrc/J/crr' 1 101 2 'c' 1113 'f' 1114
+1115 '/JK/crrc/J/crc' 9
+1116 '/JK/crrc/J/crf' -5
+249 '/JK/crrc/J/cr' 0 40 3 'r' 248 'c' 1115 'f' 1116
+1117 '/JK/crrc/J/cc' 5
+250 '/JK/crrc/J/c' 1 102 2 'r' 249 'c' 1117
+251 '/JK/crrc/J/' 0 41 2 'r' 247 'c' 250
+1118 '/JK/crrc/Q/rrc' -13
+1119 '/JK/crrc/Q/rrf' -9
+252 '/JK/crrc/Q/rr' 0 13 2 'c' 1118 'f' 1119
+1120 '/JK/crrc/Q/rc' -9
+1121 '/JK/crrc/Q/rf' 5
+253 '/JK/crrc/Q/r' 1 103 3 'r' 252 'c' 1120 'f' 1121
+1122 '/JK/crrc/Q/crrc' -13
+1123 '/JK/crrc/Q/crrf' 9
+254 '/JK/crrc/Q/crr' 1 104 2 'c' 1122 'f' 1123
+1124 '/JK/crrc/Q/crc' -9
+1125 '/JK/crrc/Q/crf' -5
+255 '/JK/crrc/Q/cr' 0 14 3 'r' 254 'c' 1124 'f' 1125
+1126 '/JK/crrc/Q/cc' -5
+256 '/JK/crrc/Q/c' 1 105 2 'r' 255 'c' 1126
+257 '/JK/crrc/Q/' 0 15 2 'r' 253 'c' 256
+1127 '/JK/crrc/K/rrc' -13
+1128 '/JK/crrc/K/rrf' -9
+258 '/JK/crrc/K/rr' 0 16 2 'c' 1127 'f' 1128
+1129 '/JK/crrc/K/rc' -9
+1130 '/JK/crrc/K/rf' 5
+259 '/JK/crrc/K/r' 1 106 3 'r' 258 'c' 1129 'f' 1130
+1131 '/JK/crrc/K/crrc' -13
+1132 '/JK/crrc/K/crrf' 9
+260 '/JK/crrc/K/crr' 1 107 2 'c' 1131 'f' 1132
+1133 '/JK/crrc/K/crc' -9
+1134 '/JK/crrc/K/crf' -5
+261 '/JK/crrc/K/cr' 0 17 3 'r' 260 'c' 1133 'f' 1134
+1135 '/JK/crrc/K/cc' -5
+262 '/JK/crrc/K/c' 1 108 2 'r' 261 'c' 1135
+263 '/JK/crrc/K/' 0 18 2 'r' 259 'c' 262
+12 '/JK/crrc' 3 'J' 251 1 'Q' 257 2 'K' 263 1
+1136 '/JK/crrf' 3
+264 '/JK/crr' 1 109 2 'c' 12 'f' 1136
+1137 '/JK/crc/J/rrc' 11
+1138 '/JK/crc/J/rrf' -7
+265 '/JK/crc/J/rr' 0 42 2 'c' 1137 'f' 1138
+1139 '/JK/crc/J/rc' 7
+1140 '/JK/crc/J/rf' 3
+266 '/JK/crc/J/r' 1 110 3 'r' 265 'c' 1139 'f' 1140
+1141 '/JK/crc/J/crrc' 11
+1142 '/JK/crc/J/crrf' 7
+267 '/JK/crc/J/crr' 1 111 2 'c' 1141 'f' 1142
+1143 '/JK/crc/J/crc' 7
+1144 '/JK/crc/J/crf' -3
+268 '/JK/crc/J/cr' 0 43 3 'r' 267 'c' 1143 'f' 1144
+1145 '/JK/crc/J/cc' 3
+269 '/JK/crc/J/c' 1 112 2 'r' 268 'c' 1145
+270 '/JK/crc/J/' 0 44 2 'r' 266 'c' 269
+1146 '/JK/crc/Q/rrc' -11
+1147 '/JK/crc/Q/rrf' -7
+271 '/JK/crc/Q/rr' 0 19 2 'c' 1146 'f' 1147
+1148 '/JK/crc/Q/rc' -7
+1149 '/JK/crc/Q/rf' 3
+272 '/JK/crc/Q/r' 1 113 3 'r' 271 'c' 1148 'f' 1149
+1150 '/JK/crc/Q/crrc' -11
+1151 '/JK/crc/Q/crrf' 7
+273 '/JK/crc/Q/crr' 1 114 2 'c' 1150 'f' 1151
+1152 '/JK/crc/Q/crc' -7
+1153 '/JK/crc/Q/crf' -3
+274 '/JK/crc/Q/cr' 0 20 3 'r' 273 'c' 1152 'f' 1153
+1154 '/JK/crc/Q/cc' -3
+275 '/JK/crc/Q/c' 1 115 2 'r' 274 'c' 1154
+276 '/JK/crc/Q/' 0 21 2 'r' 272 'c' 275
+1155 '/JK/crc/K/rrc' -11
+1156 '/JK/crc/K/rrf' -7
+277 '/JK/crc/K/rr' 0 22 2 'c' 1155 'f' 1156
+1157 '/JK/crc/K/rc' -7
+1158 '/JK/crc/K/rf' 3
+278 '/JK/crc/K/r' 1 116 3 'r' 277 'c' 1157 'f' 1158
+1159 '/JK/crc/K/crrc' -11
+1160 '/JK/crc/K/crrf' 7
+279 '/JK/crc/K/crr' 1 117 2 'c' 1159 'f' 1160
+1161 '/JK/crc/K/crc' -7
+1162 '/JK/crc/K/crf' -3
+280 '/JK/crc/K/cr' 0 23 3 'r' 279 'c' 1161 'f' 1162
+1163 '/JK/crc/K/cc' -3
+281 '/JK/crc/K/c' 1 118 2 'r' 280 'c' 1163
+282 '/JK/crc/K/' 0 24 2 'r' 278 'c' 281
+13 '/JK/crc' 3 'J' 270 1 'Q' 276 2 'K' 282 1
+1164 '/JK/crf' -1
+283 '/JK/cr' 0 25 3 'r' 264 'c' 13 'f' 1164
+1165 '/JK/cc/J/rrc' 9
+1166 '/JK/cc/J/rrf' -5
+284 '/JK/cc/J/rr' 0 45 2 'c' 1165 'f' 1166
+1167 '/JK/cc/J/rc' 5
+1168 '/JK/cc/J/rf' 1
+285 '/JK/cc/J/r' 1 119 3 'r' 284 'c' 1167 'f' 1168
+1169 '/JK/cc/J/crrc' 9
+1170 '/JK/cc/J/crrf' 5
+286 '/JK/cc/J/crr' 1 120 2 'c' 1169 'f' 1170
+1171 '/JK/cc/J/crc' 5
+1172 '/JK/cc/J/crf' -1
+287 '/JK/cc/J/cr' 0 46 3 'r' 286 'c' 1171 'f' 1172
+1173 '/JK/cc/J/cc' 1
+288 '/JK/cc/J/c' 1 121 2 'r' 287 'c' 1173
+289 '/JK/cc/J/' 0 47 2 'r' 285 'c' 288
+1174 '/JK/cc/Q/rrc' -9
+1175 '/JK/cc/Q/rrf' -5
+290 '/JK/cc/Q/rr' 0 26 2 'c' 1174 'f' 1175
+1176 '/JK/cc/Q/rc' -5
+1177 '/JK/cc/Q/rf' 1
+291 '/JK/cc/Q/r' 1 122 3 'r' 290 'c' 1176 'f' 1177
+1178 '/JK/cc/Q/crrc' -9
+1179 '/JK/cc/Q/crrf' 5
+292 '/JK/cc/Q/crr' 1 123 2 'c' 1178 'f' 1179
+1180 '/JK/cc/Q/crc' -5
+1181 '/JK/cc/Q/crf' -1
+293 '/JK/cc/Q/cr' 0 27 3 'r' 292 'c' 1180 'f' 1181
+1182 '/JK/cc/Q/cc' -1
+294 '/JK/cc/Q/c' 1 124 2 'r' 293 'c' 1182
+295 '/JK/cc/Q/' 0 28 2 'r' 291 'c' 294
+1183 '/JK/cc/K/rrc' -9
+1184 '/JK/cc/K/rrf' -5
+296 '/JK/cc/K/rr' 0 29 2 'c' 1183 'f' 1184
+1185 '/JK/cc/K/rc' -5
+1186 '/JK/cc/K/rf' 1
+297 '/JK/cc/K/r' 1 125 3 'r' 296 'c' 1185 'f' 1186
+1187 '/JK/cc/K/crrc' -9
+1188 '/JK/cc/K/crrf' 5
+298 '/JK/cc/K/crr' 1 126 2 'c' 1187 'f' 1188
+1189 '/JK/cc/K/crc' -5
+1190 '/JK/cc/K/crf' -1
+299 '/JK/cc/K/cr' 0 30 3 'r' 298 'c' 1189 'f' 1190
+1191 '/JK/cc/K/cc' -1
+300 '/JK/cc/K/c' 1 127 2 'r' 299 'c' 1191
+301 '/JK/cc/K/' 0 31 2 'r' 297 'c' 300
+14 '/JK/cc' 3 'J' 289 1 'Q' 295 2 'K' 301 1
+302 '/JK/c' 1 128 2 'r' 283 'c' 14
+303 '/JK/' 0 32 2 'r' 245 'c' 302
+1192 '/QJ/rrc/J/rrc' -13
+1193 '/QJ/rrc/J/rrf' -9
+304 '/QJ/rrc/J/rr' 0 48 2 'c' 1192 'f' 1193
+1194 '/QJ/rrc/J/rc' -9
+1195 '/QJ/rrc/J/rf' 5
+305 '/QJ/rrc/J/r' 1 129 3 'r' 304 'c' 1194 'f' 1195
+1196 '/QJ/rrc/J/crrc' -13
+1197 '/QJ/rrc/J/crrf' 9
+306 '/QJ/rrc/J/crr' 1 130 2 'c' 1196 'f' 1197
+1198 '/QJ/rrc/J/crc' -9
+1199 '/QJ/rrc/J/crf' -5
+307 '/QJ/rrc/J/cr' 0 49 3 'r' 306 'c' 1198 'f' 1199
+1200 '/QJ/rrc/J/cc' -5
+308 '/QJ/rrc/J/c' 1 131 2 'r' 307 'c' 1200
+309 '/QJ/rrc/J/' 0 50 2 'r' 305 'c' 308
+1201 '/QJ/rrc/Q/rrc' 13
+1202 '/QJ/rrc/Q/rrf' -9
+310 '/QJ/rrc/Q/rr' 0 51 2 'c' 1201 'f' 1202
+1203 '/QJ/rrc/Q/rc' 9
+1204 '/QJ/rrc/Q/rf' 5
+311 '/QJ/rrc/Q/r' 1 0 3 'r' 310 'c' 1203 'f' 1204
+1205 '/QJ/rrc/Q/crrc' 13
+1206 '/QJ/rrc/Q/crrf' 9
+312 '/QJ/rrc/Q/crr' 1 1 2 'c' 1205 'f' 1206
+1207 '/QJ/rrc/Q/crc' 9
+1208 '/QJ/rrc/Q/crf' -5
+313 '/QJ/rrc/Q/cr' 0 52 3 'r' 312 'c' 1207 'f' 1208
+1209 '/QJ/rrc/Q/cc' 5
+314 '/QJ/rrc/Q/c' 1 2 2 'r' 313 'c' 1209
+315 '/QJ/rrc/Q/' 0 53 2 'r' 311 'c' 314
+1210 '/QJ/rrc/K/rrc' 13
+1211 '/QJ/rrc/K/rrf' -9
+316 '/QJ/rrc/K/rr' 0 54 2 'c' 1210 'f' 1211
+1212 '/QJ/rrc/K/rc' 9
+1213 '/QJ/rrc/K/rf' 5
+317 '/QJ/rrc/K/r' 1 3 3 'r' 316 'c' 1212 'f' 1213
+1214 '/QJ/rrc/K/crrc' 13
+1215 '/QJ/rrc/K/crrf' 9
+318 '/QJ/rrc/K/crr' 1 4 2 'c' 1214 'f' 1215
+1216 '/QJ/rrc/K/crc' 9
+1217 '/QJ/rrc/K/crf' -5
+319 '/QJ/rrc/K/cr' 0 55 3 'r' 318 'c' 1216 'f' 1217
+1218 '/QJ/rrc/K/cc' 5
+320 '/QJ/rrc/K/c' 1 5 2 'r' 319 'c' 1218
+321 '/QJ/rrc/K/' 0 56 2 'r' 317 'c' 320
+15 '/QJ/rrc' 3 'J' 309 1 'Q' 315 1 'K' 321 2
+1219 '/QJ/rrf' -3
+322 '/QJ/rr' 0 57 2 'c' 15 'f' 1219
+1220 '/QJ/rc/J/rrc' -11
+1221 '/QJ/rc/J/rrf' -7
+323 '/QJ/rc/J/rr' 0 58 2 'c' 1220 'f' 1221
+1222 '/QJ/rc/J/rc' -7
+1223 '/QJ/rc/J/rf' 3
+324 '/QJ/rc/J/r' 1 132 3 'r' 323 'c' 1222 'f' 1223
+1224 '/QJ/rc/J/crrc' -11
+1225 '/QJ/rc/J/crrf' 7
+325 '/QJ/rc/J/crr' 1 133 2 'c' 1224 'f' 1225
+1226 '/QJ/rc/J/crc' -7
+1227 '/QJ/rc/J/crf' -3
+326 '/QJ/rc/J/cr' 0 59 3 'r' 325 'c' 1226 'f' 1227
+1228 '/QJ/rc/J/cc' -3
+327 '/QJ/rc/J/c' 1 134 2 'r' 326 'c' 1228
+328 '/QJ/rc/J/' 0 60 2 'r' 324 'c' 327
+1229 '/QJ/rc/Q/rrc' 11
+1230 '/QJ/rc/Q/rrf' -7
+329 '/QJ/rc/Q/rr' 0 61 2 'c' 1229 'f' 1230
+1231 '/QJ/rc/Q/rc' 7
+1232 '/QJ/rc/Q/rf' 3
+330 '/QJ/rc/Q/r' 1 6 3 'r' 329 'c' 1231 'f' 1232
+1233 '/QJ/rc/Q/crrc' 11
+1234 '/QJ/rc/Q/crrf' 7
+331 '/QJ/rc/Q/crr' 1 7 2 'c' 1233 'f' 1234
+1235 '/QJ/rc/Q/crc' 7
+1236 '/QJ/rc/Q/crf' -3
+332 '/QJ/rc/Q/cr' 0 62 3 'r' 331 'c' 1235 'f' 1236
+1237 '/QJ/rc/Q/cc' 3
+333 '/QJ/rc/Q/c' 1 8 2 'r' 332 'c' 1237
+334 '/QJ/rc/Q/' 0 63 2 'r' 330 'c' 333
+1238 '/QJ/rc/K/rrc' 11
+1239 '/QJ/rc/K/rrf' -7
+335 '/QJ/rc/K/rr' 0 64 2 'c' 1238 'f' 1239
+1240 '/QJ/rc/K/rc' 7
+1241 '/QJ/rc/K/rf' 3
+336 '/QJ/rc/K/r' 1 9 3 'r' 335 'c' 1240 'f' 1241
+1242 '/QJ/rc/K/crrc' 11
+1243 '/QJ/rc/K/crrf' 7
+337 '/QJ/rc/K/crr' 1 10 2 'c' 1242 'f' 1243
+1244 '/QJ/rc/K/crc' 7
+1245 '/QJ/rc/K/crf' -3
+338 '/QJ/rc/K/cr' 0 65 3 'r' 337 'c' 1244 'f' 1245
+1246 '/QJ/rc/K/cc' 3
+339 '/QJ/rc/K/c' 1 11 2 'r' 338 'c' 1246
+340 '/QJ/rc/K/' 0 66 2 'r' 336 'c' 339
+16 '/QJ/rc' 3 'J' 328 1 'Q' 334 1 'K' 340 2
+1247 '/QJ/rf' 1
+341 '/QJ/r' 1 12 3 'r' 322 'c' 16 'f' 1247
+1248 '/QJ/crrc/J/rrc' -13
+1249 '/QJ/crrc/J/rrf' -9
+342 '/QJ/crrc/J/rr' 0 67 2 'c' 1248 'f' 1249
+1250 '/QJ/crrc/J/rc' -9
+1251 '/QJ/crrc/J/rf' 5
+343 '/QJ/crrc/J/r' 1 135 3 'r' 342 'c' 1250 'f' 1251
+1252 '/QJ/crrc/J/crrc' -13
+1253 '/QJ/crrc/J/crrf' 9
+344 '/QJ/crrc/J/crr' 1 136 2 'c' 1252 'f' 1253
+1254 '/QJ/crrc/J/crc' -9
+1255 '/QJ/crrc/J/crf' -5
+345 '/QJ/crrc/J/cr' 0 68 3 'r' 344 'c' 1254 'f' 1255
+1256 '/QJ/crrc/J/cc' -5
+346 '/QJ/crrc/J/c' 1 137 2 'r' 345 'c' 1256
+347 '/QJ/crrc/J/' 0 69 2 'r' 343 'c' 346
+1257 '/QJ/crrc/Q/rrc' 13
+1258 '/QJ/crrc/Q/rrf' -9
+348 '/QJ/crrc/Q/rr' 0 70 2 'c' 1257 'f' 1258
+1259 '/QJ/crrc/Q/rc' 9
+1260 '/QJ/crrc/Q/rf' 5
+349 '/QJ/crrc/Q/r' 1 13 3 'r' 348 'c' 1259 'f' 1260
+1261 '/QJ/crrc/Q/crrc' 13
+1262 '/QJ/crrc/Q/crrf' 9
+350 '/QJ/crrc/Q/crr' 1 14 2 'c' 1261 'f' 1262
+1263 '/QJ/crrc/Q/crc' 9
+1264 '/QJ/crrc/Q/crf' -5
+351 '/QJ/crrc/Q/cr' 0 71 3 'r' 350 'c' 1263 'f' 1264
+1265 '/QJ/crrc/Q/cc' 5
+352 '/QJ/crrc/Q/c' 1 15 2 'r' 351 'c' 1265
+353 '/QJ/crrc/Q/' 0 72 2 'r' 349 'c' 352
+1266 '/QJ/crrc/K/rrc' 13
+1267 '/QJ/crrc/K/rrf' -9
+354 '/QJ/crrc/K/rr' 0 73 2 'c' 1266 'f' 1267
+1268 '/QJ/crrc/K/rc' 9
+1269 '/QJ/crrc/K/rf' 5
+355 '/QJ/crrc/K/r' 1 16 3 'r' 354 'c' 1268 'f' 1269
+1270 '/QJ/crrc/K/crrc' 13
+1271 '/QJ/crrc/K/crrf' 9
+356 '/QJ/crrc/K/crr' 1 17 2 'c' 1270 'f' 1271
+1272 '/QJ/crrc/K/crc' 9
+1273 '/QJ/crrc/K/crf' -5
+357 '/QJ/crrc/K/cr' 0 74 3 'r' 356 'c' 1272 'f' 1273
+1274 '/QJ/crrc/K/cc' 5
+358 '/QJ/crrc/K/c' 1 18 2 'r' 357 'c' 1274
+359 '/QJ/crrc/K/' 0 75 2 'r' 355 'c' 358
+17 '/QJ/crrc' 3 'J' 347 1 'Q' 353 1 'K' 359 2
+1275 '/QJ/crrf' 3
+360 '/QJ/crr' 1 19 2 'c' 17 'f' 1275
+1276 '/QJ/crc/J/rrc' -11
+1277 '/QJ/crc/J/rrf' -7
+361 '/QJ/crc/J/rr' 0 76 2 'c' 1276 'f' 1277
+1278 '/QJ/crc/J/rc' -7
+1279 '/QJ/crc/J/rf' 3
+362 '/QJ/crc/J/r' 1 138 3 'r' 361 'c' 1278 'f' 1279
+1280 '/QJ/crc/J/crrc' -11
+1281 '/QJ/crc/J/crrf' 7
+363 '/QJ/crc/J/crr' 1 139 2 'c' 1280 'f' 1281
+1282 '/QJ/crc/J/crc' -7
+1283 '/QJ/crc/J/crf' -3
+364 '/QJ/crc/J/cr' 0 77 3 'r' 363 'c' 1282 'f' 1283
+1284 '/QJ/crc/J/cc' -3
+365 '/QJ/crc/J/c' 1 140 2 'r' 364 'c' 1284
+366 '/QJ/crc/J/' 0 78 2 'r' 362 'c' 365
+1285 '/QJ/crc/Q/rrc' 11
+1286 '/QJ/crc/Q/rrf' -7
+367 '/QJ/crc/Q/rr' 0 79 2 'c' 1285 'f' 1286
+1287 '/QJ/crc/Q/rc' 7
+1288 '/QJ/crc/Q/rf' 3
+368 '/QJ/crc/Q/r' 1 20 3 'r' 367 'c' 1287 'f' 1288
+1289 '/QJ/crc/Q/crrc' 11
+1290 '/QJ/crc/Q/crrf' 7
+369 '/QJ/crc/Q/crr' 1 21 2 'c' 1289 'f' 1290
+1291 '/QJ/crc/Q/crc' 7
+1292 '/QJ/crc/Q/crf' -3
+370 '/QJ/crc/Q/cr' 0 80 3 'r' 369 'c' 1291 'f' 1292
+1293 '/QJ/crc/Q/cc' 3
+371 '/QJ/crc/Q/c' 1 22 2 'r' 370 'c' 1293
+372 '/QJ/crc/Q/' 0 81 2 'r' 368 'c' 371
+1294 '/QJ/crc/K/rrc' 11
+1295 '/QJ/crc/K/rrf' -7
+373 '/QJ/crc/K/rr' 0 82 2 'c' 1294 'f' 1295
+1296 '/QJ/crc/K/rc' 7
+1297 '/QJ/crc/K/rf' 3
+374 '/QJ/crc/K/r' 1 23 3 'r' 373 'c' 1296 'f' 1297
+1298 '/QJ/crc/K/crrc' 11
+1299 '/QJ/crc/K/crrf' 7
+375 '/QJ/crc/K/crr' 1 24 2 'c' 1298 'f' 1299
+1300 '/QJ/crc/K/crc' 7
+1301 '/QJ/crc/K/crf' -3
+376 '/QJ/crc/K/cr' 0 83 3 'r' 375 'c' 1300 'f' 1301
+1302 '/QJ/crc/K/cc' 3
+377 '/QJ/crc/K/c' 1 25 2 'r' 376 'c' 1302
+378 '/QJ/crc/K/' 0 84 2 'r' 374 'c' 377
+18 '/QJ/crc' 3 'J' 366 1 'Q' 372 1 'K' 378 2
+1303 '/QJ/crf' -1
+379 '/QJ/cr' 0 85 3 'r' 360 'c' 18 'f' 1303
+1304 '/QJ/cc/J/rrc' -9
+1305 '/QJ/cc/J/rrf' -5
+380 '/QJ/cc/J/rr' 0 86 2 'c' 1304 'f' 1305
+1306 '/QJ/cc/J/rc' -5
+1307 '/QJ/cc/J/rf' 1
+381 '/QJ/cc/J/r' 1 141 3 'r' 380 'c' 1306 'f' 1307
+1308 '/QJ/cc/J/crrc' -9
+1309 '/QJ/cc/J/crrf' 5
+382 '/QJ/cc/J/crr' 1 142 2 'c' 1308 'f' 1309
+1310 '/QJ/cc/J/crc' -5
+1311 '/QJ/cc/J/crf' -1
+383 '/QJ/cc/J/cr' 0 87 3 'r' 382 'c' 1310 'f' 1311
+1312 '/QJ/cc/J/cc' -1
+384 '/QJ/cc/J/c' 1 143 2 'r' 383 'c' 1312
+385 '/QJ/cc/J/' 0 88 2 'r' 381 'c' 384
+1313 '/QJ/cc/Q/rrc' 9
+1314 '/QJ/cc/Q/rrf' -5
+386 '/QJ/cc/Q/rr' 0 89 2 'c' 1313 'f' 1314
+1315 '/QJ/cc/Q/rc' 5
+1316 '/QJ/cc/Q/rf' 1
+387 '/QJ/cc/Q/r' 1 26 3 'r' 386 'c' 1315 'f' 1316
+1317 '/QJ/cc/Q/crrc' 9
+1318 '/QJ/cc/Q/crrf' 5
+388 '/QJ/cc/Q/crr' 1 27 2 'c' 1317 'f' 1318
+1319 '/QJ/cc/Q/crc' 5
+1320 '/QJ/cc/Q/crf' -1
+389 '/QJ/cc/Q/cr' 0 90 3 'r' 388 'c' 1319 'f' 1320
+1321 '/QJ/cc/Q/cc' 1
+390 '/QJ/cc/Q/c' 1 28 2 'r' 389 'c' 1321
+391 '/QJ/cc/Q/' 0 91 2 'r' 387 'c' 390
+1322 '/QJ/cc/K/rrc' 9
+1323 '/QJ/cc/K/rrf' -5
+392 '/QJ/cc/K/rr' 0 92 2 'c' 1322 'f' 1323
+1324 '/QJ/cc/K/rc' 5
+1325 '/QJ/cc/K/rf' 1
+393 '/QJ/cc/K/r' 1 29 3 'r' 392 'c' 1324 'f' 1325
+1326 '/QJ/cc/K/crrc' 9
+1327 '/QJ/cc/K/crrf' 5
+394 '/QJ/cc/K/crr' 1 30 2 'c' 1326 'f' 1327
+1328 '/QJ/cc/K/crc' 5
+1329 '/QJ/cc/K/crf' -1
+395 '/QJ/cc/K/cr' 0 93 3 'r' 394 'c' 1328 'f' 1329
+1330 '/QJ/cc/K/cc' 1
+396 '/QJ/cc/K/c' 1 31 2 'r' 395 'c' 1330
+397 '/QJ/cc/K/' 0 94 2 'r' 393 'c' 396
+19 '/QJ/cc' 3 'J' 385 1 'Q' 391 1 'K' 397 2
+398 '/QJ/c' 1 32 2 'r' 379 'c' 19
+399 '/QJ/' 0 95 2 'r' 341 'c' 398
+1331 '/QQ/rrc/J/rrc' 0
+1332 '/QQ/rrc/J/rrf' -9
+400 '/QQ/rrc/J/rr' 0 48 2 'c' 1331 'f' 1332
+1333 '/QQ/rrc/J/rc' 0
+1334 '/QQ/rrc/J/rf' 5
+401 '/QQ/rrc/J/r' 1 33 3 'r' 400 'c' 1333 'f' 1334
+1335 '/QQ/rrc/J/crrc' 0
+1336 '/QQ/rrc/J/crrf' 9
+402 '/QQ/rrc/J/crr' 1 34 2 'c' 1335 'f' 1336
+1337 '/QQ/rrc/J/crc' 0
+1338 '/QQ/rrc/J/crf' -5
+403 '/QQ/rrc/J/cr' 0 49 3 'r' 402 'c' 1337 'f' 1338
+1339 '/QQ/rrc/J/cc' 0
+404 '/QQ/rrc/J/c' 1 35 2 'r' 403 'c' 1339
+405 '/QQ/rrc/J/' 0 50 2 'r' 401 'c' 404
+1340 '/QQ/rrc/K/rrc' 0
+1341 '/QQ/rrc/K/rrf' -9
+406 '/QQ/rrc/K/rr' 0 54 2 'c' 1340 'f' 1341
+1342 '/QQ/rrc/K/rc' 0
+1343 '/QQ/rrc/K/rf' 5
+407 '/QQ/rrc/K/r' 1 39 3 'r' 406 'c' 1342 'f' 1343
+1344 '/QQ/rrc/K/crrc' 0
+1345 '/QQ/rrc/K/crrf' 9
+408 '/QQ/rrc/K/crr' 1 40 2 'c' 1344 'f' 1345
+1346 '/QQ/rrc/K/crc' 0
+1347 '/QQ/rrc/K/crf' -5
+409 '/QQ/rrc/K/cr' 0 55 3 'r' 408 'c' 1346 'f' 1347
+1348 '/QQ/rrc/K/cc' 0
+410 '/QQ/rrc/K/c' 1 41 2 'r' 409 'c' 1348
+411 '/QQ/rrc/K/' 0 56 2 'r' 407 'c' 410
+20 '/QQ/rrc' 2 'J' 405 2 'K' 411 2
+1349 '/QQ/rrf' -3
+412 '/QQ/rr' 0 57 2 'c' 20 'f' 1349
+1350 '/QQ/rc/J/rrc' 0
+1351 '/QQ/rc/J/rrf' -7
+413 '/QQ/rc/J/rr' 0 58 2 'c' 1350 'f' 1351
+1352 '/QQ/rc/J/rc' 0
+1353 '/QQ/rc/J/rf' 3
+414 '/QQ/rc/J/r' 1 42 3 'r' 413 'c' 1352 'f' 1353
+1354 '/QQ/rc/J/crrc' 0
+1355 '/QQ/rc/J/crrf' 7
+415 '/QQ/rc/J/crr' 1 43 2 'c' 1354 'f' 1355
+1356 '/QQ/rc/J/crc' 0
+1357 '/QQ/rc/J/crf' -3
+416 '/QQ/rc/J/cr' 0 59 3 'r' 415 'c' 1356 'f' 1357
+1358 '/QQ/rc/J/cc' 0
+417 '/QQ/rc/J/c' 1 44 2 'r' 416 'c' 1358
+418 '/QQ/rc/J/' 0 60 2 'r' 414 'c' 417
+1359 '/QQ/rc/K/rrc' 0
+1360 '/QQ/rc/K/rrf' -7
+419 '/QQ/rc/K/rr' 0 64 2 'c' 1359 'f' 1360
+1361 '/QQ/rc/K/rc' 0
+1362 '/QQ/rc/K/rf' 3
+420 '/QQ/rc/K/r' 1 48 3 'r' 419 'c' 1361 'f' 1362
+1363 '/QQ/rc/K/crrc' 0
+1364 '/QQ/rc/K/crrf' 7
+421 '/QQ/rc/K/crr' 1 49 2 'c' 1363 'f' 1364
+1365 '/QQ/rc/K/crc' 0
+1366 '/QQ/rc/K/crf' -3
+422 '/QQ/rc/K/cr' 0 65 3 'r' 421 'c' 1365 'f' 1366
+1367 '/QQ/rc/K/cc' 0
+423 '/QQ/rc/K/c' 1 50 2 'r' 422 'c' 1367
+424 '/QQ/rc/K/' 0 66 2 'r' 420 'c' 423
+21 '/QQ/rc' 2 'J' 418 2 'K' 424 2
+1368 '/QQ/rf' 1
+425 '/QQ/r' 1 51 3 'r' 412 'c' 21 'f' 1368
+1369 '/QQ/crrc/J/rrc' 0
+1370 '/QQ/crrc/J/rrf' -9
+426 '/QQ/crrc/J/rr' 0 67 2 'c' 1369 'f' 1370
+1371 '/QQ/crrc/J/rc' 0
+1372 '/QQ/crrc/J/rf' 5
+427 '/QQ/crrc/J/r' 1 52 3 'r' 426 'c' 1371 'f' 1372
+1373 '/QQ/crrc/J/crrc' 0
+1374 '/QQ/crrc/J/crrf' 9
+428 '/QQ/crrc/J/crr' 1 53 2 'c' 1373 'f' 1374
+1375 '/QQ/crrc/J/crc' 0
+1376 '/QQ/crrc/J/crf' -5
+429 '/QQ/crrc/J/cr' 0 68 3 'r' 428 'c' 1375 'f' 1376
+1377 '/QQ/crrc/J/cc' 0
+430 '/QQ/crrc/J/c' 1 54 2 'r' 429 'c' 1377
+431 '/QQ/crrc/J/' 0 69 2 'r' 427 'c' 430
+1378 '/QQ/crrc/K/rrc' 0
+1379 '/QQ/crrc/K/rrf' -9
+432 '/QQ/crrc/K/rr' 0 73 2 'c' 1378 'f' 1379
+1380 '/QQ/crrc/K/rc' 0
+1381 '/QQ/crrc/K/rf' 5
+433 '/QQ/crrc/K/r' 1 58 3 'r' 432 'c' 1380 'f' 1381
+1382 '/QQ/crrc/K/crrc' 0
+1383 '/QQ/crrc/K/crrf' 9
+434 '/QQ/crrc/K/crr' 1 59 2 'c' 1382 'f' 1383
+1384 '/QQ/crrc/K/crc' 0
+1385 '/QQ/crrc/K/crf' -5
+435 '/QQ/crrc/K/cr' 0 74 3 'r' 434 'c' 1384 'f' 1385
+1386 '/QQ/crrc/K/cc' 0
+436 '/QQ/crrc/K/c' 1 60 2 'r' 435 'c' 1386
+437 '/QQ/crrc/K/' 0 75 2 'r' 433 'c' 436
+22 '/QQ/crrc' 2 'J' 431 2 'K' 437 2
+1387 '/QQ/crrf' 3
+438 '/QQ/crr' 1 61 2 'c' 22 'f' 1387
+1388 '/QQ/crc/J/rrc' 0
+1389 '/QQ/crc/J/rrf' -7
+439 '/QQ/crc/J/rr' 0 76 2 'c' 1388 'f' 1389
+1390 '/QQ/crc/J/rc' 0
+1391 '/QQ/crc/J/rf' 3
+440 '/QQ/crc/J/r' 1 62 3 'r' 439 'c' 1390 'f' 1391
+1392 '/QQ/crc/J/crrc' 0
+1393 '/QQ/crc/J/crrf' 7
+441 '/QQ/crc/J/crr' 1 63 2 'c' 1392 'f' 1393
+1394 '/QQ/crc/J/crc' 0
+1395 '/QQ/crc/J/crf' -3
+442 '/QQ/crc/J/cr' 0 77 3 'r' 441 'c' 1394 'f' 1395
+1396 '/QQ/crc/J/cc' 0
+443 '/QQ/crc/J/c' 1 64 2 'r' 442 'c' 1396
+444 '/QQ/crc/J/' 0 78 2 'r' 440 'c' 443
+1397 '/QQ/crc/K/rrc' 0
+1398 '/QQ/crc/K/rrf' -7
+445 '/QQ/crc/K/rr' 0 82 2 'c' 1397 'f' 1398
+1399 '/QQ/crc/K/rc' 0
+1400 '/QQ/crc/K/rf' 3
+446 '/QQ/crc/K/r' 1 68 3 'r' 445 'c' 1399 'f' 1400
+1401 '/QQ/crc/K/crrc' 0
+1402 '/QQ/crc/K/crrf' 7
+447 '/QQ/crc/K/crr' 1 69 2 'c' 1401 'f' 1402
+1403 '/QQ/crc/K/crc' 0
+1404 '/QQ/crc/K/crf' -3
+448 '/QQ/crc/K/cr' 0 83 3 'r' 447 'c' 1403 'f' 1404
+1405 '/QQ/crc/K/cc' 0
+449 '/QQ/crc/K/c' 1 70 2 'r' 448 'c' 1405
+450 '/QQ/crc/K/' 0 84 2 'r' 446 'c' 449
+23 '/QQ/crc' 2 'J' 444 2 'K' 450 2
+1406 '/QQ/crf' -1
+451 '/QQ/cr' 0 85 3 'r' 438 'c' 23 'f' 1406
+1407 '/QQ/cc/J/rrc' 0
+1408 '/QQ/cc/J/rrf' -5
+452 '/QQ/cc/J/rr' 0 86 2 'c' 1407 'f' 1408
+1409 '/QQ/cc/J/rc' 0
+1410 '/QQ/cc/J/rf' 1
+453 '/QQ/cc/J/r' 1 71 3 'r' 452 'c' 1409 'f' 1410
+1411 '/QQ/cc/J/crrc' 0
+1412 '/QQ/cc/J/crrf' 5
+454 '/QQ/cc/J/crr' 1 72 2 'c' 1411 'f' 1412
+1413 '/QQ/cc/J/crc' 0
+1414 '/QQ/cc/J/crf' -1
+455 '/QQ/cc/J/cr' 0 87 3 'r' 454 'c' 1413 'f' 1414
+1415 '/QQ/cc/J/cc' 0
+456 '/QQ/cc/J/c' 1 73 2 'r' 455 'c' 1415
+457 '/QQ/cc/J/' 0 88 2 'r' 453 'c' 456
+1416 '/QQ/cc/K/rrc' 0
+1417 '/QQ/cc/K/rrf' -5
+458 '/QQ/cc/K/rr' 0 92 2 'c' 1416 'f' 1417
+1418 '/QQ/cc/K/rc' 0
+1419 '/QQ/cc/K/rf' 1
+459 '/QQ/cc/K/r' 1 77 3 'r' 458 'c' 1418 'f' 1419
+1420 '/QQ/cc/K/crrc' 0
+1421 '/QQ/cc/K/crrf' 5
+460 '/QQ/cc/K/crr' 1 78 2 'c' 1420 'f' 1421
+1422 '/QQ/cc/K/crc' 0
+1423 '/QQ/cc/K/crf' -1
+461 '/QQ/cc/K/cr' 0 93 3 'r' 460 'c' 1422 'f' 1423
+1424 '/QQ/cc/K/cc' 0
+462 '/QQ/cc/K/c' 1 79 2 'r' 461 'c' 1424
+463 '/QQ/cc/K/' 0 94 2 'r' 459 'c' 462
+24 '/QQ/cc' 2 'J' 457 2 'K' 463 2
+464 '/QQ/c' 1 80 2 'r' 451 'c' 24
+465 '/QQ/' 0 95 2 'r' 425 'c' 464
+1425 '/QK/rrc/J/rrc' -13
+1426 '/QK/rrc/J/rrf' -9
+466 '/QK/rrc/J/rr' 0 48 2 'c' 1425 'f' 1426
+1427 '/QK/rrc/J/rc' -9
+1428 '/QK/rrc/J/rf' 5
+467 '/QK/rrc/J/r' 1 81 3 'r' 466 'c' 1427 'f' 1428
+1429 '/QK/rrc/J/crrc' -13
+1430 '/QK/rrc/J/crrf' 9
+468 '/QK/rrc/J/crr' 1 82 2 'c' 1429 'f' 1430
+1431 '/QK/rrc/J/crc' -9
+1432 '/QK/rrc/J/crf' -5
+469 '/QK/rrc/J/cr' 0 49 3 'r' 468 'c' 1431 'f' 1432
+1433 '/QK/rrc/J/cc' -5
+470 '/QK/rrc/J/c' 1 83 2 'r' 469 'c' 1433
+471 '/QK/rrc/J/' 0 50 2 'r' 467 'c' 470
+1434 '/QK/rrc/Q/rrc' 13
+1435 '/QK/rrc/Q/rrf' -9
+472 '/QK/rrc/Q/rr' 0 51 2 'c' 1434 'f' 1435
+1436 '/QK/rrc/Q/rc' 9
+1437 '/QK/rrc/Q/rf' 5
+473 '/QK/rrc/Q/r' 1 84 3 'r' 472 'c' 1436 'f' 1437
+1438 '/QK/rrc/Q/crrc' 13
+1439 '/QK/rrc/Q/crrf' 9
+474 '/QK/rrc/Q/crr' 1 85 2 'c' 1438 'f' 1439
+1440 '/QK/rrc/Q/crc' 9
+1441 '/QK/rrc/Q/crf' -5
+475 '/QK/rrc/Q/cr' 0 52 3 'r' 474 'c' 1440 'f' 1441
+1442 '/QK/rrc/Q/cc' 5
+476 '/QK/rrc/Q/c' 1 86 2 'r' 475 'c' 1442
+477 '/QK/rrc/Q/' 0 53 2 'r' 473 'c' 476
+1443 '/QK/rrc/K/rrc' -13
+1444 '/QK/rrc/K/rrf' -9
+478 '/QK/rrc/K/rr' 0 54 2 'c' 1443 'f' 1444
+1445 '/QK/rrc/K/rc' -9
+1446 '/QK/rrc/K/rf' 5
+479 '/QK/rrc/K/r' 1 87 3 'r' 478 'c' 1445 'f' 1446
+1447 '/QK/rrc/K/crrc' -13
+1448 '/QK/rrc/K/crrf' 9
+480 '/QK/rrc/K/crr' 1 88 2 'c' 1447 'f' 1448
+1449 '/QK/rrc/K/crc' -9
+1450 '/QK/rrc/K/crf' -5
+481 '/QK/rrc/K/cr' 0 55 3 'r' 480 'c' 1449 'f' 1450
+1451 '/QK/rrc/K/cc' -5
+482 '/QK/rrc/K/c' 1 89 2 'r' 481 'c' 1451
+483 '/QK/rrc/K/' 0 56 2 'r' 479 'c' 482
+25 '/QK/rrc' 3 'J' 471 2 'Q' 477 1 'K' 483 1
+1452 '/QK/rrf' -3
+484 '/QK/rr' 0 57 2 'c' 25 'f' 1452
+1453 '/QK/rc/J/rrc' -11
+1454 '/QK/rc/J/rrf' -7
+485 '/QK/rc/J/rr' 0 58 2 'c' 1453 'f' 1454
+1455 '/QK/rc/J/rc' -7
+1456 '/QK/rc/J/rf' 3
+486 '/QK/rc/J/r' 1 90 3 'r' 485 'c' 1455 'f' 1456
+1457 '/QK/rc/J/crrc' -11
+1458 '/QK/rc/J/crrf' 7
+487 '/QK/rc/J/crr' 1 91 2 'c' 1457 'f' 1458
+1459 '/QK/rc/J/crc' -7
+1460 '/QK/rc/J/crf' -3
+488 '/QK/rc/J/cr' 0 59 3 'r' 487 'c' 1459 'f' 1460
+1461 '/QK/rc/J/cc' -3
+489 '/QK/rc/J/c' 1 92 2 'r' 488 'c' 1461
+490 '/QK/rc/J/' 0 60 2 'r' 486 'c' 489
+1462 '/QK/rc/Q/rrc' 11
+1463 '/QK/rc/Q/rrf' -7
+491 '/QK/rc/Q/rr' 0 61 2 'c' 1462 'f' 1463
+1464 '/QK/rc/Q/rc' 7
+1465 '/QK/rc/Q/rf' 3
+492 '/QK/rc/Q/r' 1 93 3 'r' 491 'c' 1464 'f' 1465
+1466 '/QK/rc/Q/crrc' 11
+1467 '/QK/rc/Q/crrf' 7
+493 '/QK/rc/Q/crr' 1 94 2 'c' 1466 'f' 1467
+1468 '/QK/rc/Q/crc' 7
+1469 '/QK/rc/Q/crf' -3
+494 '/QK/rc/Q/cr' 0 62 3 'r' 493 'c' 1468 'f' 1469
+1470 '/QK/rc/Q/cc' 3
+495 '/QK/rc/Q/c' 1 95 2 'r' 494 'c' 1470
+496 '/QK/rc/Q/' 0 63 2 'r' 492 'c' 495
+1471 '/QK/rc/K/rrc' -11
+1472 '/QK/rc/K/rrf' -7
+497 '/QK/rc/K/rr' 0 64 2 'c' 1471 'f' 1472
+1473 '/QK/rc/K/rc' -7
+1474 '/QK/rc/K/rf' 3
+498 '/QK/rc/K/r' 1 96 3 'r' 497 'c' 1473 'f' 1474
+1475 '/QK/rc/K/crrc' -11
+1476 '/QK/rc/K/crrf' 7
+499 '/QK/rc/K/crr' 1 97 2 'c' 1475 'f' 1476
+1477 '/QK/rc/K/crc' -7
+1478 '/QK/rc/K/crf' -3
+500 '/QK/rc/K/cr' 0 65 3 'r' 499 'c' 1477 'f' 1478
+1479 '/QK/rc/K/cc' -3
+501 '/QK/rc/K/c' 1 98 2 'r' 500 'c' 1479
+502 '/QK/rc/K/' 0 66 2 'r' 498 'c' 501
+26 '/QK/rc' 3 'J' 490 2 'Q' 496 1 'K' 502 1
+1480 '/QK/rf' 1
+503 '/QK/r' 1 99 3 'r' 484 'c' 26 'f' 1480
+1481 '/QK/crrc/J/rrc' -13
+1482 '/QK/crrc/J/rrf' -9
+504 '/QK/crrc/J/rr' 0 67 2 'c' 1481 'f' 1482
+1483 '/QK/crrc/J/rc' -9
+1484 '/QK/crrc/J/rf' 5
+505 '/QK/crrc/J/r' 1 100 3 'r' 504 'c' 1483 'f' 1484
+1485 '/QK/crrc/J/crrc' -13
+1486 '/QK/crrc/J/crrf' 9
+506 '/QK/crrc/J/crr' 1 101 2 'c' 1485 'f' 1486
+1487 '/QK/crrc/J/crc' -9
+1488 '/QK/crrc/J/crf' -5
+507 '/QK/crrc/J/cr' 0 68 3 'r' 506 'c' 1487 'f' 1488
+1489 '/QK/crrc/J/cc' -5
+508 '/QK/crrc/J/c' 1 102 2 'r' 507 'c' 1489
+509 '/QK/crrc/J/' 0 69 2 'r' 505 'c' 508
+1490 '/QK/crrc/Q/rrc' 13
+1491 '/QK/crrc/Q/rrf' -9
+510 '/QK/crrc/Q/rr' 0 70 2 'c' 1490 'f' 1491
+1492 '/QK/crrc/Q/rc' 9
+1493 '/QK/crrc/Q/rf' 5
+511 '/QK/crrc/Q/r' 1 103 3 'r' 510 'c' 1492 'f' 1493
+1494 '/QK/crrc/Q/crrc' 13
+1495 '/QK/crrc/Q/crrf' 9
+512 '/QK/crrc/Q/crr' 1 104 2 'c' 1494 'f' 1495
+1496 '/QK/crrc/Q/crc' 9
+1497 '/QK/crrc/Q/crf' -5
+513 '/QK/crrc/Q/cr' 0 71 3 'r' 512 'c' 1496 'f' 1497
+1498 '/QK/crrc/Q/cc' 5
+514 '/QK/crrc/Q/c' 1 105 2 'r' 513 'c' 1498
+515 '/QK/crrc/Q/' 0 72 2 'r' 511 'c' 514
+1499 '/QK/crrc/K/rrc' -13
+1500 '/QK/crrc/K/rrf' -9
+516 '/QK/crrc/K/rr' 0 73 2 'c' 1499 'f' 1500
+1501 '/QK/crrc/K/rc' -9
+1502 '/QK/crrc/K/rf' 5
+517 '/QK/crrc/K/r' 1 106 3 'r' 516 'c' 1501 'f' 1502
+1503 '/QK/crrc/K/crrc' -13
+1504 '/QK/crrc/K/crrf' 9
+518 '/QK/crrc/K/crr' 1 107 2 'c' 1503 'f' 1504
+1505 '/QK/crrc/K/crc' -9
+1506 '/QK/crrc/K/crf' -5
+519 '/QK/crrc/K/cr' 0 74 3 'r' 518 'c' 1505 'f' 1506
+1507 '/QK/crrc/K/cc' -5
+520 '/QK/crrc/K/c' 1 108 2 'r' 519 'c' 1507
+521 '/QK/crrc/K/' 0 75 2 'r' 517 'c' 520
+27 '/QK/crrc' 3 'J' 509 2 'Q' 515 1 'K' 521 1
+1508 '/QK/crrf' 3
+522 '/QK/crr' 1 109 2 'c' 27 'f' 1508
+1509 '/QK/crc/J/rrc' -11
+1510 '/QK/crc/J/rrf' -7
+523 '/QK/crc/J/rr' 0 76 2 'c' 1509 'f' 1510
+1511 '/QK/crc/J/rc' -7
+1512 '/QK/crc/J/rf' 3
+524 '/QK/crc/J/r' 1 110 3 'r' 523 'c' 1511 'f' 1512
+1513 '/QK/crc/J/crrc' -11
+1514 '/QK/crc/J/crrf' 7
+525 '/QK/crc/J/crr' 1 111 2 'c' 1513 'f' 1514
+1515 '/QK/crc/J/crc' -7
+1516 '/QK/crc/J/crf' -3
+526 '/QK/crc/J/cr' 0 77 3 'r' 525 'c' 1515 'f' 1516
+1517 '/QK/crc/J/cc' -3
+527 '/QK/crc/J/c' 1 112 2 'r' 526 'c' 1517
+528 '/QK/crc/J/' 0 78 2 'r' 524 'c' 527
+1518 '/QK/crc/Q/rrc' 11
+1519 '/QK/crc/Q/rrf' -7
+529 '/QK/crc/Q/rr' 0 79 2 'c' 1518 'f' 1519
+1520 '/QK/crc/Q/rc' 7
+1521 '/QK/crc/Q/rf' 3
+530 '/QK/crc/Q/r' 1 113 3 'r' 529 'c' 1520 'f' 1521
+1522 '/QK/crc/Q/crrc' 11
+1523 '/QK/crc/Q/crrf' 7
+531 '/QK/crc/Q/crr' 1 114 2 'c' 1522 'f' 1523
+1524 '/QK/crc/Q/crc' 7
+1525 '/QK/crc/Q/crf' -3
+532 '/QK/crc/Q/cr' 0 80 3 'r' 531 'c' 1524 'f' 1525
+1526 '/QK/crc/Q/cc' 3
+533 '/QK/crc/Q/c' 1 115 2 'r' 532 'c' 1526
+534 '/QK/crc/Q/' 0 81 2 'r' 530 'c' 533
+1527 '/QK/crc/K/rrc' -11
+1528 '/QK/crc/K/rrf' -7
+535 '/QK/crc/K/rr' 0 82 2 'c' 1527 'f' 1528
+1529 '/QK/crc/K/rc' -7
+1530 '/QK/crc/K/rf' 3
+536 '/QK/crc/K/r' 1 116 3 'r' 535 'c' 1529 'f' 1530
+1531 '/QK/crc/K/crrc' -11
+1532 '/QK/crc/K/crrf' 7
+537 '/QK/crc/K/crr' 1 117 2 'c' 1531 'f' 1532
+1533 '/QK/crc/K/crc' -7
+1534 '/QK/crc/K/crf' -3
+538 '/QK/crc/K/cr' 0 83 3 'r' 537 'c' 1533 'f' 1534
+1535 '/QK/crc/K/cc' -3
+539 '/QK/crc/K/c' 1 118 2 'r' 538 'c' 1535
+540 '/QK/crc/K/' 0 84 2 'r' 536 'c' 539
+28 '/QK/crc' 3 'J' 528 2 'Q' 534 1 'K' 540 1
+1536 '/QK/crf' -1
+541 '/QK/cr' 0 85 3 'r' 522 'c' 28 'f' 1536
+1537 '/QK/cc/J/rrc' -9
+1538 '/QK/cc/J/rrf' -5
+542 '/QK/cc/J/rr' 0 86 2 'c' 1537 'f' 1538
+1539 '/QK/cc/J/rc' -5
+1540 '/QK/cc/J/rf' 1
+543 '/QK/cc/J/r' 1 119 3 'r' 542 'c' 1539 'f' 1540
+1541 '/QK/cc/J/crrc' -9
+1542 '/QK/cc/J/crrf' 5
+544 '/QK/cc/J/crr' 1 120 2 'c' 1541 'f' 1542
+1543 '/QK/cc/J/crc' -5
+1544 '/QK/cc/J/crf' -1
+545 '/QK/cc/J/cr' 0 87 3 'r' 544 'c' 1543 'f' 1544
+1545 '/QK/cc/J/cc' -1
+546 '/QK/cc/J/c' 1 121 2 'r' 545 'c' 1545
+547 '/QK/cc/J/' 0 88 2 'r' 543 'c' 546
+1546 '/QK/cc/Q/rrc' 9
+1547 '/QK/cc/Q/rrf' -5
+548 '/QK/cc/Q/rr' 0 89 2 'c' 1546 'f' 1547
+1548 '/QK/cc/Q/rc' 5
+1549 '/QK/cc/Q/rf' 1
+549 '/QK/cc/Q/r' 1 122 3 'r' 548 'c' 1548 'f' 1549
+1550 '/QK/cc/Q/crrc' 9
+1551 '/QK/cc/Q/crrf' 5
+550 '/QK/cc/Q/crr' 1 123 2 'c' 1550 'f' 1551
+1552 '/QK/cc/Q/crc' 5
+1553 '/QK/cc/Q/crf' -1
+551 '/QK/cc/Q/cr' 0 90 3 'r' 550 'c' 1552 'f' 1553
+1554 '/QK/cc/Q/cc' 1
+552 '/QK/cc/Q/c' 1 124 2 'r' 551 'c' 1554
+553 '/QK/cc/Q/' 0 91 2 'r' 549 'c' 552
+1555 '/QK/cc/K/rrc' -9
+1556 '/QK/cc/K/rrf' -5
+554 '/QK/cc/K/rr' 0 92 2 'c' 1555 'f' 1556
+1557 '/QK/cc/K/rc' -5
+1558 '/QK/cc/K/rf' 1
+555 '/QK/cc/K/r' 1 125 3 'r' 554 'c' 1557 'f' 1558
+1559 '/QK/cc/K/crrc' -9
+1560 '/QK/cc/K/crrf' 5
+556 '/QK/cc/K/crr' 1 126 2 'c' 1559 'f' 1560
+1561 '/QK/cc/K/crc' -5
+1562 '/QK/cc/K/crf' -1
+557 '/QK/cc/K/cr' 0 93 3 'r' 556 'c' 1561 'f' 1562
+1563 '/QK/cc/K/cc' -1
+558 '/QK/cc/K/c' 1 127 2 'r' 557 'c' 1563
+559 '/QK/cc/K/' 0 94 2 'r' 555 'c' 558
+29 '/QK/cc' 3 'J' 547 2 'Q' 553 1 'K' 559 1
+560 '/QK/c' 1 128 2 'r' 541 'c' 29
+561 '/QK/' 0 95 2 'r' 503 'c' 560
+1564 '/KJ/rrc/J/rrc' -13
+1565 '/KJ/rrc/J/rrf' -9
+562 '/KJ/rrc/J/rr' 0 96 2 'c' 1564 'f' 1565
+1566 '/KJ/rrc/J/rc' -9
+1567 '/KJ/rrc/J/rf' 5
+563 '/KJ/rrc/J/r' 1 129 3 'r' 562 'c' 1566 'f' 1567
+1568 '/KJ/rrc/J/crrc' -13
+1569 '/KJ/rrc/J/crrf' 9
+564 '/KJ/rrc/J/crr' 1 130 2 'c' 1568 'f' 1569
+1570 '/KJ/rrc/J/crc' -9
+1571 '/KJ/rrc/J/crf' -5
+565 '/KJ/rrc/J/cr' 0 97 3 'r' 564 'c' 1570 'f' 1571
+1572 '/KJ/rrc/J/cc' -5
+566 '/KJ/rrc/J/c' 1 131 2 'r' 565 'c' 1572
+567 '/KJ/rrc/J/' 0 98 2 'r' 563 'c' 566
+1573 '/KJ/rrc/Q/rrc' 13
+1574 '/KJ/rrc/Q/rrf' -9
+568 '/KJ/rrc/Q/rr' 0 99 2 'c' 1573 'f' 1574
+1575 '/KJ/rrc/Q/rc' 9
+1576 '/KJ/rrc/Q/rf' 5
+569 '/KJ/rrc/Q/r' 1 0 3 'r' 568 'c' 1575 'f' 1576
+1577 '/KJ/rrc/Q/crrc' 13
+1578 '/KJ/rrc/Q/crrf' 9
+570 '/KJ/rrc/Q/crr' 1 1 2 'c' 1577 'f' 1578
+1579 '/KJ/rrc/Q/crc' 9
+1580 '/KJ/rrc/Q/crf' -5
+571 '/KJ/rrc/Q/cr' 0 100 3 'r' 570 'c' 1579 'f' 1580
+1581 '/KJ/rrc/Q/cc' 5
+572 '/KJ/rrc/Q/c' 1 2 2 'r' 571 'c' 1581
+573 '/KJ/rrc/Q/' 0 101 2 'r' 569 'c' 572
+1582 '/KJ/rrc/K/rrc' 13
+1583 '/KJ/rrc/K/rrf' -9
+574 '/KJ/rrc/K/rr' 0 102 2 'c' 1582 'f' 1583
+1584 '/KJ/rrc/K/rc' 9
+1585 '/KJ/rrc/K/rf' 5
+575 '/KJ/rrc/K/r' 1 3 3 'r' 574 'c' 1584 'f' 1585
+1586 '/KJ/rrc/K/crrc' 13
+1587 '/KJ/rrc/K/crrf' 9
+576 '/KJ/rrc/K/crr' 1 4 2 'c' 1586 'f' 1587
+1588 '/KJ/rrc/K/crc' 9
+1589 '/KJ/rrc/K/crf' -5
+577 '/KJ/rrc/K/cr' 0 103 3 'r' 576 'c' 1588 'f' 1589
+1590 '/KJ/rrc/K/cc' 5
+578 '/KJ/rrc/K/c' 1 5 2 'r' 577 'c' 1590
+579 '/KJ/rrc/K/' 0 104 2 'r' 575 'c' 578
+30 '/KJ/rrc' 3 'J' 567 1 'Q' 573 2 'K' 579 1
+1591 '/KJ/rrf' -3
+580 '/KJ/rr' 0 105 2 'c' 30 'f' 1591
+1592 '/KJ/rc/J/rrc' -11
+1593 '/KJ/rc/J/rrf' -7
+581 '/KJ/rc/J/rr' 0 106 2 'c' 1592 'f' 1593
+1594 '/KJ/rc/J/rc' -7
+1595 '/KJ/rc/J/rf' 3
+582 '/KJ/rc/J/r' 1 132 3 'r' 581 'c' 1594 'f' 1595
+1596 '/KJ/rc/J/crrc' -11
+1597 '/KJ/rc/J/crrf' 7
+583 '/KJ/rc/J/crr' 1 133 2 'c' 1596 'f' 1597
+1598 '/KJ/rc/J/crc' -7
+1599 '/KJ/rc/J/crf' -3
+584 '/KJ/rc/J/cr' 0 107 3 'r' 583 'c' 1598 'f' 1599
+1600 '/KJ/rc/J/cc' -3
+585 '/KJ/rc/J/c' 1 134 2 'r' 584 'c' 1600
+586 '/KJ/rc/J/' 0 108 2 'r' 582 'c' 585
+1601 '/KJ/rc/Q/rrc' 11
+1602 '/KJ/rc/Q/rrf' -7
+587 '/KJ/rc/Q/rr' 0 109 2 'c' 1601 'f' 1602
+1603 '/KJ/rc/Q/rc' 7
+1604 '/KJ/rc/Q/rf' 3
+588 '/KJ/rc/Q/r' 1 6 3 'r' 587 'c' 1603 'f' 1604
+1605 '/KJ/rc/Q/crrc' 11
+1606 '/KJ/rc/Q/crrf' 7
+589 '/KJ/rc/Q/crr' 1 7 2 'c' 1605 'f' 1606
+1607 '/KJ/rc/Q/crc' 7
+1608 '/KJ/rc/Q/crf' -3
+590 '/KJ/rc/Q/cr' 0 110 3 'r' 589 'c' 1607 'f' 1608
+1609 '/KJ/rc/Q/cc' 3
+591 '/KJ/rc/Q/c' 1 8 2 'r' 590 'c' 1609
+592 '/KJ/rc/Q/' 0 111 2 'r' 588 'c' 591
+1610 '/KJ/rc/K/rrc' 11
+1611 '/KJ/rc/K/rrf' -7
+593 '/KJ/rc/K/rr' 0 112 2 'c' 1610 'f' 1611
+1612 '/KJ/rc/K/rc' 7
+1613 '/KJ/rc/K/rf' 3
+594 '/KJ/rc/K/r' 1 9 3 'r' 593 'c' 1612 'f' 1613
+1614 '/KJ/rc/K/crrc' 11
+1615 '/KJ/rc/K/crrf' 7
+595 '/KJ/rc/K/crr' 1 10 2 'c' 1614 'f' 1615
+1616 '/KJ/rc/K/crc' 7
+1617 '/KJ/rc/K/crf' -3
+596 '/KJ/rc/K/cr' 0 113 3 'r' 595 'c' 1616 'f' 1617
+1618 '/KJ/rc/K/cc' 3
+597 '/KJ/rc/K/c' 1 11 2 'r' 596 'c' 1618
+598 '/KJ/rc/K/' 0 114 2 'r' 594 'c' 597
+31 '/KJ/rc' 3 'J' 586 1 'Q' 592 2 'K' 598 1
+1619 '/KJ/rf' 1
+599 '/KJ/r' 1 12 3 'r' 580 'c' 31 'f' 1619
+1620 '/KJ/crrc/J/rrc' -13
+1621 '/KJ/crrc/J/rrf' -9
+600 '/KJ/crrc/J/rr' 0 115 2 'c' 1620 'f' 1621
+1622 '/KJ/crrc/J/rc' -9
+1623 '/KJ/crrc/J/rf' 5
+601 '/KJ/crrc/J/r' 1 135 3 'r' 600 'c' 1622 'f' 1623
+1624 '/KJ/crrc/J/crrc' -13
+1625 '/KJ/crrc/J/crrf' 9
+602 '/KJ/crrc/J/crr' 1 136 2 'c' 1624 'f' 1625
+1626 '/KJ/crrc/J/crc' -9
+1627 '/KJ/crrc/J/crf' -5
+603 '/KJ/crrc/J/cr' 0 116 3 'r' 602 'c' 1626 'f' 1627
+1628 '/KJ/crrc/J/cc' -5
+604 '/KJ/crrc/J/c' 1 137 2 'r' 603 'c' 1628
+605 '/KJ/crrc/J/' 0 117 2 'r' 601 'c' 604
+1629 '/KJ/crrc/Q/rrc' 13
+1630 '/KJ/crrc/Q/rrf' -9
+606 '/KJ/crrc/Q/rr' 0 118 2 'c' 1629 'f' 1630
+1631 '/KJ/crrc/Q/rc' 9
+1632 '/KJ/crrc/Q/rf' 5
+607 '/KJ/crrc/Q/r' 1 13 3 'r' 606 'c' 1631 'f' 1632
+1633 '/KJ/crrc/Q/crrc' 13
+1634 '/KJ/crrc/Q/crrf' 9
+608 '/KJ/crrc/Q/crr' 1 14 2 'c' 1633 'f' 1634
+1635 '/KJ/crrc/Q/crc' 9
+1636 '/KJ/crrc/Q/crf' -5
+609 '/KJ/crrc/Q/cr' 0 119 3 'r' 608 'c' 1635 'f' 1636
+1637 '/KJ/crrc/Q/cc' 5
+610 '/KJ/crrc/Q/c' 1 15 2 'r' 609 'c' 1637
+611 '/KJ/crrc/Q/' 0 120 2 'r' 607 'c' 610
+1638 '/KJ/crrc/K/rrc' 13
+1639 '/KJ/crrc/K/rrf' -9
+612 '/KJ/crrc/K/rr' 0 121 2 'c' 1638 'f' 1639
+1640 '/KJ/crrc/K/rc' 9
+1641 '/KJ/crrc/K/rf' 5
+613 '/KJ/crrc/K/r' 1 16 3 'r' 612 'c' 1640 'f' 1641
+1642 '/KJ/crrc/K/crrc' 13
+1643 '/KJ/crrc/K/crrf' 9
+614 '/KJ/crrc/K/crr' 1 17 2 'c' 1642 'f' 1643
+1644 '/KJ/crrc/K/crc' 9
+1645 '/KJ/crrc/K/crf' -5
+615 '/KJ/crrc/K/cr' 0 122 3 'r' 614 'c' 1644 'f' 1645
+1646 '/KJ/crrc/K/cc' 5
+616 '/KJ/crrc/K/c' 1 18 2 'r' 615 'c' 1646
+617 '/KJ/crrc/K/' 0 123 2 'r' 613 'c' 616
+32 '/KJ/crrc' 3 'J' 605 1 'Q' 611 2 'K' 617 1
+1647 '/KJ/crrf' 3
+618 '/KJ/crr' 1 19 2 'c' 32 'f' 1647
+1648 '/KJ/crc/J/rrc' -11
+1649 '/KJ/crc/J/rrf' -7
+619 '/KJ/crc/J/rr' 0 124 2 'c' 1648 'f' 1649
+1650 '/KJ/crc/J/rc' -7
+1651 '/KJ/crc/J/rf' 3
+620 '/KJ/crc/J/r' 1 138 3 'r' 619 'c' 1650 'f' 1651
+1652 '/KJ/crc/J/crrc' -11
+1653 '/KJ/crc/J/crrf' 7
+621 '/KJ/crc/J/crr' 1 139 2 'c' 1652 'f' 1653
+1654 '/KJ/crc/J/crc' -7
+1655 '/KJ/crc/J/crf' -3
+622 '/KJ/crc/J/cr' 0 125 3 'r' 621 'c' 1654 'f' 1655
+1656 '/KJ/crc/J/cc' -3
+623 '/KJ/crc/J/c' 1 140 2 'r' 622 'c' 1656
+624 '/KJ/crc/J/' 0 126 2 'r' 620 'c' 623
+1657 '/KJ/crc/Q/rrc' 11
+1658 '/KJ/crc/Q/rrf' -7
+625 '/KJ/crc/Q/rr' 0 127 2 'c' 1657 'f' 1658
+1659 '/KJ/crc/Q/rc' 7
+1660 '/KJ/crc/Q/rf' 3
+626 '/KJ/crc/Q/r' 1 20 3 'r' 625 'c' 1659 'f' 1660
+1661 '/KJ/crc/Q/crrc' 11
+1662 '/KJ/crc/Q/crrf' 7
+627 '/KJ/crc/Q/crr' 1 21 2 'c' 1661 'f' 1662
+1663 '/KJ/crc/Q/crc' 7
+1664 '/KJ/crc/Q/crf' -3
+628 '/KJ/crc/Q/cr' 0 128 3 'r' 627 'c' 1663 'f' 1664
+1665 '/KJ/crc/Q/cc' 3
+629 '/KJ/crc/Q/c' 1 22 2 'r' 628 'c' 1665
+630 '/KJ/crc/Q/' 0 129 2 'r' 626 'c' 629
+1666 '/KJ/crc/K/rrc' 11
+1667 '/KJ/crc/K/rrf' -7
+631 '/KJ/crc/K/rr' 0 130 2 'c' 1666 'f' 1667
+1668 '/KJ/crc/K/rc' 7
+1669 '/KJ/crc/K/rf' 3
+632 '/KJ/crc/K/r' 1 23 3 'r' 631 'c' 1668 'f' 1669
+1670 '/KJ/crc/K/crrc' 11
+1671 '/KJ/crc/K/crrf' 7
+633 '/KJ/crc/K/crr' 1 24 2 'c' 1670 'f' 1671
+1672 '/KJ/crc/K/crc' 7
+1673 '/KJ/crc/K/crf' -3
+634 '/KJ/crc/K/cr' 0 131 3 'r' 633 'c' 1672 'f' 1673
+1674 '/KJ/crc/K/cc' 3
+635 '/KJ/crc/K/c' 1 25 2 'r' 634 'c' 1674
+636 '/KJ/crc/K/' 0 132 2 'r' 632 'c' 635
+33 '/KJ/crc' 3 'J' 624 1 'Q' 630 2 'K' 636 1
+1675 '/KJ/crf' -1
+637 '/KJ/cr' 0 133 3 'r' 618 'c' 33 'f' 1675
+1676 '/KJ/cc/J/rrc' -9
+1677 '/KJ/cc/J/rrf' -5
+638 '/KJ/cc/J/rr' 0 134 2 'c' 1676 'f' 1677
+1678 '/KJ/cc/J/rc' -5
+1679 '/KJ/cc/J/rf' 1
+639 '/KJ/cc/J/r' 1 141 3 'r' 638 'c' 1678 'f' 1679
+1680 '/KJ/cc/J/crrc' -9
+1681 '/KJ/cc/J/crrf' 5
+640 '/KJ/cc/J/crr' 1 142 2 'c' 1680 'f' 1681
+1682 '/KJ/cc/J/crc' -5
+1683 '/KJ/cc/J/crf' -1
+641 '/KJ/cc/J/cr' 0 135 3 'r' 640 'c' 1682 'f' 1683
+1684 '/KJ/cc/J/cc' -1
+642 '/KJ/cc/J/c' 1 143 2 'r' 641 'c' 1684
+643 '/KJ/cc/J/' 0 136 2 'r' 639 'c' 642
+1685 '/KJ/cc/Q/rrc' 9
+1686 '/KJ/cc/Q/rrf' -5
+644 '/KJ/cc/Q/rr' 0 137 2 'c' 1685 'f' 1686
+1687 '/KJ/cc/Q/rc' 5
+1688 '/KJ/cc/Q/rf' 1
+645 '/KJ/cc/Q/r' 1 26 3 'r' 644 'c' 1687 'f' 1688
+1689 '/KJ/cc/Q/crrc' 9
+1690 '/KJ/cc/Q/crrf' 5
+646 '/KJ/cc/Q/crr' 1 27 2 'c' 1689 'f' 1690
+1691 '/KJ/cc/Q/crc' 5
+1692 '/KJ/cc/Q/crf' -1
+647 '/KJ/cc/Q/cr' 0 138 3 'r' 646 'c' 1691 'f' 1692
+1693 '/KJ/cc/Q/cc' 1
+648 '/KJ/cc/Q/c' 1 28 2 'r' 647 'c' 1693
+649 '/KJ/cc/Q/' 0 139 2 'r' 645 'c' 648
+1694 '/KJ/cc/K/rrc' 9
+1695 '/KJ/cc/K/rrf' -5
+650 '/KJ/cc/K/rr' 0 140 2 'c' 1694 'f' 1695
+1696 '/KJ/cc/K/rc' 5
+1697 '/KJ/cc/K/rf' 1
+651 '/KJ/cc/K/r' 1 29 3 'r' 650 'c' 1696 'f' 1697
+1698 '/KJ/cc/K/crrc' 9
+1699 '/KJ/cc/K/crrf' 5
+652 '/KJ/cc/K/crr' 1 30 2 'c' 1698 'f' 1699
+1700 '/KJ/cc/K/crc' 5
+1701 '/KJ/cc/K/crf' -1
+653 '/KJ/cc/K/cr' 0 141 3 'r' 652 'c' 1700 'f' 1701
+1702 '/KJ/cc/K/cc' 1
+654 '/KJ/cc/K/c' 1 31 2 'r' 653 'c' 1702
+655 '/KJ/cc/K/' 0 142 2 'r' 651 'c' 654
+34 '/KJ/cc' 3 'J' 643 1 'Q' 649 2 'K' 655 1
+656 '/KJ/c' 1 32 2 'r' 637 'c' 34
+657 '/KJ/' 0 143 2 'r' 599 'c' 656
+1703 '/KQ/rrc/J/rrc' 13
+1704 '/KQ/rrc/J/rrf' -9
+658 '/KQ/rrc/J/rr' 0 96 2 'c' 1703 'f' 1704
+1705 '/KQ/rrc/J/rc' 9
+1706 '/KQ/rrc/J/rf' 5
+659 '/KQ/rrc/J/r' 1 33 3 'r' 658 'c' 1705 'f' 1706
+1707 '/KQ/rrc/J/crrc' 13
+1708 '/KQ/rrc/J/crrf' 9
+660 '/KQ/rrc/J/crr' 1 34 2 'c' 1707 'f' 1708
+1709 '/KQ/rrc/J/crc' 9
+1710 '/KQ/rrc/J/crf' -5
+661 '/KQ/rrc/J/cr' 0 97 3 'r' 660 'c' 1709 'f' 1710
+1711 '/KQ/rrc/J/cc' 5
+662 '/KQ/rrc/J/c' 1 35 2 'r' 661 'c' 1711
+663 '/KQ/rrc/J/' 0 98 2 'r' 659 'c' 662
+1712 '/KQ/rrc/Q/rrc' -13
+1713 '/KQ/rrc/Q/rrf' -9
+664 '/KQ/rrc/Q/rr' 0 99 2 'c' 1712 'f' 1713
+1714 '/KQ/rrc/Q/rc' -9
+1715 '/KQ/rrc/Q/rf' 5
+665 '/KQ/rrc/Q/r' 1 36 3 'r' 664 'c' 1714 'f' 1715
+1716 '/KQ/rrc/Q/crrc' -13
+1717 '/KQ/rrc/Q/crrf' 9
+666 '/KQ/rrc/Q/crr' 1 37 2 'c' 1716 'f' 1717
+1718 '/KQ/rrc/Q/crc' -9
+1719 '/KQ/rrc/Q/crf' -5
+667 '/KQ/rrc/Q/cr' 0 100 3 'r' 666 'c' 1718 'f' 1719
+1720 '/KQ/rrc/Q/cc' -5
+668 '/KQ/rrc/Q/c' 1 38 2 'r' 667 'c' 1720
+669 '/KQ/rrc/Q/' 0 101 2 'r' 665 'c' 668
+1721 '/KQ/rrc/K/rrc' 13
+1722 '/KQ/rrc/K/rrf' -9
+670 '/KQ/rrc/K/rr' 0 102 2 'c' 1721 'f' 1722
+1723 '/KQ/rrc/K/rc' 9
+1724 '/KQ/rrc/K/rf' 5
+671 '/KQ/rrc/K/r' 1 39 3 'r' 670 'c' 1723 'f' 1724
+1725 '/KQ/rrc/K/crrc' 13
+1726 '/KQ/rrc/K/crrf' 9
+672 '/KQ/rrc/K/crr' 1 40 2 'c' 1725 'f' 1726
+1727 '/KQ/rrc/K/crc' 9
+1728 '/KQ/rrc/K/crf' -5
+673 '/KQ/rrc/K/cr' 0 103 3 'r' 672 'c' 1727 'f' 1728
+1729 '/KQ/rrc/K/cc' 5
+674 '/KQ/rrc/K/c' 1 41 2 'r' 673 'c' 1729
+675 '/KQ/rrc/K/' 0 104 2 'r' 671 'c' 674
+35 '/KQ/rrc' 3 'J' 663 2 'Q' 669 1 'K' 675 1
+1730 '/KQ/rrf' -3
+676 '/KQ/rr' 0 105 2 'c' 35 'f' 1730
+1731 '/KQ/rc/J/rrc' 11
+1732 '/KQ/rc/J/rrf' -7
+677 '/KQ/rc/J/rr' 0 106 2 'c' 1731 'f' 1732
+1733 '/KQ/rc/J/rc' 7
+1734 '/KQ/rc/J/rf' 3
+678 '/KQ/rc/J/r' 1 42 3 'r' 677 'c' 1733 'f' 1734
+1735 '/KQ/rc/J/crrc' 11
+1736 '/KQ/rc/J/crrf' 7
+679 '/KQ/rc/J/crr' 1 43 2 'c' 1735 'f' 1736
+1737 '/KQ/rc/J/crc' 7
+1738 '/KQ/rc/J/crf' -3
+680 '/KQ/rc/J/cr' 0 107 3 'r' 679 'c' 1737 'f' 1738
+1739 '/KQ/rc/J/cc' 3
+681 '/KQ/rc/J/c' 1 44 2 'r' 680 'c' 1739
+682 '/KQ/rc/J/' 0 108 2 'r' 678 'c' 681
+1740 '/KQ/rc/Q/rrc' -11
+1741 '/KQ/rc/Q/rrf' -7
+683 '/KQ/rc/Q/rr' 0 109 2 'c' 1740 'f' 1741
+1742 '/KQ/rc/Q/rc' -7
+1743 '/KQ/rc/Q/rf' 3
+684 '/KQ/rc/Q/r' 1 45 3 'r' 683 'c' 1742 'f' 1743
+1744 '/KQ/rc/Q/crrc' -11
+1745 '/KQ/rc/Q/crrf' 7
+685 '/KQ/rc/Q/crr' 1 46 2 'c' 1744 'f' 1745
+1746 '/KQ/rc/Q/crc' -7
+1747 '/KQ/rc/Q/crf' -3
+686 '/KQ/rc/Q/cr' 0 110 3 'r' 685 'c' 1746 'f' 1747
+1748 '/KQ/rc/Q/cc' -3
+687 '/KQ/rc/Q/c' 1 47 2 'r' 686 'c' 1748
+688 '/KQ/rc/Q/' 0 111 2 'r' 684 'c' 687
+1749 '/KQ/rc/K/rrc' 11
+1750 '/KQ/rc/K/rrf' -7
+689 '/KQ/rc/K/rr' 0 112 2 'c' 1749 'f' 1750
+1751 '/KQ/rc/K/rc' 7
+1752 '/KQ/rc/K/rf' 3
+690 '/KQ/rc/K/r' 1 48 3 'r' 689 'c' 1751 'f' 1752
+1753 '/KQ/rc/K/crrc' 11
+1754 '/KQ/rc/K/crrf' 7
+691 '/KQ/rc/K/crr' 1 49 2 'c' 1753 'f' 1754
+1755 '/KQ/rc/K/crc' 7
+1756 '/KQ/rc/K/crf' -3
+692 '/KQ/rc/K/cr' 0 113 3 'r' 691 'c' 1755 'f' 1756
+1757 '/KQ/rc/K/cc' 3
+693 '/KQ/rc/K/c' 1 50 2 'r' 692 'c' 1757
+694 '/KQ/rc/K/' 0 114 2 'r' 690 'c' 693
+36 '/KQ/rc' 3 'J' 682 2 'Q' 688 1 'K' 694 1
+1758 '/KQ/rf' 1
+695 '/KQ/r' 1 51 3 'r' 676 'c' 36 'f' 1758
+1759 '/KQ/crrc/J/rrc' 13
+1760 '/KQ/crrc/J/rrf' -9
+696 '/KQ/crrc/J/rr' 0 115 2 'c' 1759 'f' 1760
+1761 '/KQ/crrc/J/rc' 9
+1762 '/KQ/crrc/J/rf' 5
+697 '/KQ/crrc/J/r' 1 52 3 'r' 696 'c' 1761 'f' 1762
+1763 '/KQ/crrc/J/crrc' 13
+1764 '/KQ/crrc/J/crrf' 9
+698 '/KQ/crrc/J/crr' 1 53 2 'c' 1763 'f' 1764
+1765 '/KQ/crrc/J/crc' 9
+1766 '/KQ/crrc/J/crf' -5
+699 '/KQ/crrc/J/cr' 0 116 3 'r' 698 'c' 1765 'f' 1766
+1767 '/KQ/crrc/J/cc' 5
+700 '/KQ/crrc/J/c' 1 54 2 'r' 699 'c' 1767
+701 '/KQ/crrc/J/' 0 117 2 'r' 697 'c' 700
+1768 '/KQ/crrc/Q/rrc' -13
+1769 '/KQ/crrc/Q/rrf' -9
+702 '/KQ/crrc/Q/rr' 0 118 2 'c' 1768 'f' 1769
+1770 '/KQ/crrc/Q/rc' -9
+1771 '/KQ/crrc/Q/rf' 5
+703 '/KQ/crrc/Q/r' 1 55 3 'r' 702 'c' 1770 'f' 1771
+1772 '/KQ/crrc/Q/crrc' -13
+1773 '/KQ/crrc/Q/crrf' 9
+704 '/KQ/crrc/Q/crr' 1 56 2 'c' 1772 'f' 1773
+1774 '/KQ/crrc/Q/crc' -9
+1775 '/KQ/crrc/Q/crf' -5
+705 '/KQ/crrc/Q/cr' 0 119 3 'r' 704 'c' 1774 'f' 1775
+1776 '/KQ/crrc/Q/cc' -5
+706 '/KQ/crrc/Q/c' 1 57 2 'r' 705 'c' 1776
+707 '/KQ/crrc/Q/' 0 120 2 'r' 703 'c' 706
+1777 '/KQ/crrc/K/rrc' 13
+1778 '/KQ/crrc/K/rrf' -9
+708 '/KQ/crrc/K/rr' 0 121 2 'c' 1777 'f' 1778
+1779 '/KQ/crrc/K/rc' 9
+1780 '/KQ/crrc/K/rf' 5
+709 '/KQ/crrc/K/r' 1 58 3 'r' 708 'c' 1779 'f' 1780
+1781 '/KQ/crrc/K/crrc' 13
+1782 '/KQ/crrc/K/crrf' 9
+710 '/KQ/crrc/K/crr' 1 59 2 'c' 1781 'f' 1782
+1783 '/KQ/crrc/K/crc' 9
+1784 '/KQ/crrc/K/crf' -5
+711 '/KQ/crrc/K/cr' 0 122 3 'r' 710 'c' 1783 'f' 1784
+1785 '/KQ/crrc/K/cc' 5
+712 '/KQ/crrc/K/c' 1 60 2 'r' 711 'c' 1785
+713 '/KQ/crrc/K/' 0 123 2 'r' 709 'c' 712
+37 '/KQ/crrc' 3 'J' 701 2 'Q' 707 1 'K' 713 1
+1786 '/KQ/crrf' 3
+714 '/KQ/crr' 1 61 2 'c' 37 'f' 1786
+1787 '/KQ/crc/J/rrc' 11
+1788 '/KQ/crc/J/rrf' -7
+715 '/KQ/crc/J/rr' 0 124 2 'c' 1787 'f' 1788
+1789 '/KQ/crc/J/rc' 7
+1790 '/KQ/crc/J/rf' 3
+716 '/KQ/crc/J/r' 1 62 3 'r' 715 'c' 1789 'f' 1790
+1791 '/KQ/crc/J/crrc' 11
+1792 '/KQ/crc/J/crrf' 7
+717 '/KQ/crc/J/crr' 1 63 2 'c' 1791 'f' 1792
+1793 '/KQ/crc/J/crc' 7
+1794 '/KQ/crc/J/crf' -3
+718 '/KQ/crc/J/cr' 0 125 3 'r' 717 'c' 1793 'f' 1794
+1795 '/KQ/crc/J/cc' 3
+719 '/KQ/crc/J/c' 1 64 2 'r' 718 'c' 1795
+720 '/KQ/crc/J/' 0 126 2 'r' 716 'c' 719
+1796 '/KQ/crc/Q/rrc' -11
+1797 '/KQ/crc/Q/rrf' -7
+721 '/KQ/crc/Q/rr' 0 127 2 'c' 1796 'f' 1797
+1798 '/KQ/crc/Q/rc' -7
+1799 '/KQ/crc/Q/rf' 3
+722 '/KQ/crc/Q/r' 1 65 3 'r' 721 'c' 1798 'f' 1799
+1800 '/KQ/crc/Q/crrc' -11
+1801 '/KQ/crc/Q/crrf' 7
+723 '/KQ/crc/Q/crr' 1 66 2 'c' 1800 'f' 1801
+1802 '/KQ/crc/Q/crc' -7
+1803 '/KQ/crc/Q/crf' -3
+724 '/KQ/crc/Q/cr' 0 128 3 'r' 723 'c' 1802 'f' 1803
+1804 '/KQ/crc/Q/cc' -3
+725 '/KQ/crc/Q/c' 1 67 2 'r' 724 'c' 1804
+726 '/KQ/crc/Q/' 0 129 2 'r' 722 'c' 725
+1805 '/KQ/crc/K/rrc' 11
+1806 '/KQ/crc/K/rrf' -7
+727 '/KQ/crc/K/rr' 0 130 2 'c' 1805 'f' 1806
+1807 '/KQ/crc/K/rc' 7
+1808 '/KQ/crc/K/rf' 3
+728 '/KQ/crc/K/r' 1 68 3 'r' 727 'c' 1807 'f' 1808
+1809 '/KQ/crc/K/crrc' 11
+1810 '/KQ/crc/K/crrf' 7
+729 '/KQ/crc/K/crr' 1 69 2 'c' 1809 'f' 1810
+1811 '/KQ/crc/K/crc' 7
+1812 '/KQ/crc/K/crf' -3
+730 '/KQ/crc/K/cr' 0 131 3 'r' 729 'c' 1811 'f' 1812
+1813 '/KQ/crc/K/cc' 3
+731 '/KQ/crc/K/c' 1 70 2 'r' 730 'c' 1813
+732 '/KQ/crc/K/' 0 132 2 'r' 728 'c' 731
+38 '/KQ/crc' 3 'J' 720 2 'Q' 726 1 'K' 732 1
+1814 '/KQ/crf' -1
+733 '/KQ/cr' 0 133 3 'r' 714 'c' 38 'f' 1814
+1815 '/KQ/cc/J/rrc' 9
+1816 '/KQ/cc/J/rrf' -5
+734 '/KQ/cc/J/rr' 0 134 2 'c' 1815 'f' 1816
+1817 '/KQ/cc/J/rc' 5
+1818 '/KQ/cc/J/rf' 1
+735 '/KQ/cc/J/r' 1 71 3 'r' 734 'c' 1817 'f' 1818
+1819 '/KQ/cc/J/crrc' 9
+1820 '/KQ/cc/J/crrf' 5
+736 '/KQ/cc/J/crr' 1 72 2 'c' 1819 'f' 1820
+1821 '/KQ/cc/J/crc' 5
+1822 '/KQ/cc/J/crf' -1
+737 '/KQ/cc/J/cr' 0 135 3 'r' 736 'c' 1821 'f' 1822
+1823 '/KQ/cc/J/cc' 1
+738 '/KQ/cc/J/c' 1 73 2 'r' 737 'c' 1823
+739 '/KQ/cc/J/' 0 136 2 'r' 735 'c' 738
+1824 '/KQ/cc/Q/rrc' -9
+1825 '/KQ/cc/Q/rrf' -5
+740 '/KQ/cc/Q/rr' 0 137 2 'c' 1824 'f' 1825
+1826 '/KQ/cc/Q/rc' -5
+1827 '/KQ/cc/Q/rf' 1
+741 '/KQ/cc/Q/r' 1 74 3 'r' 740 'c' 1826 'f' 1827
+1828 '/KQ/cc/Q/crrc' -9
+1829 '/KQ/cc/Q/crrf' 5
+742 '/KQ/cc/Q/crr' 1 75 2 'c' 1828 'f' 1829
+1830 '/KQ/cc/Q/crc' -5
+1831 '/KQ/cc/Q/crf' -1
+743 '/KQ/cc/Q/cr' 0 138 3 'r' 742 'c' 1830 'f' 1831
+1832 '/KQ/cc/Q/cc' -1
+744 '/KQ/cc/Q/c' 1 76 2 'r' 743 'c' 1832
+745 '/KQ/cc/Q/' 0 139 2 'r' 741 'c' 744
+1833 '/KQ/cc/K/rrc' 9
+1834 '/KQ/cc/K/rrf' -5
+746 '/KQ/cc/K/rr' 0 140 2 'c' 1833 'f' 1834
+1835 '/KQ/cc/K/rc' 5
+1836 '/KQ/cc/K/rf' 1
+747 '/KQ/cc/K/r' 1 77 3 'r' 746 'c' 1835 'f' 1836
+1837 '/KQ/cc/K/crrc' 9
+1838 '/KQ/cc/K/crrf' 5
+748 '/KQ/cc/K/crr' 1 78 2 'c' 1837 'f' 1838
+1839 '/KQ/cc/K/crc' 5
+1840 '/KQ/cc/K/crf' -1
+749 '/KQ/cc/K/cr' 0 141 3 'r' 748 'c' 1839 'f' 1840
+1841 '/KQ/cc/K/cc' 1
+750 '/KQ/cc/K/c' 1 79 2 'r' 749 'c' 1841
+751 '/KQ/cc/K/' 0 142 2 'r' 747 'c' 750
+39 '/KQ/cc' 3 'J' 739 2 'Q' 745 1 'K' 751 1
+752 '/KQ/c' 1 80 2 'r' 733 'c' 39
+753 '/KQ/' 0 143 2 'r' 695 'c' 752
+1842 '/KK/rrc/J/rrc' 0
+1843 '/KK/rrc/J/rrf' -9
+754 '/KK/rrc/J/rr' 0 96 2 'c' 1842 'f' 1843
+1844 '/KK/rrc/J/rc' 0
+1845 '/KK/rrc/J/rf' 5
+755 '/KK/rrc/J/r' 1 81 3 'r' 754 'c' 1844 'f' 1845
+1846 '/KK/rrc/J/crrc' 0
+1847 '/KK/rrc/J/crrf' 9
+756 '/KK/rrc/J/crr' 1 82 2 'c' 1846 'f' 1847
+1848 '/KK/rrc/J/crc' 0
+1849 '/KK/rrc/J/crf' -5
+757 '/KK/rrc/J/cr' 0 97 3 'r' 756 'c' 1848 'f' 1849
+1850 '/KK/rrc/J/cc' 0
+758 '/KK/rrc/J/c' 1 83 2 'r' 757 'c' 1850
+759 '/KK/rrc/J/' 0 98 2 'r' 755 'c' 758
+1851 '/KK/rrc/Q/rrc' 0
+1852 '/KK/rrc/Q/rrf' -9
+760 '/KK/rrc/Q/rr' 0 99 2 'c' 1851 'f' 1852
+1853 '/KK/rrc/Q/rc' 0
+1854 '/KK/rrc/Q/rf' 5
+761 '/KK/rrc/Q/r' 1 84 3 'r' 760 'c' 1853 'f' 1854
+1855 '/KK/rrc/Q/crrc' 0
+1856 '/KK/rrc/Q/crrf' 9
+762 '/KK/rrc/Q/crr' 1 85 2 'c' 1855 'f' 1856
+1857 '/KK/rrc/Q/crc' 0
+1858 '/KK/rrc/Q/crf' -5
+763 '/KK/rrc/Q/cr' 0 100 3 'r' 762 'c' 1857 'f' 1858
+1859 '/KK/rrc/Q/cc' 0
+764 '/KK/rrc/Q/c' 1 86 2 'r' 763 'c' 1859
+765 '/KK/rrc/Q/' 0 101 2 'r' 761 'c' 764
+40 '/KK/rrc' 2 'J' 759 2 'Q' 765 2
+1860 '/KK/rrf' -3
+766 '/KK/rr' 0 105 2 'c' 40 'f' 1860
+1861 '/KK/rc/J/rrc' 0
+1862 '/KK/rc/J/rrf' -7
+767 '/KK/rc/J/rr' 0 106 2 'c' 1861 'f' 1862
+1863 '/KK/rc/J/rc' 0
+1864 '/KK/rc/J/rf' 3
+768 '/KK/rc/J/r' 1 90 3 'r' 767 'c' 1863 'f' 1864
+1865 '/KK/rc/J/crrc' 0
+1866 '/KK/rc/J/crrf' 7
+769 '/KK/rc/J/crr' 1 91 2 'c' 1865 'f' 1866
+1867 '/KK/rc/J/crc' 0
+1868 '/KK/rc/J/crf' -3
+770 '/KK/rc/J/cr' 0 107 3 'r' 769 'c' 1867 'f' 1868
+1869 '/KK/rc/J/cc' 0
+771 '/KK/rc/J/c' 1 92 2 'r' 770 'c' 1869
+772 '/KK/rc/J/' 0 108 2 'r' 768 'c' 771
+1870 '/KK/rc/Q/rrc' 0
+1871 '/KK/rc/Q/rrf' -7
+773 '/KK/rc/Q/rr' 0 109 2 'c' 1870 'f' 1871
+1872 '/KK/rc/Q/rc' 0
+1873 '/KK/rc/Q/rf' 3
+774 '/KK/rc/Q/r' 1 93 3 'r' 773 'c' 1872 'f' 1873
+1874 '/KK/rc/Q/crrc' 0
+1875 '/KK/rc/Q/crrf' 7
+775 '/KK/rc/Q/crr' 1 94 2 'c' 1874 'f' 1875
+1876 '/KK/rc/Q/crc' 0
+1877 '/KK/rc/Q/crf' -3
+776 '/KK/rc/Q/cr' 0 110 3 'r' 775 'c' 1876 'f' 1877
+1878 '/KK/rc/Q/cc' 0
+777 '/KK/rc/Q/c' 1 95 2 'r' 776 'c' 1878
+778 '/KK/rc/Q/' 0 111 2 'r' 774 'c' 777
+41 '/KK/rc' 2 'J' 772 2 'Q' 778 2
+1879 '/KK/rf' 1
+779 '/KK/r' 1 99 3 'r' 766 'c' 41 'f' 1879
+1880 '/KK/crrc/J/rrc' 0
+1881 '/KK/crrc/J/rrf' -9
+780 '/KK/crrc/J/rr' 0 115 2 'c' 1880 'f' 1881
+1882 '/KK/crrc/J/rc' 0
+1883 '/KK/crrc/J/rf' 5
+781 '/KK/crrc/J/r' 1 100 3 'r' 780 'c' 1882 'f' 1883
+1884 '/KK/crrc/J/crrc' 0
+1885 '/KK/crrc/J/crrf' 9
+782 '/KK/crrc/J/crr' 1 101 2 'c' 1884 'f' 1885
+1886 '/KK/crrc/J/crc' 0
+1887 '/KK/crrc/J/crf' -5
+783 '/KK/crrc/J/cr' 0 116 3 'r' 782 'c' 1886 'f' 1887
+1888 '/KK/crrc/J/cc' 0
+784 '/KK/crrc/J/c' 1 102 2 'r' 783 'c' 1888
+785 '/KK/crrc/J/' 0 117 2 'r' 781 'c' 784
+1889 '/KK/crrc/Q/rrc' 0
+1890 '/KK/crrc/Q/rrf' -9
+786 '/KK/crrc/Q/rr' 0 118 2 'c' 1889 'f' 1890
+1891 '/KK/crrc/Q/rc' 0
+1892 '/KK/crrc/Q/rf' 5
+787 '/KK/crrc/Q/r' 1 103 3 'r' 786 'c' 1891 'f' 1892
+1893 '/KK/crrc/Q/crrc' 0
+1894 '/KK/crrc/Q/crrf' 9
+788 '/KK/crrc/Q/crr' 1 104 2 'c' 1893 'f' 1894
+1895 '/KK/crrc/Q/crc' 0
+1896 '/KK/crrc/Q/crf' -5
+789 '/KK/crrc/Q/cr' 0 119 3 'r' 788 'c' 1895 'f' 1896
+1897 '/KK/crrc/Q/cc' 0
+790 '/KK/crrc/Q/c' 1 105 2 'r' 789 'c' 1897
+791 '/KK/crrc/Q/' 0 120 2 'r' 787 'c' 790
+42 '/KK/crrc' 2 'J' 785 2 'Q' 791 2
+1898 '/KK/crrf' 3
+792 '/KK/crr' 1 109 2 'c' 42 'f' 1898
+1899 '/KK/crc/J/rrc' 0
+1900 '/KK/crc/J/rrf' -7
+793 '/KK/crc/J/rr' 0 124 2 'c' 1899 'f' 1900
+1901 '/KK/crc/J/rc' 0
+1902 '/KK/crc/J/rf' 3
+794 '/KK/crc/J/r' 1 110 3 'r' 793 'c' 1901 'f' 1902
+1903 '/KK/crc/J/crrc' 0
+1904 '/KK/crc/J/crrf' 7
+795 '/KK/crc/J/crr' 1 111 2 'c' 1903 'f' 1904
+1905 '/KK/crc/J/crc' 0
+1906 '/KK/crc/J/crf' -3
+796 '/KK/crc/J/cr' 0 125 3 'r' 795 'c' 1905 'f' 1906
+1907 '/KK/crc/J/cc' 0
+797 '/KK/crc/J/c' 1 112 2 'r' 796 'c' 1907
+798 '/KK/crc/J/' 0 126 2 'r' 794 'c' 797
+1908 '/KK/crc/Q/rrc' 0
+1909 '/KK/crc/Q/rrf' -7
+799 '/KK/crc/Q/rr' 0 127 2 'c' 1908 'f' 1909
+1910 '/KK/crc/Q/rc' 0
+1911 '/KK/crc/Q/rf' 3
+800 '/KK/crc/Q/r' 1 113 3 'r' 799 'c' 1910 'f' 1911
+1912 '/KK/crc/Q/crrc' 0
+1913 '/KK/crc/Q/crrf' 7
+801 '/KK/crc/Q/crr' 1 114 2 'c' 1912 'f' 1913
+1914 '/KK/crc/Q/crc' 0
+1915 '/KK/crc/Q/crf' -3
+802 '/KK/crc/Q/cr' 0 128 3 'r' 801 'c' 1914 'f' 1915
+1916 '/KK/crc/Q/cc' 0
+803 '/KK/crc/Q/c' 1 115 2 'r' 802 'c' 1916
+804 '/KK/crc/Q/' 0 129 2 'r' 800 'c' 803
+43 '/KK/crc' 2 'J' 798 2 'Q' 804 2
+1917 '/KK/crf' -1
+805 '/KK/cr' 0 133 3 'r' 792 'c' 43 'f' 1917
+1918 '/KK/cc/J/rrc' 0
+1919 '/KK/cc/J/rrf' -5
+806 '/KK/cc/J/rr' 0 134 2 'c' 1918 'f' 1919
+1920 '/KK/cc/J/rc' 0
+1921 '/KK/cc/J/rf' 1
+807 '/KK/cc/J/r' 1 119 3 'r' 806 'c' 1920 'f' 1921
+1922 '/KK/cc/J/crrc' 0
+1923 '/KK/cc/J/crrf' 5
+808 '/KK/cc/J/crr' 1 120 2 'c' 1922 'f' 1923
+1924 '/KK/cc/J/crc' 0
+1925 '/KK/cc/J/crf' -1
+809 '/KK/cc/J/cr' 0 135 3 'r' 808 'c' 1924 'f' 1925
+1926 '/KK/cc/J/cc' 0
+810 '/KK/cc/J/c' 1 121 2 'r' 809 'c' 1926
+811 '/KK/cc/J/' 0 136 2 'r' 807 'c' 810
+1927 '/KK/cc/Q/rrc' 0
+1928 '/KK/cc/Q/rrf' -5
+812 '/KK/cc/Q/rr' 0 137 2 'c' 1927 'f' 1928
+1929 '/KK/cc/Q/rc' 0
+1930 '/KK/cc/Q/rf' 1
+813 '/KK/cc/Q/r' 1 122 3 'r' 812 'c' 1929 'f' 1930
+1931 '/KK/cc/Q/crrc' 0
+1932 '/KK/cc/Q/crrf' 5
+814 '/KK/cc/Q/crr' 1 123 2 'c' 1931 'f' 1932
+1933 '/KK/cc/Q/crc' 0
+1934 '/KK/cc/Q/crf' -1
+815 '/KK/cc/Q/cr' 0 138 3 'r' 814 'c' 1933 'f' 1934
+1935 '/KK/cc/Q/cc' 0
+816 '/KK/cc/Q/c' 1 124 2 'r' 815 'c' 1935
+817 '/KK/cc/Q/' 0 139 2 'r' 813 'c' 816
+44 '/KK/cc' 2 'J' 811 2 'Q' 817 2
+818 '/KK/c' 1 128 2 'r' 805 'c' 44
+819 '/KK/' 0 143 2 'r' 779 'c' 818
+45 '/' 9 'JJ' 111 2 'JQ' 207 4 'JK' 303 4 'QJ' 399 4 'QQ' 465 2 'QK' 561 4 'KJ' 657 4 'KQ' 753 4 'KK' 819 2

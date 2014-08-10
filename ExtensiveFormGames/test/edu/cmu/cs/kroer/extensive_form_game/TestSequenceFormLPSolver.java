@@ -10,7 +10,7 @@ import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
 public class TestSequenceFormLPSolver {
 	private static final double epsilon = 0.001;
 	private static final String gamesFolder = "/Users/ckroer/Documents/research/zerosum/games/";
-	private static final String originalGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
+	private static final String zerosumGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
 
 	Game miniKuhnGame;
 	Game kuhnGame;
@@ -24,25 +24,25 @@ public class TestSequenceFormLPSolver {
 	@Before
 	public void setUp() {
 		miniKuhnGame = new Game();
-		miniKuhnGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "mini_kuhn.txt");		
+		miniKuhnGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "mini_kuhn.txt");		
 
 		kuhnGame = new Game();
-		kuhnGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "kuhn.txt");		
+		kuhnGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "kuhn.txt");		
 
 		coinGame = new Game();
-		coinGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "coin.txt");		
+		coinGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "coin.txt");		
 
 		prslGame = new Game();
-		prslGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "prsl.txt");		
+		prslGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "prsl.txt");		
 
 		leducKJGame = new Game();
-		leducKJGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "leduc_KJ.txt");
+		leducKJGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "leduc_KJ.txt");
 
 		leducKj1RaiseGame = new Game();
-		leducKj1RaiseGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "leduc_Kj1Raise.txt");
+		leducKj1RaiseGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "leduc_Kj1Raise.txt");
 
 		leducGame = new Game();
-		leducGame.createGameFromFileZerosumPackageFormat(originalGamesFolder + "leduc.txt");
+		leducGame.createGameFromFileZerosumPackageFormat(zerosumGamesFolder + "leduc.txt");
 
 		leducUnabstractedGame = new Game();
 		leducUnabstractedGame.createGameFromFile(gamesFolder + "leduc.txt");
