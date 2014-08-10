@@ -10,3 +10,7 @@ One or more solvers in this library require CPLEX to run. In order to use these,
 
 -Djava.library.path=/path/to/CPLEX_Studio/cplex/bin/your-architecture/
 
+References
+==========
+
+SequenceFormLPSolver is an implementation of the sequence form LP described in
