@@ -1,7 +1,13 @@
 ExtensiveFormGames
 ==================
 
-Contains code for modeling two-player zero-sum extensive-form games and algorithms for computing Nash equilibria.
+Contains code for modeling two-player zero-sum extensive-form games and algorithms for computing Nash equilibria and related concepts.
+
+If you use this codebase, please cite one of our recent papers, for example:
+
+Extensive-form Game Abstraction with Bounds. Christian Kroer and Tuomas Sandholm. In _ACM conference on Economics and Computation_ (EC), 2014
+
+For a C library implementation of the sequence form linear program and the counter-factual regret minimization algorithm, check out Kevin Waugh's [zerosum](http://www.cs.cmu.edu/~./waugh/zerosum.html) package.
 
 Dependencies
 ============
@@ -13,4 +19,7 @@ One or more solvers in this library require CPLEX to run. In order to use these,
 References
 ==========
 
-SequenceFormLPSolver is an implementation of the sequence form LP described in
+SequenceFormLPSolver is an implementation of the sequence form LP described in:
+Efficient Computation of Behavior Strategies. Bernhard von Stengel. In _Games and Economic Behavior_, 1996
+
+
