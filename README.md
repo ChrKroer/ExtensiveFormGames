@@ -1,7 +1,7 @@
 ExtensiveFormGames
 ==================
 
-Contains code for modeling two-player zero-sum extensive-form games and algorithms for computing Nash equilibria and related concepts.
+Contains code for modeling two-player zero-sum extensive-form games and algorithms for computing Nash equilibria and related concepts. Right now, the file reader can read two formats, the one used by the [zerosum](http://www.cs.cmu.edu/~./waugh/zerosum.html) package, and an extension of that format, allowing heavier annotation of the game. In the future, I will hopefully add a formal description of the two formats.
 
 If you use this codebase, please cite one of our recent papers, for example:
 
