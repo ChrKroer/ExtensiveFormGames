@@ -16,6 +16,8 @@ One or more solvers in this library require CPLEX to run. In order to use these,
 
 -Djava.library.path=/path/to/CPLEX_Studio/cplex/bin/your-architecture/
 
+To run the JUnit test cases, the variables gamesFolder and zerosumGamesFolder must be updated with the paths to the game files in the folder gamefiles.
+
 References
 ==========
 
