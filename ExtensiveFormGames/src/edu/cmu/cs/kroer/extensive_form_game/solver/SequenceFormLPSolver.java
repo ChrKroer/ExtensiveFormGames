@@ -47,7 +47,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	int numDualSequences;
 	
 	TIntObjectMap<IloConstraint> primalConstraints;
-	TIntObjectMap<IloConstraint> dualConstraints;
+	TIntObjectMap<IloRange> dualConstraints;
 
 	public SequenceFormLPSolver(Game game, int playerToSolveFor) {
 		super(game);
@@ -121,7 +121,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 		
 		primalConstraints = new TIntObjectHashMap<IloConstraint>();
-		dualConstraints = new TIntObjectHashMap<IloConstraint>();
+		dualConstraints = new TIntObjectHashMap<IloRange>();
 	}
 	
 	@Override
@@ -366,15 +366,15 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			lhs.addTerm(valueMultiplier, dualVars[informationSetId]);
 		}
 		
-		IloLinearNumExpr rhs = cplex.linearNumExpr();
+		//IloLinearNumExpr rhs = cplex.linearNumExpr();
 		TIntDoubleIterator it = dualPayoffMatrix[sequenceId].iterator();
 		for ( int i = dualPayoffMatrix[sequenceId].size(); i-- > 0; ) {
 			it.advance();
-			rhs.addTerm(it.value(), strategyVarsBySequenceId[it.key()]);
+			lhs.addTerm(-it.value(), strategyVarsBySequenceId[it.key()]);
 		}
 		
 				
-		dualConstraints.put(sequenceId, cplex.addGe(lhs, rhs, "Dual"+sequenceId));
+		dualConstraints.put(sequenceId, cplex.addGe(lhs, 0, "Dual"+sequenceId));
 	}
 	
 	private int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
@@ -459,7 +459,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		return primalConstraints;
 	}
 
-	public TIntObjectMap<IloConstraint> getDualConstraints() {
+	public TIntObjectMap<IloRange> getDualConstraints() {
 		return dualConstraints;
 	}
 }
