@@ -26,6 +26,29 @@ public class TestGameClass {
 		assertNotNull(game.getNodes()[10]);
 	}
 
+	@Test
+	public void testZerosumPackageFormatFileReaderLeducKj() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/leduc_KJ.txt");
+		assertEquals(21, game.getNumChanceHistories());
+		assertEquals(511, game.getNodes().length);
+		assertNotNull(game.getNodes()[0]);
+		assertNotNull(game.getNodes()[10]);
+		assertEquals(66, game.getNumInformationSetsPlayer1());
+		assertEquals(66, game.getNumInformationSetsPlayer2());
+	}
+
+	@Test
+	public void testZerosumPackageFormatFileReaderLeducKj1Raise() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/leduc_Kj1Raise.txt");
+		assertEquals(13, game.getNumChanceHistories());
+		assertEquals(199, game.getNodes().length);
+		assertNotNull(game.getNodes()[0]);
+		assertNotNull(game.getNodes()[10]);
+		assertEquals(28, game.getNumInformationSetsPlayer1());
+		assertEquals(28, game.getNumInformationSetsPlayer2());
+	}
 	
 	@Test
 	public void testZerosumPackageFormatFileReader() {

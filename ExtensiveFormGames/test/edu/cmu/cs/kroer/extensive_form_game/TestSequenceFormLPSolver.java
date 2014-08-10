@@ -13,6 +13,8 @@ public class TestSequenceFormLPSolver {
 	Game kuhnGame;
 	Game coinGame;
 	Game prslGame;
+	Game leducKJGame;
+	Game leducKj1RaiseGame;
 	Game leducGame;
 	Game leducUnabstractedGame;
 	
@@ -29,6 +31,12 @@ public class TestSequenceFormLPSolver {
 
 		prslGame = new Game();
 		prslGame.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/prsl.txt");		
+
+		leducKJGame = new Game();
+		leducKJGame.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/leduc_KJ.txt");
+
+		leducKj1RaiseGame = new Game();
+		leducKj1RaiseGame.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/leduc_Kj1Raise.txt");
 
 		leducGame = new Game();
 		leducGame.createGameFromFileZerosumPackageFormat("/Users/ckroer/Documents/research/zerosum/original_games/leduc.txt");
@@ -102,6 +110,21 @@ public class TestSequenceFormLPSolver {
 		assertEquals(0, solver.getValueOfGame(), 0.001);
 	}
 	
+	@Test
+	public void testSolveLeducKJP1() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKJGame, 1);
+		solver.writeModelToFile("/Users/ckroer/Documents/research/lp-models/leducKjP1.lp");
+		solver.solveGame();
+		assertEquals(3.312e-17, solver.getValueOfGame(), epsilon);
+	}
+
+	@Test
+	public void testSolveLeducKj1RaiseP1() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKj1RaiseGame, 1);
+		solver.writeModelToFile("/Users/ckroer/Documents/research/lp-models/leducKj1RaiseP1.lp");
+		solver.solveGame();
+		assertEquals(-1.85e-17, solver.getValueOfGame(), epsilon);
+	}
 	
 	@Test
 	public void testPrimalConstraintsLeducP1() {

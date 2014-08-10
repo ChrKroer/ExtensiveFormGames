@@ -8,7 +8,6 @@ import edu.cmu.cs.kroer.extensive_form_game.Game;
 import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
 import edu.cmu.cs.kroer.extensive_form_game.Game.Node;
 import gnu.trove.iterator.TIntDoubleIterator;
-import gnu.trove.list.TDoubleList;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntDoubleMap;
@@ -260,7 +259,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	}
 
 	private void CreateSequenceFormVariablesAndConstraints(int currentNodeId, IloNumVar parentSequence, TIntSet visited) throws IloException{
-		Node node = this.game.getNodeById(currentNodeId);
+		Node node = game.getNodeById(currentNodeId);
 		if (node.isLeaf()) return;
 		
 		if (node.getPlayer() == playerToSolveFor && !visited.contains(node.getInformationSet())) {
@@ -268,7 +267,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			IloLinearNumExpr sum = cplex.linearNumExpr();
 			//sum.addTerm(-1, parentSequence);
 			for (Action action : node.getActions()) {
-				IloNumVar v = cplex.numVar(0, 1, "X" + node.getInformationSet() + ";" + action.getName());
+				IloNumVar v = cplex.numVar(0, 1, "X" + node.getInformationSet() + action.getName());
 				strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
 				int sequenceId = GetSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName()); //= playerToSolveFor == 1 ? sequenceIdByInformationSetAndActionP1[node.getInformationSet()].get(action.getName()) : sequenceIdByInformationSetAndActionP2[node.getInformationSet()].get(action.getName()); 
 				strategyVarsBySequenceId[sequenceId] = v;
@@ -278,7 +277,12 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			primalConstraints.put(node.getInformationSet(), cplex.addEq(sum, parentSequence,"Primal"+node.getInformationSet()));
 		} else {
 			for (Action action : node.getActions()) {
-				CreateSequenceFormVariablesAndConstraints(action.getChildId(), parentSequence, visited);
+				if (node.getPlayer() == playerToSolveFor) {
+					IloNumVar v = strategyVarsByInformationSet[node.getInformationSet()].get(action.getName());
+					CreateSequenceFormVariablesAndConstraints(action.getChildId(), v, visited);
+				} else {
+					CreateSequenceFormVariablesAndConstraints(action.getChildId(), parentSequence, visited);
+				}
 			}
 		}
 	}
@@ -395,10 +399,6 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	}
 
 	
-	public void SolveWithCuts(TDoubleList coefficients, TIntList vars) {
-		// TODO
-	}
-
 	public int getPlayerToSolveFor() {
 		return playerToSolveFor;
 	}
