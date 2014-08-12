@@ -17,9 +17,9 @@ import org.apache.commons.lang3.*;
 public class Game {
 	public class Action {
 		private String name;
-		private int childId;
+		private int childId; // id of the node lead to by taking this action
 		private double probability;
-		private int rem;
+		private int rem; // Legacy from zerosum package. Denotes the probability as an integer. We only use this to set the probability field
 		public String getName() {
 			return name;
 		}
@@ -29,21 +29,18 @@ public class Game {
 		public double getProbability() {
 			return probability;
 		}
-		public int getRem() {
-			return rem;
-		}
 	}
 	public class Node {
 		private int nodeId;
 		private String name;
-		private int player;
-		private boolean publicSignal;
-		private int playerReceivingSignal;
+		private int player; // -2 is leaf, 0 is nature, positive integers are actual players
+		private boolean publicSignal; // TODO, useful for abstraction algorithms
+		private int playerReceivingSignal; // TODO, useful for abstraction algorithms
 		private int informationSet;
-		private int signalGroupPlayer1; // Signal groups not yet implemented
-		private int signalGroupPlayer2;
-		private Action[] actions;
-		private int value;
+		private int signalGroupPlayer1; // TODO, useful for abstraction algorithms
+		private int signalGroupPlayer2; // TODO, useful for abstraction algorithms
+		private Action[] actions; 
+		private int value; // payoff at node, if node is a leaf node (player == 2) 
 		public int getNodeId() {
 			return nodeId;
 		}
@@ -79,11 +76,11 @@ public class Game {
 		}
 	}
 	
-	private TIntArrayList [] [] informationSets;
-	private boolean [] [] informationSetsSeen;
+	private TIntArrayList [] [] informationSets; // indexed as [player]
+	private boolean [] [] informationSetsSeen; // indexed as [player]
 	private Node [] nodes;
-	private TIntIntMap [] childNodeIdBySignalId;
-	private TIntIntMap [] actionIdBySignalId;
+	private TIntIntMap [] childNodeIdBySignalId; // indexed as [nodeId][signalId], returns the child node reached when nature selects the signal
+	private TIntIntMap [] actionIdBySignalId;// indexed as [nodeId][signalId], returns the index of the signal in the action vector at the node
 	
 	private int root;
 	private int numChanceHistories;
@@ -92,11 +89,11 @@ public class Game {
 	private int numNodes;
 	private int numInformationSetsPlayer1;
 	private int numInformationSetsPlayer2;
-	private int smallestInformationSetId[];
+	private int smallestInformationSetId[]; // indexed as [player], keeps track of the base index for the information sets
 	private int [] numSequences;
 	
-	private String [] signals;
-	private TObjectIntMap<String> signalNameToId;
+	private String [] signals; // TODO
+	private TObjectIntMap<String> signalNameToId; // TODO signalName refers to a unique name for each signal in the set S of all signals dealt by nature. 
 	private int numRounds;
 	private int depth;
 	private int numPrivateSignals;
@@ -133,6 +130,7 @@ public class Game {
 		String[] splitLine;
 		try {
 			while ((splitLine = in.readNext()) != null) {
+				// splitLine may contain empty strings. We filter these out here. This should preferably be handled by a library function. 
 				List<String> filtered = new ArrayList<String>();
 				for(String s : splitLine) {
 					if(!s.equals("")) {
@@ -140,6 +138,7 @@ public class Game {
 					}
 				}
 				splitLine = filtered.toArray(new String[0]);
+				
 				if (splitLine.length == 0) {
 					continue;
 				} else if (splitLine[0].equals("#")) {
@@ -308,10 +307,11 @@ public class Game {
 			sum += action.rem;
 			node.actions[i] = action;			
 		}
+		// update probability field to be an actual probability distribution. rem specifies probabilities as integers
 		for (int i = 0; i < numActions; i++) {
 			node.actions[i].probability = (double) node.actions[i].rem / sum;
 		}
-		
+		// the root node is the empty history
 		if (node.name.equals("/")) {
 			root = node.nodeId;
 		}
