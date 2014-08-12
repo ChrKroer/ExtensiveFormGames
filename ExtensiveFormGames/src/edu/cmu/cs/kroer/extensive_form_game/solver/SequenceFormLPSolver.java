@@ -32,22 +32,22 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	
 	IloCplex cplex;
 	//IloNumVar[] modelStrategyVars;
-	IloNumVar[] dualVars;
-	HashMap<String, IloNumVar>[] strategyVarsByInformationSet;
+	IloNumVar[] dualVars; // indexed as [informationSetId]. Note that we expect information sets to be 1-indexed, but the code corrects for when this is not the case
+	HashMap<String, IloNumVar>[] strategyVarsByInformationSet; // indexed as [inforationSetId][action.name]
 
-	TIntList[] sequenceFormDualMatrix; // indexed as [sequence id][information set]
-	TIntDoubleMap[] dualPayoffMatrix; // indexed by [dual sequence][primal sequence]
+	TIntList[] sequenceFormDualMatrix; // indexed as [dual sequence id][information set]
+	TIntDoubleMap[] dualPayoffMatrix; // indexed as [dual sequence][primal sequence]
 	
-	TObjectIntMap<String>[] sequenceIdByInformationSetAndActionP1;
-	TObjectIntMap<String>[] sequenceIdByInformationSetAndActionP2;
+	TObjectIntMap<String>[] sequenceIdByInformationSetAndActionP1; // indexed as [informationSetId][action.name]
+	TObjectIntMap<String>[] sequenceIdByInformationSetAndActionP2; // indexed as [informationSetId][action.name]
 	IloNumVar[] strategyVarsBySequenceId;
 	int numSequencesP1;
 	int numSequencesP2;
 	int numPrimalSequences;
 	int numDualSequences;
 	
-	TIntObjectMap<IloConstraint> primalConstraints;
-	TIntObjectMap<IloRange> dualConstraints;
+	TIntObjectMap<IloConstraint> primalConstraints; // indexed as [informationSetId], without correcting for 1-indexing
+	TIntObjectMap<IloRange> dualConstraints; // indexed as [sequenceId]
 
 	public SequenceFormLPSolver(Game game, int playerToSolveFor) {
 		super(game);
@@ -73,6 +73,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 
+	/** 
+	 * Initializes the arrays and other data structure objects that we use.
+	 */
 	@SuppressWarnings("unchecked")
 	private void initializeDataStructures() {
 		int numInformationSets = 0;
@@ -124,6 +127,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		dualConstraints = new TIntObjectHashMap<IloRange>();
 	}
 	
+	/**
+	 * Tries to solve the current model. Currently relies on CPLEX to throw an exception if no model has been built.
+	 */
 	@Override
 	public void solveGame() {
 		try {
@@ -141,6 +147,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 
+	/**
+	 * Creates and returns a mapping from variable names to the values they take on in the solution computed by CPLEX.
+	 */
 	@Override
 	public TObjectDoubleMap<String> getStrategyVarMap() {
 		TObjectDoubleMap<String> map = new TObjectDoubleHashMap<String>();
@@ -158,6 +167,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	}
 
 
+	/**
+	 * Prints the value of the game along with the names and computed values for each variable.
+	 */
 	@Override
 	public void printStrategyVarsAndGameValue() {
 		printGameValue();
@@ -172,6 +184,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 
+	/**
+	 * Prints the value of the game, as computed by CPLEX. If solve() has not been called, an exception will be thrown.
+	 */
 	@Override
 	public void printGameValue() {
 		try {
@@ -185,18 +200,26 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 
 	}
 
-	public void writeStrategyToFile(String filename) {
+	/**
+	 * Writes the computed strategy to a file. An exception is thrown if solve() has not been called. 
+	 * @param filename the absolute path to the file being written to
+	 */
+	public void writeStrategyToFile(String filename) throws IloException{
 		try {
 			FileWriter fw = new FileWriter(filename);
 			for (IloNumVar v : strategyVarsBySequenceId) {
 				fw.write(v.getName() + ": \t" + cplex.getValue(v) + "\n");
 			}
 			fw.close();
-		} catch (IOException | IloException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Writes the current model to a file.
+	 * @param filename the absolute path to the file being written to
+	 */
 	public void writeModelToFile(String filename) {
 		try {
 			cplex.exportModel(filename);
@@ -205,6 +228,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 	
+	/**
+	 * Sets the parameters of CPLEX such that minimal output is produced.
+	 */
 	private void setCplexParameters() {
 		try {
 			cplex.setParam(IloCplex.IntParam.SimDisplay, 0);
@@ -220,9 +246,14 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 	
+	/**
+	 * Builds the LP model based on the game instance.
+	 * @throws IloException
+	 */
 	private void setUpModel() throws IloException {
 		setCplexParameters();
 
+		// The empty sequence is the 0'th sequence for each player
 		numSequencesP1 = numSequencesP2 = 1;
 		CreateSequenceFormIds(game.getRoot(), new TIntHashSet(), new TIntHashSet());
 		assert(numSequencesP1 == game.getNumSequencesP1()); // Ensure that our recursive function agrees with the game reader on how many sequences there are
@@ -239,6 +270,12 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		SetObjective();
 	}
 
+	/**
+	 * Recursive function that traverses the game tree, assigning Id values, starting at 1 due to the empty sequence, to sequences in pre-order. Sequence IDs are only assigned if an information set has not previously been visited
+	 * @param currentNodeId id into the game.nodes array
+	 * @param visitedP1 an integer set indicating which information sets have already been visited for Player 1
+	 * @param visitedP2 an integer set indicating which information sets have already been visited for Player 2
+	 */
 	private void CreateSequenceFormIds(int currentNodeId, TIntSet visitedP1, TIntSet visitedP2) {
 		Node node = game.getNodeById(currentNodeId);
 		if (node.isLeaf()) return;
