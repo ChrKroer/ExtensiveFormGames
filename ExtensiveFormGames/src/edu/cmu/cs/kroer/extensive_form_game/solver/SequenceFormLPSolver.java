@@ -45,6 +45,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	int numSequencesP2;
 	int numPrimalSequences;
 	int numDualSequences;
+	int numPrimalInformationSets;
 	int numDualInformationSets;
 	
 	TIntObjectMap<IloConstraint> primalConstraints; // indexed as [informationSetId], without correcting for 1-indexing
@@ -98,11 +99,12 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		
 		numPrimalSequences = playerToSolveFor == 1 ? game.getNumSequencesP1() : game.getNumSequencesP2();
 		numDualSequences = playerNotToSolveFor == 1 ? game.getNumSequencesP1() : game.getNumSequencesP2();
-		numDualInformationSets = playerNotToSolveFor == 1 ? game.getNumInformationSetsPlayer1() : game.getNumInformationSetsPlayer2();
 		sequenceFormDualMatrix = new TIntList[numDualSequences];
 		for (int i = 0; i < numDualSequences; i++) {
 			sequenceFormDualMatrix[i] =  new TIntArrayList();
 		}
+		numPrimalInformationSets = playerToSolveFor == 1 ? game.getNumInformationSetsPlayer1() : game.getNumInformationSetsPlayer2();
+		numDualInformationSets = playerNotToSolveFor == 1 ? game.getNumInformationSetsPlayer1() : game.getNumInformationSetsPlayer2();
 		
 		dualPayoffMatrix = new TIntDoubleHashMap[numDualSequences];
 		for (int i = 0; i < numDualSequences; i++) {
