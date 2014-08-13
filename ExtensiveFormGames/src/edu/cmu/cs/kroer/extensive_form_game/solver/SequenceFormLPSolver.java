@@ -45,6 +45,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	int numSequencesP2;
 	int numPrimalSequences;
 	int numDualSequences;
+	int numDualInformationSets;
 	
 	TIntObjectMap<IloConstraint> primalConstraints; // indexed as [informationSetId], without correcting for 1-indexing
 	TIntObjectMap<IloRange> dualConstraints; // indexed as [sequenceId]
@@ -97,6 +98,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		
 		numPrimalSequences = playerToSolveFor == 1 ? game.getNumSequencesP1() : game.getNumSequencesP2();
 		numDualSequences = playerNotToSolveFor == 1 ? game.getNumSequencesP1() : game.getNumSequencesP2();
+		numDualInformationSets = playerNotToSolveFor == 1 ? game.getNumInformationSetsPlayer1() : game.getNumInformationSetsPlayer2();
 		sequenceFormDualMatrix = new TIntList[numDualSequences];
 		for (int i = 0; i < numDualSequences; i++) {
 			sequenceFormDualMatrix[i] =  new TIntArrayList();
@@ -217,7 +219,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	}
 	
 	/**
-	 * Writes the current model to a file.
+	 * Writes the current model to a file. CPLEX throws an exception if the model is faulty or the path does not exist.
 	 * @param filename the absolute path to the file being written to
 	 */
 	public void writeModelToFile(String filename) {
@@ -295,6 +297,13 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 
+	/**
+	 * Creates sequence form variables in pre-order traversal. A constraint is also added to ensure that the probability sum over the new sequences sum to the value of the last seen sequence on the path to this information set 
+	 * @param currentNodeId
+	 * @param parentSequence last seen sequence belonging to the primal player
+	 * @param visited keeps track of which information sets have been visited
+	 * @throws IloException
+	 */
 	private void CreateSequenceFormVariablesAndConstraints(int currentNodeId, IloNumVar parentSequence, TIntSet visited) throws IloException{
 		Node node = game.getNodeById(currentNodeId);
 		if (node.isLeaf()) return;
@@ -304,17 +313,21 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			IloLinearNumExpr sum = cplex.linearNumExpr();
 			//sum.addTerm(-1, parentSequence);
 			for (Action action : node.getActions()) {
+				// real-valued variable in (0,1)
 				IloNumVar v = cplex.numVar(0, 1, "X" + node.getInformationSet() + action.getName());
 				strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
-				int sequenceId = GetSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName()); //= playerToSolveFor == 1 ? sequenceIdByInformationSetAndActionP1[node.getInformationSet()].get(action.getName()) : sequenceIdByInformationSetAndActionP2[node.getInformationSet()].get(action.getName()); 
+				int sequenceId = GetSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName());
 				strategyVarsBySequenceId[sequenceId] = v;
+				// add 1*v to the sum over all the sequences at the information set
 				sum.addTerm(1, v);
 				CreateSequenceFormVariablesAndConstraints(action.getChildId(), v, visited);
 			}
+			// sum_{sequences} = parent_sequence. cplex.addEq returns a reference to the range object describing the constraint. This is useful for dynamically modifying the model in derived classes.
 			primalConstraints.put(node.getInformationSet(), cplex.addEq(sum, parentSequence,"Primal"+node.getInformationSet()));
 		} else {
 			for (Action action : node.getActions()) {
 				if (node.getPlayer() == playerToSolveFor) {
+					// update parentSequence to be the current sequence
 					IloNumVar v = strategyVarsByInformationSet[node.getInformationSet()].get(action.getName());
 					CreateSequenceFormVariablesAndConstraints(action.getChildId(), v, visited);
 				} else {
@@ -414,7 +427,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		dualConstraints.put(sequenceId, cplex.addGe(lhs, 0, "Dual"+sequenceId));
 	}
 	
-	private int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
+	int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
 		if (playerToSolveFor == 1) {
 			return sequenceIdByInformationSetAndActionP1[informationSet].get(actionName);
 		} else {
@@ -422,14 +435,14 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 	
-	private int GetSequenceIdForPlayerNotToSolveFor(int informationSet, String actionName) {
+	int GetSequenceIdForPlayerNotToSolveFor(int informationSet, String actionName) {
 		if (playerNotToSolveFor == 1) {
 			return sequenceIdByInformationSetAndActionP1[informationSet].get(actionName);
 		} else {
 			return sequenceIdByInformationSetAndActionP2[informationSet].get(actionName);
 		}
 	}
-	
+
 	
 	private void SetObjective() throws IloException {
 		cplex.addMinimize(cplex.prod(1, dualVars[0]));
