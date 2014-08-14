@@ -29,6 +29,16 @@ public class Game {
 		public double getProbability() {
 			return probability;
 		}
+		
+		public boolean equals(Action action) {
+			if (name.equals(action.name)) return true;
+			else return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return name.hashCode();
+		}
 	}
 	public class Node {
 		private int nodeId;
@@ -76,7 +86,7 @@ public class Game {
 		}
 	}
 	
-	private TIntArrayList [] [] informationSets; // indexed as [player]
+	private TIntArrayList [] [] informationSets; // indexed as [player][information set]
 	private boolean [] [] informationSetsSeen; // indexed as [player]
 	private Node [] nodes;
 	private TIntIntMap [] childNodeIdBySignalId; // indexed as [nodeId][signalId], returns the child node reached when nature selects the signal
@@ -360,10 +370,11 @@ public class Game {
 		nodes[node.nodeId] = node;
 	}
 
-	public TIntArrayList[][] getInformationSets() {
-		return informationSets;
+	public TIntArrayList getInformationSet(int player, int informationSetId) {
+		return informationSets[player-1][informationSetId];
 	}
 
+	
 	public boolean[][] getInformationSetsSeen() {
 		return informationSetsSeen;
 	}

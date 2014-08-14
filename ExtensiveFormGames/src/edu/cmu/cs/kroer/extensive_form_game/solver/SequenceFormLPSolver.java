@@ -50,6 +50,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	
 	TIntObjectMap<IloConstraint> primalConstraints; // indexed as [informationSetId], without correcting for 1-indexing
 	TIntObjectMap<IloRange> dualConstraints; // indexed as [sequenceId]
+	double[] nodeNatureProbabilities; // indexed as [nodeId]. Returns the probability of that node being reached when considering only nature nodes
 
 	public SequenceFormLPSolver(Game game, int playerToSolveFor) {
 		super(game);
@@ -129,6 +130,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		
 		primalConstraints = new TIntObjectHashMap<IloConstraint>();
 		dualConstraints = new TIntObjectHashMap<IloRange>();
+		nodeNatureProbabilities = new double[game.getNumNodes()+1]; // Use +1 to be robust for non-zero indexed nodes
 	}
 	
 	/**
@@ -392,6 +394,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	
 	private void InitializeDualPayoffMatrixRecursive(int currentNodeId, int primalSequence, int dualSequence, double natureProbability) {
 		Node node = this.game.getNodeById(currentNodeId);
+		nodeNatureProbabilities[node.getNodeId()] = natureProbability;
 		if (node.isLeaf()) {
 			int valueMultiplier = playerToSolveFor == 1? -1 : 1;
 			double leafValue = valueMultiplier * natureProbability * node.getValue();
