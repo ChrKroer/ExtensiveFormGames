@@ -51,6 +51,8 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	TIntObjectMap<IloConstraint> primalConstraints; // indexed as [informationSetId], without correcting for 1-indexing
 	TIntObjectMap<IloRange> dualConstraints; // indexed as [sequenceId]
 	double[] nodeNatureProbabilities; // indexed as [nodeId]. Returns the probability of that node being reached when considering only nature nodes
+	int[] sequenceIdForNodeP1; // indexed as [nodeId]. Returns the sequenceId of the last sequence belonging to Player 1 on the path to the node. 
+	int[] sequenceIdForNodeP2; // indexed as [nodeId]. Returns the sequenceId of the last sequence belonging to Player 2 on the path to the node. 
 
 	public SequenceFormLPSolver(Game game, int playerToSolveFor) {
 		super(game);
@@ -131,6 +133,9 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		primalConstraints = new TIntObjectHashMap<IloConstraint>();
 		dualConstraints = new TIntObjectHashMap<IloRange>();
 		nodeNatureProbabilities = new double[game.getNumNodes()+1]; // Use +1 to be robust for non-zero indexed nodes
+		sequenceIdForNodeP1 = new int[game.getNumNodes()+1];
+		sequenceIdForNodeP2 = new int[game.getNumNodes()+1];
+		computeAuxiliaryInformationForNodes();
 	}
 	
 	/**
@@ -394,7 +399,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	
 	private void InitializeDualPayoffMatrixRecursive(int currentNodeId, int primalSequence, int dualSequence, double natureProbability) {
 		Node node = this.game.getNodeById(currentNodeId);
-		nodeNatureProbabilities[node.getNodeId()] = natureProbability;
+		
 		if (node.isLeaf()) {
 			int valueMultiplier = playerToSolveFor == 1? -1 : 1;
 			double leafValue = valueMultiplier * natureProbability * node.getValue();
@@ -430,6 +435,26 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		
 				
 		dualConstraints.put(sequenceId, cplex.addGe(lhs, 0, "Dual"+sequenceId));
+	}
+	
+	/**
+	 * Fills in the convenience arrays nodeNatureProbabilities and sequenceIdForNodeP1/2
+	 */
+	void computeAuxiliaryInformationForNodes() {
+		computeAuxiliaryInformationForNodesRecursive(game.getRoot(), 0, 0, 1);
+	}
+	private void computeAuxiliaryInformationForNodesRecursive(int currentNodeId, int sequenceIdP1, int sequenceIdP2, double natureProbability) {
+		Node node = this.game.getNodeById(currentNodeId);
+		nodeNatureProbabilities[node.getNodeId()] = natureProbability;
+		sequenceIdForNodeP1[currentNodeId] = sequenceIdP1;
+		sequenceIdForNodeP2[currentNodeId] = sequenceIdP2;
+		
+		for (Action action : node.getActions()) {
+			int newSequenceIdP1= node.getPlayer() == 1? sequenceIdByInformationSetAndActionP1[node.getInformationSet()].get(action.getName()) : sequenceIdP1;
+			int newSequenceIdP2= node.getPlayer() == 2? sequenceIdByInformationSetAndActionP2[node.getInformationSet()].get(action.getName()) : sequenceIdP2;
+			double newNatureProbability = node.getPlayer() == 0? natureProbability * action.getProbability() : natureProbability;
+			computeAuxiliaryInformationForNodesRecursive(action.getChildId(), newSequenceIdP1, newSequenceIdP2, newNatureProbability);
+		}
 	}
 	
 	int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
