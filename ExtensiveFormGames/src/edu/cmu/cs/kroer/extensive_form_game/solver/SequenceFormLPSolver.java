@@ -445,6 +445,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	}
 	private void computeAuxiliaryInformationForNodesRecursive(int currentNodeId, int sequenceIdP1, int sequenceIdP2, double natureProbability) {
 		Node node = this.game.getNodeById(currentNodeId);
+		if (node.isLeaf()) return;
 		nodeNatureProbabilities[node.getNodeId()] = natureProbability;
 		sequenceIdForNodeP1[currentNodeId] = sequenceIdP1;
 		sequenceIdForNodeP2[currentNodeId] = sequenceIdP2;
