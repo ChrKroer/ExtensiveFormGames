@@ -325,7 +325,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 				// real-valued variable in (0,1)
 				IloNumVar v = cplex.numVar(0, 1, "X" + node.getInformationSet() + action.getName());
 				strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
-				int sequenceId = GetSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName());
+				int sequenceId = getSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName());
 				strategyVarsBySequenceId[sequenceId] = v;
 				// add 1*v to the sum over all the sequences at the information set
 				sum.addTerm(1, v);
@@ -380,13 +380,13 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			int informationSetMatrixId = node.getInformationSet() + (1-game.getSmallestInformationSetId(playerNotToSolveFor)); // map information set ID to 1 indexing. Assumes that information sets are named by consecutive integers
 			sequenceFormDualMatrix[parentSequenceId].add(informationSetMatrixId);
 			for (Action action : node.getActions()) {
-				int newSequenceId = GetSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName());
+				int newSequenceId = getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName());
 				sequenceFormDualMatrix[newSequenceId].add(informationSetMatrixId);
 				InitializeDualSequenceMatrixRecursive(action.getChildId(), visited, newSequenceId);
 			}
 		} else {
 			for (Action action : node.getActions()) {
-				int newSequenceId = playerNotToSolveFor == node.getPlayer()? GetSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName()) : parentSequenceId;
+				int newSequenceId = playerNotToSolveFor == node.getPlayer()? getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName()) : parentSequenceId;
 				InitializeDualSequenceMatrixRecursive(action.getChildId(), visited, newSequenceId);
 			}
 		}		
@@ -410,8 +410,8 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 			}
 		} else {
 			for (Action action : node.getActions()) {
-				int newPrimalSequence = node.getPlayer() == playerToSolveFor? GetSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName()) : primalSequence;
-				int newDualSequence = node.getPlayer() == playerNotToSolveFor? GetSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName()) : dualSequence;
+				int newPrimalSequence = node.getPlayer() == playerToSolveFor? getSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName()) : primalSequence;
+				int newDualSequence = node.getPlayer() == playerNotToSolveFor? getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName()) : dualSequence;
 				double newNatureProbability = node.getPlayer() == 0? natureProbability * action.getProbability() : natureProbability;
 				InitializeDualPayoffMatrixRecursive(action.getChildId(), newPrimalSequence, newDualSequence, newNatureProbability);
 			}
@@ -459,7 +459,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 	
-	int GetSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
+	int getSequenceIdForPlayerToSolveFor(int informationSet, String actionName) {
 		if (playerToSolveFor == 1) {
 			return sequenceIdByInformationSetAndActionP1[informationSet].get(actionName);
 		} else {
@@ -467,7 +467,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		}
 	}
 	
-	int GetSequenceIdForPlayerNotToSolveFor(int informationSet, String actionName) {
+	int getSequenceIdForPlayerNotToSolveFor(int informationSet, String actionName) {
 		if (playerNotToSolveFor == 1) {
 			return sequenceIdByInformationSetAndActionP1[informationSet].get(actionName);
 		} else {
