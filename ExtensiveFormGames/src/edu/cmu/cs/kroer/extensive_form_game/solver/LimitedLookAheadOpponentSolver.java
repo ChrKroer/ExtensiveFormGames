@@ -244,13 +244,27 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			TCustomHashMap<String,IloLinearNumExpr> actionMap = new TCustomHashMap<String,IloLinearNumExpr>();
 			IloLinearNumExpr sum = cplex.linearNumExpr();
 			for (Action action : node.getActions()) {
-				IloNumVar actionActiveVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "V"+node.getInformationSet());
+				IloNumVar actionActiveVar = cplex.boolVar();
+				// actionActiveVars should sum to 1
 				sum.addTerm(1, actionActiveVar);
-				IloLinearNumExpr newActionExpr = cplex.linearNumExpr();
+				// actionValueVar represents the value of the action according to the heuristic evaluation k steps ahead
+				IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "V"+node.getInformationSet());
+				actionExpr.addTerm(1, actionValueVar);
 				
+				// Expression that takes on value 0 or M, where M is a sufficiently large constant to enable the full value of the action when active
+				IloLinearNumExpr valueExpr = cplex.linearNumExpr();
+				valueExpr.addTerm(maxEvaluationValueForSequence[getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName())], actionActiveVar);
+				
+				// Force the real-valued actionValueVar to take on a non-zero value only if actionActiveVar == 1
+				cplex.addLe(actionValueVar, valueExpr);
+				
+				// Create a new actionExpr to recurse on and let actionValueVar be bounded by its value  
+				IloLinearNumExpr newActionExpr = cplex.linearNumExpr();
+				cplex.addLe(actionValueVar, newActionExpr);
 				actionMap.put(action.getName(), newActionExpr);
 			}
-			cplex.addLe(sum, 1);
+			// actionActiveVars should sum to 1
+			cplex.addEq(sum, 1);
 			exprMap.put(node.getInformationSet(), actionMap);
 		}
 		for (Action action : node.getActions()) {
