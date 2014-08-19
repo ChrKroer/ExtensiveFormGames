@@ -8,8 +8,6 @@ import org.junit.*;
 import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
 
 public class TestSequenceFormLPSolver {
-	private static final double epsilon = 0.001;
-
 	Game miniKuhnGame;
 	Game kuhnGame;
 	Game coinGame;
@@ -51,7 +49,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(miniKuhnGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1.lp");
 		solver.solveGame();
-		assertEquals(0.5, solver.getValueOfGame(), epsilon);
+		assertEquals(0.5, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -59,7 +57,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(miniKuhnGame, 2);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp2.lp");
 		solver.solveGame();
-		assertEquals(-0.5, solver.getValueOfGame(), epsilon);
+		assertEquals(-0.5, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	
@@ -68,7 +66,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(kuhnGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1.lp");
 		solver.solveGame();
-		assertEquals(-1.0/18.0, solver.getValueOfGame(), epsilon);
+		assertEquals(-1.0/18.0, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -76,7 +74,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(kuhnGame, 2);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp2.lp");
 		solver.solveGame();
-		assertEquals(1.0/18.0, solver.getValueOfGame(), epsilon);
+		assertEquals(1.0/18.0, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -84,7 +82,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(coinGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "coinp1.lp");
 		solver.solveGame();
-		assertEquals(0.375, solver.getValueOfGame(), epsilon);
+		assertEquals(0.375, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -116,7 +114,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKJGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducKjP1.lp");
 		solver.solveGame();
-		assertEquals(3.312e-17, solver.getValueOfGame(), epsilon);
+		assertEquals(3.312e-17, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -124,7 +122,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKj1RaiseGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducKj1RaiseP1.lp");
 		solver.solveGame();
-		assertEquals(-1.85e-17, solver.getValueOfGame(), epsilon);
+		assertEquals(-1.85e-17, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
 	@Test
@@ -148,7 +146,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducp1.lp");
 		solver.solveGame();
-		assertEquals(-0.0856064, solver.getValueOfGame(), epsilon);
+		assertEquals(-0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
 	@Test
@@ -156,7 +154,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducUnabstractedGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducp1.lp");
 		solver.solveGame();
-		assertEquals(-0.0856064, solver.getValueOfGame(), epsilon);
+		assertEquals(-0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
 }

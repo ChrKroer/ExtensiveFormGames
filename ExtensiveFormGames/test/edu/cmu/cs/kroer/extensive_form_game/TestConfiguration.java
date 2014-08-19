@@ -7,4 +7,6 @@ public final class TestConfiguration {
 	static final String zerosumGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
 	// Specifies where to save LP models. Each test case dumps its LP model to a file in the specified folder
 	static final String lpModelsFolder = "/Users/ckroer/Documents/research/lp-models/";
+	// Epsilon value for precision of CPLEX
+	static final double epsilon = 0.001;
 }
