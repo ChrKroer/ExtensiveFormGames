@@ -29,4 +29,5 @@ public abstract class ZeroSumGameSolver {
 		return strategyVars;
 	}
 	public abstract TObjectDoubleMap<String> getStrategyVarMap();
+	public abstract TObjectDoubleMap<String>[] getInformationSetActionProbabilities();
 }

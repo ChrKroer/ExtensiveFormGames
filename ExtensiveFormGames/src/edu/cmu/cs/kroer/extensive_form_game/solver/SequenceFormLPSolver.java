@@ -177,6 +177,25 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		return map;
 	}
 
+	/**
+	 * Creates and returns a mapping from information set id and action name pairs to the probability of taking that action in the computed solution
+	 */
+	@Override
+	public TObjectDoubleMap<String>[] getInformationSetActionProbabilities() {
+		TObjectDoubleMap<String>[] map = new TObjectDoubleHashMap[numPrimalInformationSets];
+		for (int informationSetId = 0; informationSetId < numPrimalInformationSets; informationSetId++) {
+			map[informationSetId] = new TObjectDoubleHashMap<>();
+			for (String actionName : strategyVarsByInformationSet[informationSetId].keySet()) {
+				try {
+					map[informationSetId].put(actionName, cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName)));
+				} catch (IloException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return map;
+	}
+
 
 	/**
 	 * Prints the value of the game along with the names and computed values for each variable.
