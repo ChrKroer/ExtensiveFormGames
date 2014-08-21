@@ -181,6 +181,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	 * Creates and returns a mapping from information set id and action name pairs to the probability of taking that action in the computed solution
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public TObjectDoubleMap<String>[] getInformationSetActionProbabilities() {
 		TObjectDoubleMap<String>[] map = new TObjectDoubleHashMap[numPrimalInformationSets];
 		for (int informationSetId = 0; informationSetId < numPrimalInformationSets; informationSetId++) {
