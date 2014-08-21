@@ -370,6 +370,22 @@ public class Game {
 		nodes[node.nodeId] = node;
 	}
 
+	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
+		double[] expectedValue = new double[numNodes];
+		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2);
+		return expectedValue;
+	}
+	
+	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
+		Node node = nodes[currentNode];
+		array[currentNode] = 0;
+		for(Action action : node.actions) {
+			double probability = node.getPlayer() == 1 ? strategyP1[node.getInformationSet()].get(action.getName()) : strategyP2[node.getInformationSet()].get(action.getName());
+			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2);
+		}
+		return array[currentNode];
+	}
+	
 	public TIntArrayList getInformationSet(int player, int informationSetId) {
 		return informationSets[player-1][informationSetId];
 	}
