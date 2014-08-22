@@ -118,11 +118,27 @@ public class TestSequenceFormLPSolver {
 	}
 
 	@Test
+	public void testSolveLeducKJP2() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKJGame, 2);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducKjP1.lp");
+		solver.solveGame();
+		assertEquals(-3.312e-17, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
 	public void testSolveLeducKj1RaiseP1() {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKj1RaiseGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducKj1RaiseP1.lp");
 		solver.solveGame();
 		assertEquals(-1.85e-17, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
+	public void testSolveLeducKj1RaiseP2() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducKj1RaiseGame, 2);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducKj1RaiseP1.lp");
+		solver.solveGame();
+		assertEquals(1.85e-17, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
 	@Test
@@ -148,6 +164,14 @@ public class TestSequenceFormLPSolver {
 		solver.solveGame();
 		assertEquals(-0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
+
+	@Test
+	public void testSolveLeducP2() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducGame, 2);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducp1.lp");
+		solver.solveGame();
+		assertEquals(0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
 	
 	@Test
 	public void testSolveLeducUnabstractedP1() {
@@ -155,6 +179,14 @@ public class TestSequenceFormLPSolver {
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducp1.lp");
 		solver.solveGame();
 		assertEquals(-0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
+	public void testSolveLeducUnabstractedP2() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leducUnabstractedGame, 2);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "leducp1.lp");
+		solver.solveGame();
+		assertEquals(0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
 }
