@@ -135,7 +135,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		nodeNatureProbabilities = new double[game.getNumNodes()+1]; // Use +1 to be robust for non-zero indexed nodes
 		sequenceIdForNodeP1 = new int[game.getNumNodes()+1];
 		sequenceIdForNodeP2 = new int[game.getNumNodes()+1];
-		computeAuxiliaryInformationForNodes();
+		
 	}
 	
 	/**

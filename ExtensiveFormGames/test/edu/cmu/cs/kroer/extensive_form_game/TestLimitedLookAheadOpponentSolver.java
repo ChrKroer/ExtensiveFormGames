@@ -1,6 +1,8 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
 import static org.junit.Assert.*;
+import ilog.concert.IloException;
+import ilog.cplex.IloCplex.UnknownObjectException;
 
 import org.junit.Test;
 
@@ -18,8 +20,15 @@ public class TestLimitedLookAheadOpponentSolver {
 		double[] nodeEvaluationTable = {0,0,0,0,0,0,0,0,0,1,0};
 
 		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(miniKuhnGame, 1, nodeEvaluationTable, 1);
-		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "minikuhnp1-limited-look-ahead.lp");
 		solver.solveGame();
+		try {
+			solver.printSequenceActivationValues();
+		} catch (IloException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+
 		assertEquals(3, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
