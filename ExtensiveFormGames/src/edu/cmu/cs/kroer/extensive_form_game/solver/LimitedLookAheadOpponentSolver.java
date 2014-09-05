@@ -181,13 +181,37 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			// Dynamic programming table for expressions representing dominated actions
 			HashMap<Action, IloLinearNumExpr> dominatedActionExpressionTable = new HashMap<Action, IloLinearNumExpr>();
 			for (Action incentivizedAction : firstNodeInSet.getActions()) {
+				// get expr representing value of chosen action
 				IloLinearNumExpr incentiveExpr = getIncentivizedActionExpression(informationSetId, incentivizedAction);
+				
+				IloLinearNumExpr incentiveConstraintLHS = cplex.linearNumExpr();
+				incentiveConstraintLHS.add(incentiveExpr);
+				
+				int incentiveSequenceId = getSequenceIdForPlayerToSolveFor(informationSetId, incentivizedAction.getName());
+				// ensure that expression is only active if the sequence is chosen
+				incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
+		
+				
 				for (Action dominatedAction : firstNodeInSet.getActions()) {
 					if (!incentivizedAction.equals(dominatedAction)) {
-						// expresseion representing the heuristic value of the action that the opponent is being made to not take
+						// get expr representing value of dominated action
 						IloLinearNumExpr dominatedExpr = getDominatedActionExpression(informationSetId, dominatedAction, dominatedActionExpressionTable);
-						// TODO: Add cplex constraint, incentiveExpr >= dominatedExpr
-						cplex.addGe(incentiveExpr, dominatedExpr, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
+						IloLinearNumExpr incentiveConstraintRHS = cplex.linearNumExpr();
+						incentiveConstraintRHS.add(dominatedExpr);
+						
+						int dominatedSequenceId = getSequenceIdForPlayerToSolveFor(informationSetId, dominatedAction.getName());
+						// ensure that expression is only active is the sequence is deactivated
+						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+						// TODO: something needs to be flipped here. Perhaps it needs to be LB of other side
+						incentiveConstraintRHS.setConstant(this.epsilon - maxEvaluationValueForSequence[dominatedSequenceId]);
+						cplex.addGe(incentiveConstraintLHS, incentiveConstraintRHS, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
+						
+						// add constraint requiring equality if both sequences are chosen to be incentivized, here we add one side of the two weak inequalities enforcing equality, since the other direction is also iterated over
+						IloLinearNumExpr equalityRHS = cplex.linearNumExpr();
+						equalityRHS.add(incentiveConstraintRHS);
+						equalityRHS.addTerm(0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+						equalityRHS.addTerm(0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
+						cplex.addGe(incentiveExpr, equalityRHS, "quality("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
 					}
 				}
 			}
@@ -218,16 +242,15 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				// we need to locate the action that corresponds to dominatedAction at the current node, so that we can pull the correct childId
 				Action dominatedActionForNode = node.getActions()[0];
 				for (Action action : node.getActions()) {
-					if (action.getName() == dominatedAction.getName()) dominatedActionForNode = action;
+					if (action.getName().equals(dominatedAction.getName())) dominatedActionForNode = action;
 				}
 
 				// find the descendant information sets and add their values to the expression
-				fillDominatedActionExpr(expr, dominatedActionForNode.getChildId(), informationSetToVariableMap, exprMap, 0, dominatedAction);
+				fillDominatedActionExpr(expr, dominatedActionForNode.getChildId(), informationSetToVariableMap, exprMap, 1, dominatedAction);
 			}
 			// remember the expression for future method calls
 			dominatedActionExpressionTable.put(dominatedAction, expr);
-			// add epsilon to enforce strictness
-			expr.setConstant(this.epsilon);
+			
 			return expr;
 		}
 	}
@@ -291,16 +314,13 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			// ensure that we are using the correct Action at the node, so we can pull the correct childId
 			Action incentiveActionForNode = node.getActions()[0];
 			for (Action action : node.getActions()) {
-				if (action.getName() == incentivizedAction.getName()) incentiveActionForNode = action;
+				if (action.getName().equals(incentivizedAction.getName())) incentiveActionForNode = action;
 			}
 			fillIncentivizedActionExpr(actionExpr, incentiveActionForNode.getChildId(), exprMap, 1, incentivizedAction);
 			if (maxEvaluationValueForSequence[sequenceId] > maxHeuristicAtNode) {
 				maxHeuristicAtNode = maxEvaluationValueForSequence[sequenceId];
 			}
 		}
-		
-		// ensure that expression is only active if the sequence is chosen
-		actionExpr.addTerm(maxHeuristicAtNode+this.epsilon, sequenceDeactivationVars[sequenceId]);
 		
 		return actionExpr;
 	}

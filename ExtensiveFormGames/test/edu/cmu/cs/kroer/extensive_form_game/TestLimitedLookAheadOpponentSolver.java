@@ -2,8 +2,6 @@ package edu.cmu.cs.kroer.extensive_form_game;
 
 import static org.junit.Assert.*;
 import ilog.concert.IloException;
-import ilog.cplex.IloCplex.UnknownObjectException;
-
 import org.junit.Test;
 
 import edu.cmu.cs.kroer.extensive_form_game.solver.LimitedLookAheadOpponentSolver;
@@ -13,7 +11,7 @@ import gnu.trove.map.TObjectDoubleMap;
 public class TestLimitedLookAheadOpponentSolver {
 
 	@Test
-	public void testSimpleGame() {
+	public void testMiniKuhnP1() {
 		Game miniKuhnGame = new Game();
 		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");
 		
@@ -21,6 +19,26 @@ public class TestLimitedLookAheadOpponentSolver {
 
 		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(miniKuhnGame, 1, nodeEvaluationTable, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "minikuhnp1-limited-look-ahead.lp");
+		solver.solveGame();
+		try {
+			solver.printSequenceActivationValues();
+		} catch (IloException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+
+		assertEquals(1, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
+	public void testMiniKuhnP2() {
+		Game miniKuhnGame = new Game();
+		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");
+		
+		double[] nodeEvaluationTable = {0,0,0,0,0,0,0,0,0,1,0};
+
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(miniKuhnGame, 2, nodeEvaluationTable, 2);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "minikuhnp2-limited-look-ahead.lp");
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
