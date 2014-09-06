@@ -370,18 +370,37 @@ public class Game {
 		nodes[node.nodeId] = node;
 	}
 
-	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
+	/**
+	 * Computes an array that represents the expected value for each node
+	 * @param strategyP1
+	 * @param strategyP2
+	 * @param invertValues if true, all values are negated, representing the utility for Player 2 when considered as a maximizing player
+	 * @return
+	 */
+	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues) {
 		double[] expectedValue = new double[numNodes];
-		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2);
+		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2, negateValues);
 		return expectedValue;
 	}
 	
-	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
+	/**
+	 * Computes an array that represents the expected value for each node
+	 * @param strategyP1
+	 * @param strategyP2
+	 * @return
+	 */
+	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
+		return getExpectedValuesForNodes(strategyP1, strategyP2, false);
+	}
+	
+	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues) {
 		Node node = nodes[currentNode];
+		if (node.isLeaf() && !negateValues) return node.getValue();
+		if (node.isLeaf() && negateValues) return -node.getValue();
 		array[currentNode] = 0;
 		for(Action action : node.actions) {
 			double probability = node.getPlayer() == 1 ? strategyP1[node.getInformationSet()].get(action.getName()) : strategyP2[node.getInformationSet()].get(action.getName());
-			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2);
+			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues);
 		}
 		return array[currentNode];
 	}

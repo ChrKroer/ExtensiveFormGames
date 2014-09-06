@@ -32,20 +32,36 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	double maxPayoff;
 	double minPayoff;
 	double [] maxEvaluationValueForSequence; // [sequenceId] returns the maximum value in the nodeEvaluationTable at depth k over all trees rooted at the sequence
-	double epsilon = 0.001;
+	double epsilon; // This controls how much we want an action to be heuristically preferred before we consider it "incentivized"
 	
 	
 
 	
-	public LimitedLookAheadOpponentSolver(Game game, int playerToSolveFor, double[] nodeEvaluationTable, int lookAhead) {
+	public LimitedLookAheadOpponentSolver(Game game, int playerToSolveFor, double[] nodeEvaluationTable, int lookAhead, double epsilon) {
 		super(game, playerToSolveFor);
 		this.nodeEvaluationTable = nodeEvaluationTable;
+		makeNodeEvaluationTableNonNegative();
 		this.lookAhead = lookAhead;
+		this.epsilon = epsilon;
 		try {
 			setUpModel();
 		} catch (IloException e) {
 			System.out.println("LimitedLookAheadOpponentSolver error, setUpModel() exception");
 			e.printStackTrace();
+		}
+	}
+	
+	public LimitedLookAheadOpponentSolver(Game game, int playerToSolveFor, double[] nodeEvaluationTable, int lookAhead) {
+		this(game, playerToSolveFor, nodeEvaluationTable, lookAhead, 0.001);
+	}
+	
+	private void makeNodeEvaluationTableNonNegative() {
+		double minValue = 0;
+		for (int i = 0; i < nodeEvaluationTable.length; i++) {
+			if (nodeEvaluationTable[i] < minValue) minValue = nodeEvaluationTable[i];
+		}
+		for (int i = 0; i < nodeEvaluationTable.length; i++) {
+			nodeEvaluationTable[i] += Math.abs(minValue);
 		}
 	}
 	
@@ -187,7 +203,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				IloLinearNumExpr incentiveConstraintLHS = cplex.linearNumExpr();
 				incentiveConstraintLHS.add(incentiveExpr);
 				
-				int incentiveSequenceId = getSequenceIdForPlayerToSolveFor(informationSetId, incentivizedAction.getName());
+				int incentiveSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
 				// ensure that expression is only active if the sequence is chosen
 				incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
 		
@@ -199,18 +215,18 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 						IloLinearNumExpr incentiveConstraintRHS = cplex.linearNumExpr();
 						incentiveConstraintRHS.add(dominatedExpr);
 						
-						int dominatedSequenceId = getSequenceIdForPlayerToSolveFor(informationSetId, dominatedAction.getName());
+						int dominatedSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, dominatedAction.getName());
 						// ensure that expression is only active is the sequence is deactivated
-						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId]+this.epsilon, sequenceDeactivationVars[dominatedSequenceId]);
 						// TODO: something needs to be flipped here. Perhaps it needs to be LB of other side
-						incentiveConstraintRHS.setConstant(this.epsilon - maxEvaluationValueForSequence[dominatedSequenceId]);
+						incentiveConstraintRHS.setConstant(-maxEvaluationValueForSequence[dominatedSequenceId]);
 						cplex.addGe(incentiveConstraintLHS, incentiveConstraintRHS, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
 						
 						// add constraint requiring equality if both sequences are chosen to be incentivized, here we add one side of the two weak inequalities enforcing equality, since the other direction is also iterated over
 						IloLinearNumExpr equalityRHS = cplex.linearNumExpr();
-						equalityRHS.add(incentiveConstraintRHS);
-						equalityRHS.addTerm(0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
-						equalityRHS.addTerm(0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
+						equalityRHS.add(dominatedExpr);
+						equalityRHS.addTerm(-0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+						equalityRHS.addTerm(-0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
 						cplex.addGe(incentiveExpr, equalityRHS, "quality("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
 					}
 				}
@@ -397,11 +413,14 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	}
 
 	private void computeMaxEvaluation() {
+		computeMaxEvaluationForAction(game.getRoot(), 0, 0);
 		for (int informationSetId = 0; informationSetId < this.numDualInformationSets; informationSetId++) {
 			for (int i = 0; i < game.getInformationSet(playerNotToSolveFor, informationSetId).size(); i++) {
 				Node node = game.getNodeById(game.getInformationSet(playerNotToSolveFor, informationSetId).get(i));
 				for (Action action : node.getActions()) {
-					computeMaxEvaluationForAction(node.getNodeId(), getSequenceIdForPlayerNotToSolveFor(informationSetId, action.getName()), 0);
+					int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, action.getName());
+					maxEvaluationValueForSequence[sequenceId] = 0;
+					computeMaxEvaluationForAction(action.getChildId(), sequenceId, 1);
 				}
 			}
 		}
