@@ -2,10 +2,12 @@ package edu.cmu.cs.kroer.extensive_form_game;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
 import org.junit.*;
 
+import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
+import edu.cmu.cs.kroer.extensive_form_game.Game.Node;
 import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
+import gnu.trove.map.TObjectDoubleMap;
 
 public class TestSequenceFormLPSolver {
 	Game miniKuhnGame;
@@ -82,6 +84,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(coinGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "coinp1.lp");
 		solver.solveGame();
+		solver.printGameValue();
 		assertEquals(0.375, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
@@ -188,5 +191,47 @@ public class TestSequenceFormLPSolver {
 		solver.solveGame();
 		assertEquals(0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
+
+
+	public void testForProbabilityZeroNonFoldActionsLeduc() {
+		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(leducGame, 1);
+		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(leducGame, 2);
+		
+		solverP1.solveGame();
+		solverP2.solveGame();
+		
+		TObjectDoubleMap<String>[] strategyP1 = solverP1.getInformationSetActionProbabilities();
+		TObjectDoubleMap<String>[] strategyP2 = solverP2.getInformationSetActionProbabilities();
+		
+		for (int informationSetId = 0; informationSetId < leducGame.getNumInformationSetsPlayer1(); informationSetId++) {
+			int idOfFirstNodeInSet = leducGame.getInformationSet(1, informationSetId).get(0);
+			Node firstNodeInSet = leducGame.getNodeById(idOfFirstNodeInSet);
+			boolean anyNonZero = false;
+			boolean anyZero = false;
+			for (Action action : firstNodeInSet.getActions()) {
+				if (strategyP1[informationSetId].get(action.getName()) != 0) anyNonZero = true;
+				if (strategyP1[informationSetId].get(action.getName()) == 0) anyZero = true;
+			}
+			if (!anyNonZero) continue;
+			if (!anyZero) continue;
+			System.out.println();
+			for (Action action : firstNodeInSet.getActions()) {
+				//if (!(action.getName().equals("f") || strategyP1[informationSetId].get(action.getName()) != 0)) {
+					System.out.println(firstNodeInSet.getName() + ": " + action.getName() + "   ----   " + strategyP1[informationSetId].get(action.getName()));
+				//}
+			}
+		}
+		assertTrue(false);
+		for (int informationSetId = 0; informationSetId < leducGame.getNumInformationSetsPlayer2(); informationSetId++) {
+			int idOfFirstNodeInSet = leducGame.getInformationSet(1, informationSetId).get(0);
+			Node firstNodeInSet = leducGame.getNodeById(idOfFirstNodeInSet);
+			for (Action action : firstNodeInSet.getActions()) {
+				assertTrue(action.getName().equals("f") || strategyP2[informationSetId].get(action.getName()) != 0);
+			}
+		}
+		
+	}
 	
 }
+
+

@@ -1,5 +1,6 @@
 package edu.cmu.cs.kroer.extensive_form_game.solver;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import gnu.trove.list.TIntList;
@@ -11,6 +12,7 @@ import gnu.trove.set.hash.TIntHashSet;
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
+import ilog.concert.IloRange;
 import ilog.cplex.IloCplex.UnknownObjectException;
 import edu.cmu.cs.kroer.extensive_form_game.Game;
 import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
@@ -94,7 +96,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	
 	public void printSequenceActivationValues() throws UnknownObjectException, IloException {
 		for (int i = 1; i < numDualSequences; i++) {
-			System.out.println("D" + i + " = " + cplex.getValue(sequenceDeactivationVars[i]));
+			System.out.println("D" + dualSequenceNames[i] + " = " + cplex.getValue(sequenceDeactivationVars[i]));
 		}
 	}
 	
@@ -131,8 +133,8 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		String[] namesDeactivationVars = new String[numDualSequences];
 		String[] namesLookAheadVars = new String[numDualSequences];
 		for (int i = 0; i < numDualSequences; i++) {
-			namesDeactivationVars[i] = "D" + i;
-			namesLookAheadVars[i] = "T" + i;
+			namesDeactivationVars[i] = "D" + dualSequenceNames[i];
+			namesLookAheadVars[i] = "T" + dualSequenceNames[i];
 		}
 		sequenceDeactivationVars = cplex.boolVarArray(numDualSequences, namesDeactivationVars);
 		sequenceLookAheadVars = cplex.boolVarArray(numDualSequences, namesLookAheadVars);
@@ -153,6 +155,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				// add 1*v to the sum over all the sequences at the information set
 				sum.addTerm(1, v);
 				CreateDeactivationSequenceFormConstraints(action.getChildId(), v, visited);
+				cplex.addGe(v, parentSequence);
 			}
 			// if parent sequence is deactived, it subtracts one from the sum
 			sum.addTerm(-1, parentSequence);
@@ -205,7 +208,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				
 				int incentiveSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
 				// ensure that expression is only active if the sequence is chosen
-				incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
+				//incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
 		
 				
 				for (Action dominatedAction : firstNodeInSet.getActions()) {
@@ -218,6 +221,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 						int dominatedSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, dominatedAction.getName());
 						// ensure that expression is only active is the sequence is deactivated
 						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId]+this.epsilon, sequenceDeactivationVars[dominatedSequenceId]);
+						incentiveConstraintRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
 						// TODO: something needs to be flipped here. Perhaps it needs to be LB of other side
 						incentiveConstraintRHS.setConstant(-maxEvaluationValueForSequence[dominatedSequenceId]);
 						cplex.addGe(incentiveConstraintLHS, incentiveConstraintRHS, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
@@ -225,8 +229,8 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 						// add constraint requiring equality if both sequences are chosen to be incentivized, here we add one side of the two weak inequalities enforcing equality, since the other direction is also iterated over
 						IloLinearNumExpr equalityRHS = cplex.linearNumExpr();
 						equalityRHS.add(dominatedExpr);
-						equalityRHS.addTerm(-0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
-						equalityRHS.addTerm(-0.5*maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
+						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
 						cplex.addGe(incentiveExpr, equalityRHS, "quality("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
 					}
 				}
@@ -248,9 +252,11 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		} else {
 			// this expression represents the value of dominatedAction
 			IloLinearNumExpr expr = cplex.linearNumExpr();
-			TIntObjectMap<IloNumVar> informationSetToVariableMap = new TIntObjectHashMap<IloNumVar>();
-			TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap = new TIntObjectHashMap<HashMap<String, IloLinearNumExpr>>();
-			
+			//TIntObjectMap<IloNumVar> informationSetToVariableMap = new TIntObjectHashMap<IloNumVar>();
+			TIntObjectMap<HashMap<String, IloRange>> rangeMap = new TIntObjectHashMap<HashMap<String, IloRange>>();
+			IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "DomActionValue;"+Integer.toString(informationSetId) + dominatedAction.getName());
+			expr.addTerm(1, actionValueVar);
+			IloRange range = cplex.addGe(actionValueVar, 0, actionValueVar.getName());
 			// Iterate over nodes in information set and add value of each node for dominatedAction
 			TIntArrayList informationSet = game.getInformationSet(playerNotToSolveFor, informationSetId);
 			for (int i = 0; i < informationSet.size(); i++) {
@@ -262,12 +268,49 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				}
 
 				// find the descendant information sets and add their values to the expression
-				fillDominatedActionExpr(expr, dominatedActionForNode.getChildId(), informationSetToVariableMap, exprMap, 1, dominatedAction);
+				//fillDominatedActionExpr(expr, dominatedActionForNode.getChildId(), informationSetToVariableMap, exprMap, 1, Integer.toString(informationSetId) + dominatedAction.getName());
+				fillDominatedActionRange(range, dominatedActionForNode.getChildId(), rangeMap, 1, Integer.toString(informationSetId) + dominatedAction.getName());
 			}
 			// remember the expression for future method calls
 			dominatedActionExpressionTable.put(dominatedAction, expr);
 			
 			return expr;
+		}
+	}
+	
+	private void fillDominatedActionRange(IloRange parentRange, int currentNodeId, TIntObjectMap<HashMap<String, IloRange>> rangeMap, int depth, String dominatedName) throws IloException {
+		Node node = game.getNodeById(currentNodeId);
+		if (depth == lookAhead || node.isLeaf()) {
+			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
+			IloLinearNumExpr expr = cplex.linearNumExpr();
+			expr.addTerm(-nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+			cplex.addToExpr(parentRange, expr);
+			return;
+		}
+		
+		if (node.getPlayer() == playerNotToSolveFor && !rangeMap.containsKey(node.getInformationSet())) {
+			// Create information set var and action expressions
+			IloNumVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "InfoValueVar;"+dominatedName+"("+node.getInformationSet()+")");
+			// Add information set value var to the expression describing the value of the parent action
+			IloLinearNumExpr infoValueExpr = cplex.linearNumExpr();
+			infoValueExpr.addTerm(-1, informationSetValueVar);
+			cplex.addToExpr(parentRange, infoValueExpr);
+			
+			//informationSetToVariableMap.put(node.getInformationSet(), informationSetValueVar);
+			HashMap<String,IloRange> actionRangeMap = new HashMap<String,IloRange>();
+			for (Action action : node.getActions()) {
+				// Require information set value var to be >= value of each action
+				IloRange actionValueRange = cplex.addGe(informationSetValueVar, 0, informationSetValueVar.getName() + ";" + action.getName());
+				actionRangeMap.put(action.getName(), actionValueRange);
+			}
+			rangeMap.put(node.getInformationSet(), actionRangeMap);
+
+		}
+
+		for (Action action : node.getActions()) {
+			//IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
+			IloRange newParentRange = node.getPlayer() == playerNotToSolveFor ? rangeMap.get(node.getInformationSet()).get(action.getName()) : parentRange;
+			fillDominatedActionRange(newParentRange, action.getChildId(), rangeMap, depth+1, dominatedName);
 		}
 	}
 	
@@ -278,7 +321,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	 * @param informationSetToVariableMap
 	 * @throws IloException
 	 */
-	private void fillDominatedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<IloNumVar> informationSetToVariableMap, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, Action dominatedAction) throws IloException {
+	/*private void fillDominatedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<IloNumVar> informationSetToVariableMap, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, String dominatedName) throws IloException {
 		Node node = game.getNodeById(currentNodeId);
 		if (depth == lookAhead || node.isLeaf()) {
 			addLookAheadDepthEvaluationValueToExpression(actionExpr, currentNodeId);
@@ -289,7 +332,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 
 		if (node.getPlayer() == playerNotToSolveFor && !informationSetToVariableMap.containsKey(node.getInformationSet())) {
 			// Create information set var and action expressions
-			IloNumVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Dom;"+dominatedAction.getName()+"("+node.getInformationSet()+";"+currentNodeId+")");
+			IloNumVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Dom;"+dominatedName+"("+node.getInformationSet()+";"+currentNodeId+")");
 			// Add information set value var to the expression describing the value of the parent action
 			actionExpr.addTerm(1, informationSetValueVar);
 			informationSetToVariableMap.put(node.getInformationSet(), informationSetValueVar);
@@ -306,9 +349,9 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 
 		for (Action action : node.getActions()) {
 			IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
-			fillDominatedActionExpr(newActionExpr, action.getChildId(), informationSetToVariableMap, exprMap, depth+1, dominatedAction);
+			fillDominatedActionExpr(newActionExpr, action.getChildId(), informationSetToVariableMap, exprMap, depth+1, dominatedName);
 		}
-	}
+	}*/
 	
 	/**
 	 * For the given action, this method computes an IloLinearNumExpr representing the value of the action over all nodes in the information set, as a function of the rational player's strategy
@@ -317,7 +360,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	 * @return
 	 * @throws IloException
 	 */
-	private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
+	/*private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
 		IloLinearNumExpr actionExpr = cplex.linearNumExpr(); 
 		int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
 		
@@ -332,13 +375,89 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			for (Action action : node.getActions()) {
 				if (action.getName().equals(incentivizedAction.getName())) incentiveActionForNode = action;
 			}
-			fillIncentivizedActionExpr(actionExpr, incentiveActionForNode.getChildId(), exprMap, 1, incentivizedAction);
+			fillIncentivizedActionExpr(actionExpr, incentiveActionForNode.getChildId(), exprMap, 1, Integer.toString(informationSetId) + incentivizedAction.getName());
 			if (maxEvaluationValueForSequence[sequenceId] > maxHeuristicAtNode) {
 				maxHeuristicAtNode = maxEvaluationValueForSequence[sequenceId];
 			}
 		}
 		
 		return actionExpr;
+	}*/
+	
+	private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
+		IloLinearNumExpr actionExpr = cplex.linearNumExpr(); 
+		int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
+		
+		// Iterate over nodes in information set
+		double maxHeuristicAtNode = 0;
+		TIntObjectMap<HashMap<String, IloNumVar>> exprMap = new TIntObjectHashMap<HashMap<String, IloNumVar>>();
+		TIntArrayList informationSet = game.getInformationSet(playerNotToSolveFor, informationSetId);
+		
+		//IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "IncActionValue;"+Integer.toString(informationSetId) + incentivizedAction.getName());
+		//actionExpr.addTerm(1, actionValueVar);
+
+		for (int i = 0; i < informationSet.size(); i++) {
+			Node node = game.getNodeById(informationSet.get(i));
+			// ensure that we are using the correct Action at the node, so we can pull the correct childId
+			Action incentiveActionForNode = node.getActions()[0];
+			for (Action action : node.getActions()) {
+				if (action.getName().equals(incentivizedAction.getName())) incentiveActionForNode = action;
+			}
+			IloNumVar actionActiveVar = cplex.boolVar("ActionActive" + Integer.toString(informationSetId) + incentivizedAction.getName());
+			IloLinearNumExpr notDeactivatedExpr = cplex.linearNumExpr();
+			notDeactivatedExpr.addTerm(-1, sequenceDeactivationVars[sequenceId]);
+			notDeactivatedExpr.setConstant(1);
+			cplex.addEq(actionActiveVar, notDeactivatedExpr, "NotDeactivated");
+			fillIncentivizedActionExpression(actionExpr, actionActiveVar, incentiveActionForNode.getChildId(), exprMap, 1, Integer.toString(informationSetId) + incentivizedAction.getName());
+			if (maxEvaluationValueForSequence[sequenceId] > maxHeuristicAtNode) {
+				maxHeuristicAtNode = maxEvaluationValueForSequence[sequenceId];
+			}
+		}
+		
+		return actionExpr;
+	}
+
+	private void fillIncentivizedActionExpression(IloLinearNumExpr actionExpr, IloNumVar parentSequence, int currentNodeId, TIntObjectMap<HashMap<String, IloNumVar>> varActiveMap, int depth, String incentivizedName) throws IloException {
+		Node node = game.getNodeById(currentNodeId);
+		if (depth == lookAhead || node.isLeaf()) {
+			IloNumVar nodeValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
+			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
+			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player
+			IloLinearNumExpr nodeValueExpr = cplex.linearNumExpr();
+			nodeValueExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+			
+			IloLinearNumExpr nodeActiveExpr = cplex.linearNumExpr();
+			nodeActiveExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], parentSequence);
+			// the nodeValueVar is equal to the value of the node
+			cplex.addLe(nodeValueVar, nodeValueExpr, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
+			// but it is only active if the parent sequence is active
+			cplex.addLe(nodeValueVar, nodeActiveExpr, "NodeActive;"+incentivizedName+"("+node.getNodeId()+")");
+			
+			// finally, we add the value of the node to the expression representing the value of the incentivized action
+			actionExpr.addTerm(1, nodeValueVar);
+			return;
+		}
+		
+		boolean visitedInformationSet = varActiveMap.containsKey(node.getInformationSet());
+		
+		if (node.getPlayer() == playerNotToSolveFor && !visitedInformationSet) {
+			HashMap<String,IloNumVar> actionMap = new HashMap<String,IloNumVar>();
+			IloLinearNumExpr sum = cplex.linearNumExpr();
+			for (Action action : node.getActions()) {
+				IloNumVar actionActiveVar = cplex.boolVar("ActionActive" + incentivizedName + node.getInformationSet() + action.getName());
+				// actionActiveVars should sum to 1
+				sum.addTerm(1, actionActiveVar);
+				// actionValueVar represents the value of the action according to the heuristic evaluation k steps ahead
+				actionMap.put(action.getName(), actionActiveVar);
+			}
+			// actionActiveVars should sum to 1
+			cplex.addEq(sum, 1);
+			varActiveMap.put(node.getInformationSet(), actionMap);
+		}
+		for (Action action : node.getActions()) {
+			IloNumVar newParentSequence= node.getPlayer() == playerNotToSolveFor ? varActiveMap.get(node.getInformationSet()).get(action.getName()) : parentSequence;
+			fillIncentivizedActionExpression(actionExpr, newParentSequence, action.getChildId(), varActiveMap, depth+1, incentivizedName);
+		}
 	}
 	
 	/**
@@ -349,14 +468,15 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	 * @param depth
 	 * @throws IloException
 	 */
-	private void fillIncentivizedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, Action incentivizedAction) throws IloException {
+	/*private void fillIncentivizedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, String incentivizedName) throws IloException {
 		Node node = game.getNodeById(currentNodeId);
 		if (depth == lookAhead || node.isLeaf()) {
 			addLookAheadDepthEvaluationValueToExpression(actionExpr, currentNodeId);
 			return;
 		}
+		boolean visited = exprMap.containsKey(node.getInformationSet());
 		
-		if (node.getPlayer() == playerNotToSolveFor && !exprMap.containsKey(node.getInformationSet())) {
+		if (node.getPlayer() == playerNotToSolveFor && !visited) {
 			HashMap<String,IloLinearNumExpr> actionMap = new HashMap<String,IloLinearNumExpr>();
 			IloLinearNumExpr sum = cplex.linearNumExpr();
 			for (Action action : node.getActions()) {
@@ -364,7 +484,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 				// actionActiveVars should sum to 1
 				sum.addTerm(1, actionActiveVar);
 				// actionValueVar represents the value of the action according to the heuristic evaluation k steps ahead
-				IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Inc;"+incentivizedAction.getName()+"("+node.getInformationSet()+";"+action.getName()+")");
+				IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Inc;"+incentivizedName+"("+node.getInformationSet()+";"+action.getName()+")");
 				actionExpr.addTerm(1, actionValueVar);
 				
 				// Expression that takes on value 0 or M, where M is a sufficiently large constant to enable the full value of the action when active
@@ -385,15 +505,33 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 		for (Action action : node.getActions()) {
 			IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
-			fillIncentivizedActionExpr(newActionExpr, action.getChildId(), exprMap, depth+1, incentivizedAction);
-		}
-	}
+				
+			fillIncentivizedActionExpr(newActionExpr, action.getChildId(), exprMap, depth+1, incentivizedName);
 
+			if (node.getPlayer() == playerNotToSolveFor && !visited) {
+				
+			}
+
+		}
+	}*/
+
+	/*private void addLookAheadDepthEvaluationValueToRange(IloRange range, int currentNodeId) throws IloException {
+			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
+			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player 
+			//expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+			IloLinearNumExpr expr = cplex.linearNumExpr();
+			expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+			cplex.addToExpr(range, expr);
+	}
+	
+	
 	private void addLookAheadDepthEvaluationValueToExpression(IloLinearNumExpr expr, int currentNodeId) throws IloException {
 			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
 			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player 
 			expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
-	}
+	}*/
+
+	
 	
 	private void computeMaxMinPayoff(int nodeId) {
 		Node node = game.getNodeById(nodeId);
@@ -413,13 +551,14 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	}
 
 	private void computeMaxEvaluation() {
+		Arrays.fill(maxEvaluationValueForSequence, 0);
+
 		computeMaxEvaluationForAction(game.getRoot(), 0, 0);
 		for (int informationSetId = 0; informationSetId < this.numDualInformationSets; informationSetId++) {
 			for (int i = 0; i < game.getInformationSet(playerNotToSolveFor, informationSetId).size(); i++) {
 				Node node = game.getNodeById(game.getInformationSet(playerNotToSolveFor, informationSetId).get(i));
 				for (Action action : node.getActions()) {
 					int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, action.getName());
-					maxEvaluationValueForSequence[sequenceId] = 0;
 					computeMaxEvaluationForAction(action.getChildId(), sequenceId, 1);
 				}
 			}

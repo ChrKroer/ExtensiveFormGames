@@ -108,6 +108,8 @@ public class Game {
 	private int depth;
 	private int numPrivateSignals;
 	
+	private double smallestPayoff;
+	private double biggestPayoff;
 	
 	public Game() {
 		informationSets = new TIntArrayList [2] [];
@@ -119,6 +121,8 @@ public class Game {
 		smallestInformationSetId = new int[2];
 		smallestInformationSetId[0] = Integer.MAX_VALUE;
 		smallestInformationSetId[1] = Integer.MAX_VALUE;
+		smallestPayoff = Double.MAX_VALUE;
+		biggestPayoff = -Double.MAX_VALUE;
 	}
 	
 	public Game(String filename) {
@@ -261,6 +265,12 @@ public class Game {
 		node.name = line[1];
 		node.player = -2;
 		node.value = Integer.parseInt(line[2]);
+		if (node.value < smallestPayoff) {
+			smallestPayoff = node.value;
+		}
+		if (node.value > biggestPayoff) {
+			biggestPayoff = node.value;
+		}
 		if (line.length == 5) {
 			node.signalGroupPlayer1 = Integer.parseInt(line[3]);
 			node.signalGroupPlayer2 = Integer.parseInt(line[4]);
@@ -379,7 +389,7 @@ public class Game {
 	 */
 	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues) {
 		double[] expectedValue = new double[numNodes];
-		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2, negateValues);
+		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2, negateValues, ZeroBranchOption.ZERO, false);
 		return expectedValue;
 	}
 	
@@ -393,14 +403,38 @@ public class Game {
 		return getExpectedValuesForNodes(strategyP1, strategyP2, false);
 	}
 	
-	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues) {
+	// Enum specifies how to handle the expected value of branches with probability zero of being reached.
+	// ZERO: This option places expected value of zero on all nodes in a probability 0 subtree
+	// UNIFORM: This option uses uniform probabilities
+	private enum ZeroBranchOption {ZERO, UNIFORM} // TODO: implement UNIFORM option
+	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues, ZeroBranchOption zeroBranchOption, boolean inZeroBranch) {
 		Node node = nodes[currentNode];
-		if (node.isLeaf() && !negateValues) return node.getValue();
-		if (node.isLeaf() && negateValues) return -node.getValue();
+		//biggestPayoff = 0;
+		//smallestPayoff = 0;
+		if (node.isLeaf()) {
+			if (inZeroBranch) {
+				//array[currentNode] = 0;
+				array[currentNode] = negateValues ? -node.getValue() + biggestPayoff: node.getValue() - smallestPayoff;
+			}
+			else {
+				array[currentNode] = negateValues ? -node.getValue() + biggestPayoff: node.getValue() - smallestPayoff;
+			}
+			return array[currentNode];
+		}
+
+		
 		array[currentNode] = 0;
 		for(Action action : node.actions) {
-			double probability = node.getPlayer() == 1 ? strategyP1[node.getInformationSet()].get(action.getName()) : strategyP2[node.getInformationSet()].get(action.getName());
-			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues);
+			double probability = 0;
+			if (node.getPlayer() == 0) {
+				probability = action.getProbability();
+			} else if (node.getPlayer() == 1){
+				probability = strategyP1[node.getInformationSet()].get(action.getName());
+			} else {
+				probability = strategyP2[node.getInformationSet()].get(action.getName());
+			}
+			probability = inZeroBranch ? 0 : probability;
+			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues, zeroBranchOption, probability == 0);
 		}
 		return array[currentNode];
 	}
