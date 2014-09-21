@@ -314,75 +314,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 	}
 	
-	/**
-	 * Recursive algorithm for filling out value-expressions. Whenever an information set belonging to the limited look-ahead player is hit, an expr is created for each action at the information set, and the value of the information set is set to the max. The action expressions are then recursed on.
-	 * @param expr
-	 * @param currentNodeId
-	 * @param informationSetToVariableMap
-	 * @throws IloException
-	 */
-	/*private void fillDominatedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<IloNumVar> informationSetToVariableMap, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, String dominatedName) throws IloException {
-		Node node = game.getNodeById(currentNodeId);
-		if (depth == lookAhead || node.isLeaf()) {
-			addLookAheadDepthEvaluationValueToExpression(actionExpr, currentNodeId);
-			return;
-		}
-		
-		
 
-		if (node.getPlayer() == playerNotToSolveFor && !informationSetToVariableMap.containsKey(node.getInformationSet())) {
-			// Create information set var and action expressions
-			IloNumVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Dom;"+dominatedName+"("+node.getInformationSet()+";"+currentNodeId+")");
-			// Add information set value var to the expression describing the value of the parent action
-			actionExpr.addTerm(1, informationSetValueVar);
-			informationSetToVariableMap.put(node.getInformationSet(), informationSetValueVar);
-			HashMap<String,IloLinearNumExpr> actionMap = new HashMap<String,IloLinearNumExpr>();
-			for (Action action : node.getActions()) {
-				IloLinearNumExpr newActionExpr = cplex.linearNumExpr();
-				// Require information set value var to be >= value of each action
-				cplex.addGe(informationSetValueVar, newActionExpr);
-				actionMap.put(action.getName(), newActionExpr);
-			}
-			exprMap.put(node.getInformationSet(), actionMap);
-
-		}
-
-		for (Action action : node.getActions()) {
-			IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
-			fillDominatedActionExpr(newActionExpr, action.getChildId(), informationSetToVariableMap, exprMap, depth+1, dominatedName);
-		}
-	}*/
-	
-	/**
-	 * For the given action, this method computes an IloLinearNumExpr representing the value of the action over all nodes in the information set, as a function of the rational player's strategy
-	 * @param informationSetId
-	 * @param incentivizedAction
-	 * @return
-	 * @throws IloException
-	 */
-	/*private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
-		IloLinearNumExpr actionExpr = cplex.linearNumExpr(); 
-		int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
-		
-		// Iterate over nodes in information set
-		double maxHeuristicAtNode = 0;
-		TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap = new TIntObjectHashMap<HashMap<String, IloLinearNumExpr>>();
-		TIntArrayList informationSet = game.getInformationSet(playerNotToSolveFor, informationSetId); 
-		for (int i = 0; i < informationSet.size(); i++) {
-			Node node = game.getNodeById(informationSet.get(i));
-			// ensure that we are using the correct Action at the node, so we can pull the correct childId
-			Action incentiveActionForNode = node.getActions()[0];
-			for (Action action : node.getActions()) {
-				if (action.getName().equals(incentivizedAction.getName())) incentiveActionForNode = action;
-			}
-			fillIncentivizedActionExpr(actionExpr, incentiveActionForNode.getChildId(), exprMap, 1, Integer.toString(informationSetId) + incentivizedAction.getName());
-			if (maxEvaluationValueForSequence[sequenceId] > maxHeuristicAtNode) {
-				maxHeuristicAtNode = maxEvaluationValueForSequence[sequenceId];
-			}
-		}
-		
-		return actionExpr;
-	}*/
 	
 	private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
 		IloLinearNumExpr actionExpr = cplex.linearNumExpr(); 

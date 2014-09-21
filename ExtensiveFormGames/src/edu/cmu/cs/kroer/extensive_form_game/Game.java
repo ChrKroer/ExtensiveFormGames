@@ -13,6 +13,7 @@ import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import org.apache.commons.lang3.*;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class Game {
 	public class Action {
@@ -138,6 +139,7 @@ public class Game {
 			//in = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
 			System.out.println("ExtensiveFormGame::CreateGameFromFile: File not found");
+			System.out.println("filename: " + filename);
 			System.exit(0);
 		}
 		
@@ -184,6 +186,7 @@ public class Game {
 			//in = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
 			System.out.println("ExtensiveFormGame::CreateGameFromFile: File not found");
+			System.out.println("filename: " + filename);
 			System.exit(0);
 		}
 		
@@ -388,9 +391,10 @@ public class Game {
 	 * @return
 	 */
 	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues) {
-		double[] expectedValue = new double[numNodes];
+		/*double[] expectedValue = new double[numNodes];
 		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2, negateValues, ZeroBranchOption.ZERO, false);
-		return expectedValue;
+		return expectedValue;*/
+		return getExpectedValuesForNodes(strategyP1, strategyP2, negateValues, null);
 	}
 	
 	/**
@@ -402,12 +406,24 @@ public class Game {
 	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2) {
 		return getExpectedValuesForNodes(strategyP1, strategyP2, false);
 	}
-	
+
+		/**
+	 * Computes an array that represents the expected value for each node
+	 * @param strategyP1
+	 * @param strategyP2
+	 * @return
+	 */
+	public double[] getExpectedValuesForNodes(TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues, NormalDistribution distribution) {
+		double[] expectedValue = new double[numNodes];
+		fillExpectedValueArrayRecursive(expectedValue, root, strategyP1, strategyP2, negateValues, ZeroBranchOption.ZERO, false, distribution);
+		return expectedValue;
+	}
+
 	// Enum specifies how to handle the expected value of branches with probability zero of being reached.
 	// ZERO: This option places expected value of zero on all nodes in a probability 0 subtree
 	// UNIFORM: This option uses uniform probabilities
 	private enum ZeroBranchOption {ZERO, UNIFORM} // TODO: implement UNIFORM option
-	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues, ZeroBranchOption zeroBranchOption, boolean inZeroBranch) {
+	/*private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues, ZeroBranchOption zeroBranchOption, boolean inZeroBranch) {
 		Node node = nodes[currentNode];
 		//biggestPayoff = 0;
 		//smallestPayoff = 0;
@@ -437,7 +453,45 @@ public class Game {
 			array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues, zeroBranchOption, probability == 0);
 		}
 		return array[currentNode];
+	}*/
+
+	private double fillExpectedValueArrayRecursive(double[] array, int currentNode, TObjectDoubleMap<String>[] strategyP1, TObjectDoubleMap<String>[] strategyP2, boolean negateValues, ZeroBranchOption zeroBranchOption, boolean inZeroBranch, NormalDistribution distribution) {
+		Node node = nodes[currentNode];
+		//biggestPayoff = 0;
+		//smallestPayoff = 0;
+		if (node.isLeaf()) {
+			if (inZeroBranch) {
+				//array[currentNode] = 0;
+				array[currentNode] = negateValues ? -node.getValue() + biggestPayoff: node.getValue() - smallestPayoff;
+			}
+			else {
+				array[currentNode] = negateValues ? -node.getValue() + biggestPayoff: node.getValue() - smallestPayoff;
+			}
+			return array[currentNode];
+		}
+
+		
+		array[currentNode] = 0;
+		for(Action action : node.actions) {
+			double probability = 0;
+			if (node.getPlayer() == 0) {
+				probability = action.getProbability();
+			} else if (node.getPlayer() == 1){
+				probability = strategyP1[node.getInformationSet()].get(action.getName());
+			} else {
+				probability = strategyP2[node.getInformationSet()].get(action.getName());
+			}
+			
+			if (null == distribution) {
+				probability = inZeroBranch ? 0 : probability;
+				array[currentNode] += probability * (fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues, zeroBranchOption, probability == 0, distribution));
+			} else {
+				array[currentNode] += probability * fillExpectedValueArrayRecursive(array, action.childId, strategyP1, strategyP2, negateValues, zeroBranchOption, probability == 0, distribution) + distribution.sample();
+			}
+		}
+		return array[currentNode];
 	}
+	
 	
 	public TIntArrayList getInformationSet(int player, int informationSetId) {
 		return informationSets[player-1][informationSetId];

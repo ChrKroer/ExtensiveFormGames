@@ -2,9 +2,9 @@ package edu.cmu.cs.kroer.extensive_form_game;
 
 import static org.junit.Assert.*;
 import ilog.concert.IloException;
-import ilog.cplex.IloCplex.UnknownObjectException;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.random.MersenneTwister;
 import org.junit.Test;
 
 import edu.cmu.cs.kroer.extensive_form_game.solver.LimitedLookAheadOpponentSolver;
@@ -201,6 +201,38 @@ public class TestLimitedLookAheadOpponentSolver {
 	}
 
 	@Test
+	public void testEquilibriumEvalutationMiniKuhnP2() {
+		Game miniKuhnGame = new Game();
+		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");
+
+		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(miniKuhnGame, 1);
+		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(miniKuhnGame, 2);
+		
+		solverP1.solveGame();
+		solverP2.solveGame();
+		
+		TObjectDoubleMap<String>[] strategyP1 = solverP1.getInformationSetActionProbabilities();
+		TObjectDoubleMap<String>[] strategyP2 = solverP2.getInformationSetActionProbabilities();
+		
+		// get negated expected values
+		double[] nodeEvaluationTable = miniKuhnGame.getExpectedValuesForNodes(strategyP1, strategyP2, false);
+
+		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(miniKuhnGame, 2, nodeEvaluationTable, 100);
+		//solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibriump2-minikuhn-limited-look-ahead.lp");
+		solver.solveGame();
+		solver.printGameValue();
+		try {
+			solver.printSequenceActivationValues();
+		} catch (IloException e) {
+			e.printStackTrace();
+		}
+		assertEquals(solverP2.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+	
+	
+	@Test
 	public void testEquilibriumEvalutationKuhn() {
 		Game kuhnGame = new Game();
 		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "kuhn.txt");
@@ -225,6 +257,31 @@ public class TestLimitedLookAheadOpponentSolver {
 		assertEquals(solverP1.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
 	}	
 
+	@Test
+	public void testEquilibriumEvalutationtKuhnP2() {
+		Game kuhnGame = new Game();
+		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "kuhn.txt");
+
+		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(kuhnGame, 1);
+		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(kuhnGame, 2);
+		
+		solverP1.solveGame();
+		solverP2.solveGame();
+		
+		TObjectDoubleMap<String>[] strategyP1 = solverP1.getInformationSetActionProbabilities();
+		TObjectDoubleMap<String>[] strategyP2 = solverP2.getInformationSetActionProbabilities();
+		
+		// get negated expected values
+		double[] nodeEvaluationTable = kuhnGame.getExpectedValuesForNodes(strategyP1, strategyP2, false);
+
+		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(kuhnGame, 2, nodeEvaluationTable, 3);
+		//solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibrium-kuhnp2-limited-look-ahead.lp");
+		solver.solveGame();
+		assertEquals(solverP2.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
+	}	
+	
 
 	@Test
 	public void testEquilibriumEvalutationPrsl() {
@@ -283,6 +340,38 @@ public class TestLimitedLookAheadOpponentSolver {
 		assertEquals(solverP1.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
 	}	
 
+	@Test
+	public void testEquilibriumEvalutationCoinP2() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "coin.txt");
+
+		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(game, 1);
+		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(game, 2);
+		
+		solverP1.solveGame();
+		solverP2.solveGame();
+		
+		TObjectDoubleMap<String>[] strategyP1 = solverP1.getInformationSetActionProbabilities();
+		TObjectDoubleMap<String>[] strategyP2 = solverP2.getInformationSetActionProbabilities();
+		
+		// get negated expected values
+		double[] nodeEvaluationTable = game.getExpectedValuesForNodes(strategyP1, strategyP2, false);
+
+		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(game, 2, nodeEvaluationTable, 100);
+		//solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibriump2-coin-limited-look-ahead.lp");
+		solver.solveGame();
+		try {
+			solver.printSequenceActivationValues();
+			solver.printGameValue();
+		} catch (IloException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(solverP2.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
+	}	
+	
 	
 	@Test
 	public void testEquilibriumEvalutationKuhnNoise() {
@@ -341,6 +430,33 @@ public class TestLimitedLookAheadOpponentSolver {
 		assertEquals(solverP1.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 	
+	@Test
+	public void testEquilibriumEvaluationLeducKJ1RaiseLa100() {
+		Game leducGame = new Game();
+		leducGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc_Kj1Raise.txt");
+
+		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(leducGame, 1);
+		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(leducGame, 2);
+		
+		solverP1.solveGame();
+		solverP2.solveGame();
+		
+		TObjectDoubleMap<String>[] strategyP1 = solverP1.getInformationSetActionProbabilities();
+		TObjectDoubleMap<String>[] strategyP2 = solverP2.getInformationSetActionProbabilities();
+		
+
+
+		MersenneTwister twister = new MersenneTwister();
+		NormalDistribution distribution = new NormalDistribution(twister, 0, (double) 0.1);
+		double[] nodeEvaluationTable = leducGame.getExpectedValuesForNodes(strategyP1, strategyP2, true, distribution);
+	
+		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(leducGame, 1, nodeEvaluationTable, 100);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibrium-leducKj1Raisep1la1-limited-look-ahead.lp");
+		solver.solveGame();
+		System.out.println("Value of game: " + solver.getValueOfGame());
+		assertEquals(solverP1.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
 	
 	public void testEquilibriumEvaluationLeducLa1() {
 		Game leducGame = new Game();

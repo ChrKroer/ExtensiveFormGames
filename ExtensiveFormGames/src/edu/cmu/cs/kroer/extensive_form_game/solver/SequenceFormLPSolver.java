@@ -335,11 +335,11 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		for (Action action : node.getActions()) {
 			if (node.getPlayer() == 1 && !visitedP1.contains(node.getInformationSet())) {
 				sequenceIdByInformationSetAndActionP1[node.getInformationSet()].put(action.getName(), numSequencesP1++);
-				if (playerToSolveFor ==1) primalSequenceNames[numSequencesP1-1] = Integer.toString(node.getInformationSet()) + ":" + action.getName();
-				else dualSequenceNames[numSequencesP1-1] = Integer.toString(node.getInformationSet()) + ":" + action.getName();
+				if (playerToSolveFor ==1) primalSequenceNames[numSequencesP1-1] = Integer.toString(node.getInformationSet()) + ";" + action.getName();
+				else dualSequenceNames[numSequencesP1-1] = Integer.toString(node.getInformationSet()) + ";" + action.getName();
 			} else if (node.getPlayer() == 2 && !visitedP2.contains(node.getInformationSet())) {
 				sequenceIdByInformationSetAndActionP2[node.getInformationSet()].put(action.getName(), numSequencesP2++);
-				if (playerToSolveFor == 2) primalSequenceNames[numSequencesP2-1] = Integer.toString(node.getInformationSet()) + ":" + action.getName();
+				if (playerToSolveFor == 2) primalSequenceNames[numSequencesP2-1] = Integer.toString(node.getInformationSet()) + ";" + action.getName();
 				else dualSequenceNames[numSequencesP2-1] = Integer.toString(node.getInformationSet()) + ";" + action.getName();
 			}
 			CreateSequenceFormIds(action.getChildId(), visitedP1, visitedP2);
