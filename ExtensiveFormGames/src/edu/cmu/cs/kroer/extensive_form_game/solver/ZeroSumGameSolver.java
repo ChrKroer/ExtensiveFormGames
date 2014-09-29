@@ -1,15 +1,16 @@
 package edu.cmu.cs.kroer.extensive_form_game.solver;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game;
+import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
+import gnu.trove.map.TIntDoubleMap;
 import gnu.trove.map.TObjectDoubleMap;
 
 
 public abstract class ZeroSumGameSolver {
 	double valueOfGame;
 	double [] strategyVars;
-	Game game;
+	GameGenerator game;
 	
-	public ZeroSumGameSolver(Game game) {
+	public ZeroSumGameSolver(GameGenerator game) {
 		this.game = game;
 	}
 	
@@ -28,6 +29,7 @@ public abstract class ZeroSumGameSolver {
 	public double[] getStrategyVars() {
 		return strategyVars;
 	}
-	public abstract TObjectDoubleMap<String> getStrategyVarMap();
-	public abstract TObjectDoubleMap<String>[] getInformationSetActionProbabilities();
+
+	//public abstract TObjectDoubleMap<String>[] getInformationSetActionProbabilities();
+	public abstract TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId();
 }

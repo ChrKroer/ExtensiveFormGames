@@ -27,6 +27,8 @@ import ilog.cplex.IloCplex.UnknownObjectException;
 
 
 public class SequenceFormLPSolver extends ZeroSumGameSolver {
+	Game game;
+	
 	int playerToSolveFor;
 	int playerNotToSolveFor;
 	
@@ -167,7 +169,6 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	/**
 	 * Creates and returns a mapping from variable names to the values they take on in the solution computed by CPLEX.
 	 */
-	@Override
 	public TObjectDoubleMap<String> getStrategyVarMap() {
 		TObjectDoubleMap<String> map = new TObjectDoubleHashMap<String>();
 		for (IloNumVar v : strategyVarsBySequenceId) {
@@ -186,7 +187,6 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 	/**
 	 * Creates and returns a mapping from information set id and action name pairs to the probability of taking that action in the computed solution
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
 	public TObjectDoubleMap<String>[] getInformationSetActionProbabilities() {
 		TObjectDoubleMap<String>[] map = new TObjectDoubleHashMap[numPrimalInformationSets];
@@ -215,6 +215,38 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
 		return map;
 	}
 
+	/**
+	 * Creates and returns a mapping from information set id and action name pairs to the probability of taking that action in the computed solution
+	 */
+	@Override
+	public TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId() {
+		TIntDoubleMap[] map = new TIntDoubleHashMap[numPrimalInformationSets];
+		for (int informationSetId = 0; informationSetId < numPrimalInformationSets; informationSetId++) {
+			map[informationSetId] = new TIntDoubleHashMap();
+			double sum = 0;
+			for (String actionName : strategyVarsByInformationSet[informationSetId].keySet()) {
+				try {
+					sum += cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName));
+				} catch (IloException e) {
+					e.printStackTrace();
+				}
+			}
+			for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(playerToSolveFor, informationSetId); actionId++) {
+				String actionName = game.getActionsAtInformationSet(playerToSolveFor, informationSetId)[actionId].getName();
+				try {
+					if (sum > 0) {
+						map[informationSetId].put(actionId, cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName)) / sum);
+					} else {
+						map[informationSetId].put(actionId, 0);
+					}
+				} catch (IloException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return map;
+	}
+	
 
 	/**
 	 * Prints the value of the game along with the names and computed values for each variable.

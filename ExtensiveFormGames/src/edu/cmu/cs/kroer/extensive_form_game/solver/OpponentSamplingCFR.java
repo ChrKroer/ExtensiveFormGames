@@ -1,11 +1,11 @@
 package edu.cmu.cs.kroer.extensive_form_game.solver;
 
+
 import java.util.Arrays;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 import edu.cmu.cs.kroer.extensive_form_game.Game;
-import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
 import edu.cmu.cs.kroer.extensive_form_game.GameState;
 import edu.cmu.cs.kroer.extensive_form_game.TestConfiguration;
 import gnu.trove.map.TIntDoubleMap;
@@ -13,7 +13,7 @@ import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 
-public class CounterFactualRegretSolver extends ZeroSumGameSolver {
+public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	int nature = 0;
 	int player1 = 1;
 	int player2 = 2;
@@ -23,10 +23,10 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	double[][][] averagedStrategy;
 	double[][][] currentStrategy;
 	double[][][] regretTable;
-	double[][] informationSetProbabilityForPlayer;
+	int[][] informationSetCounter;
 	final UniformRealDistribution distribution = new UniformRealDistribution(0, 1);
 
-	public CounterFactualRegretSolver (GameGenerator game) {
+	public OpponentSamplingCFR(Game game) {
 		super(game);
 		initializeDataStructures();
 	}
@@ -110,8 +110,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		averagedStrategy = new double[3][][];
 		currentStrategy = new double[3][][];
 		regretTable = new double[3][][];
-		informationSetProbabilityForPlayer = new double[3][];
-
+		informationSetCounter = new int[3][];
 		
 		// Initialize over information sets for each player
 		int numInfoSetsP1 = game.getNumInformationSets(1);
@@ -122,15 +121,15 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		currentStrategy[player2] = new double[numInfoSetsP2][];
 		regretTable[player1] = new double[numInfoSetsP1][];
 		regretTable[player2] = new double[numInfoSetsP2][];
-		informationSetProbabilityForPlayer[player1] = new double[numInfoSetsP1];
-		informationSetProbabilityForPlayer[player2] = new double[numInfoSetsP2];
+		informationSetCounter[player1] = new int[numInfoSetsP1];
+		informationSetCounter[player2] = new int[numInfoSetsP2];
 		
 		// This currently assumes that information set IDs are consecutively numbered starting from 0
 		// Initialize each information set for Player 1
 		for (int informationSetId = 0; informationSetId < numInfoSetsP1; informationSetId++) {
 			int numActions = game.getNumActionsAtInformationSet(1, informationSetId);
 			averagedStrategy[1][informationSetId] = new double[numActions]; 
-			//Arrays.fill(averagedStrategy[1][informationSetId], 1.0 / numActions);
+			Arrays.fill(averagedStrategy[1][informationSetId], 1.0 / numActions);
 			currentStrategy[1][informationSetId] = new double[numActions];
 			Arrays.fill(currentStrategy[1][informationSetId], 1.0 / numActions);
 			regretTable[1][informationSetId] = new double[numActions]; 
@@ -139,7 +138,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		for (int informationSetId = 0; informationSetId < numInfoSetsP2; informationSetId++) {
 			int numActions = game.getNumActionsAtInformationSet(2, informationSetId);
 			averagedStrategy[2][informationSetId] = new double[numActions]; 
-			//Arrays.fill(averagedStrategy[2][informationSetId], 1.0 / numActions);
+			Arrays.fill(averagedStrategy[2][informationSetId], 1.0 / numActions);
 			currentStrategy[2][informationSetId] = new double[numActions]; 
 			Arrays.fill(currentStrategy[2][informationSetId], 1.0 / numActions);
 			regretTable[2][informationSetId] = new double[numActions]; 
@@ -148,12 +147,22 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	
 	
 	public void runCFR(int iterations) {
-		totalIterationsRun += iterations;
-		// TODO update existing averagedStrategy
+
+		int totalNodesTraversed = 0;
+		
 		for (int iteration = 1; iteration < iterations; iteration++) {
+			totalIterationsRun++;
+			if (iteration % 10 == 0) {
+				//System.out.println("Starting iteartion " + iteration);
+				
+			}
+			
 			GameState gs = game.getInitialGameState();
-			traverseGameState(gs);
-			regretMatch();
+			preSample(gs);
+			traverseGameState(1, gs);
+			traverseGameState(2, gs);
+			
+			totalNodesTraversed += gs.getNodesTraversed();
 		}
 	}
 
@@ -164,21 +173,20 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	 * @param iteration
 	 * @return
 	 */
-	private double traverseGameState(GameState gs) {
+	private double traverseGameState(int player, GameState gs) {
 		gs.setNodesTraversed(gs.getNodesTraversed() + 1);
 		if (gs.isLeaf()) {
-			return gs.getValue();
-		} else if (gs.getCurrentPlayer() == nature){
-			double value = 0;
-			for (int action = 0; action < game.getNumActionsForNature(gs); action++) {
-				double probabilityOfAction = getProbabilityOfAction(gs, action);
-				game.updateGameStateWithAction(gs, action, probabilityOfAction);
-				value = probabilityOfAction * traverseGameState(gs);
-				game.removeActionFromGameState(gs, action, nature);
+			if (player == player1) {
+				return gs.getValue();
+			} else {
+				return -gs.getValue();
 			}
-			return value;
+		}
+		
+		if (player == gs.getCurrentPlayer()) {
+			return traverseGameStateForUpdatingPlayer(player, gs);
 		} else {
-			return traversePlayerGameState(gs);
+			return traverseGameStateForPassivePlayer(player, gs);
 		}
 	}
 
@@ -189,61 +197,92 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	 * @param iteration
 	 * @return
 	 */
-	private double traversePlayerGameState(GameState gs) {
+	private double traverseGameStateForUpdatingPlayer(int player, GameState gs) {
+		regretMatch(gs);
 		int numActions = game.getNumActionsAtInformationSet(gs);
-		int currentPlayer = gs.getCurrentPlayer();
-		
-		double sumOfUtilities = 0;
-		double[] actionUtilities = new double[numActions];
+		double[] u = new double[numActions];
+		double uSigma = 0;
 		
 		for (int action = 0; action < numActions; action++) {
-			double probabilityOfAction = getProbabilityOfAction(gs, action);
+			double probabilityOfAction = currentStrategy[player][gs.getCurrentInformationSetId()][action];
 			game.updateGameStateWithAction(gs, action, probabilityOfAction);
-			actionUtilities[action] = traverseGameState(gs);
-			game.removeActionFromGameState(gs, action, currentPlayer);
-			sumOfUtilities += probabilityOfAction * actionUtilities[action];
+			u[action] = traverseGameState(player, gs);
+			game.removeActionFromGameState(gs, action, player);
+			uSigma += probabilityOfAction * u[action];
 		}
 		// Perform second loop to update regret table
-		if (gs.getCurrentPlayer() != nature) {
-			int utilityMultiplier = currentPlayer == player1 ? 1 : -1;
-			for (int action = 0; action < numActions; action++) {
-				regretTable[currentPlayer][gs.getCurrentInformationSetId()][action] += utilityMultiplier * gs.getProbabilityWithoutPlayer(currentPlayer) * (actionUtilities[action] - sumOfUtilities);
-				
-				informationSetProbabilityForPlayer[currentPlayer][gs.getCurrentInformationSetId()] = gs.getProbabilityWithPlayer(currentPlayer);
-			}
+		for (int action = 0; action < numActions; action++) {
+			regretTable[player][gs.getCurrentInformationSetId()][action] += u[action] - uSigma;
 		}
-
-		return sumOfUtilities;
+		
+		return uSigma;
 	}
 
 	/**
 	 * Updates the current strategy for gs.getCurrentPlayer() based on the regret tables
 	 * @param gs
 	 */
-	private void regretMatch() {
-		int t = 1;
-		for (int player = 1; player < 3; player++) {
-			for (int informationSetId = 0; informationSetId < game.getNumInformationSets(player); informationSetId++) {
-				double regretSum = 0;
-				int numActions = game.getNumActionsAtInformationSet(player, informationSetId);
-				
-				for (int action = 0; action < numActions; action++) {
-					regretSum += Math.max(0, regretTable[player][informationSetId][action]);
-					averagedStrategy[player][informationSetId][action] += informationSetProbabilityForPlayer[player][informationSetId] * currentStrategy[player][informationSetId][action];
-				}
-				
-				double probabilitySum = 0;
-				for (int action = 0; action < numActions; action++) {
-					if (regretSum > 0) {
-						currentStrategy[player][informationSetId][action] = Math.max(0, regretTable[player][informationSetId][action]) / regretSum;
-					} else {
-						currentStrategy[player][informationSetId][action] = 1.0 / numActions;
-					}
-					probabilitySum += currentStrategy[player][informationSetId][action];
-				}
-				assert probabilitySum > 0.99999999 && probabilitySum < 1.00000001;
+	private void regretMatch(GameState gs) {
+		int player = gs.getCurrentPlayer();
+		int informationSetId = gs.getCurrentInformationSetId();
+		int numActions = game.getNumActionsAtInformationSet(gs);
+		
+		// First, we sum up all the regrets at the information set
+		double regretSum = 0;
+		for (int action = 0; action < numActions; action++) {
+			regretSum += Math.max(0, regretTable[player][informationSetId][action]);
+		}
+		
+		// Second, we set the probability of each action to be regretOfAction / regretSum 
+		double probabilitySum = 0;
+		for (int action = 0; action < numActions; action++) {
+			if (regretSum > 0) {
+				currentStrategy[player][informationSetId][action] = Math.max(0, regretTable[player][informationSetId][action]) / regretSum;
+			} else {
+				currentStrategy[player][informationSetId][action] = 1.0 / numActions;
+			}
+			probabilitySum += currentStrategy[player][informationSetId][action];
+		}
+		assert probabilitySum > 0.99999999 && probabilitySum < 1.00000001;
+	}
+
+	/**
+	 * Performs an iteration for the passive player. This method merely samples an action, updates the cumulative strategy, and recurses.
+	 * @param player
+	 * @param gs
+	 * @param iteration
+	 * @return
+	 */
+	private double traverseGameStateForPassivePlayer(int player, GameState gs) {
+		if (gs.getCurrentPlayer() != nature) {
+			//regretMatch(gs);
+			for (int action = 0; action < game.getNumActionsAtInformationSet(gs); action++) {
+				averagedStrategy[gs.getCurrentPlayer()][gs.getCurrentInformationSetId()][action] += currentStrategy[gs.getCurrentPlayer()][gs.getCurrentInformationSetId()][action];
 			}
 		}
+		
+		int oldPlayer = gs.getCurrentPlayer();
+		int sampledAction = sampleAction(gs);
+		double probabilityOfBranch = getProbabilityOfAction(gs, sampledAction);
+		game.updateGameStateWithAction(gs, sampledAction, probabilityOfBranch);
+		double branchValue = traverseGameState(player, gs);
+		game.removeActionFromGameState(gs, sampledAction, oldPlayer);
+		
+		return branchValue;
+	}
+
+	private void preSample(GameState gs) {
+		if (gs.isLeaf()) {
+			return;
+		}
+		
+		int oldPlayer = gs.getCurrentPlayer();
+		int action = sampleAction(gs);
+		double branchProbability = getProbabilityOfAction(gs, action);
+		
+		game.updateGameStateWithAction(gs, action, branchProbability);
+		preSample(gs);
+		game.removeActionFromGameState(gs, action, oldPlayer);
 	}
 
 	private double getProbabilityOfAction(GameState gs, int action) {
@@ -259,6 +298,31 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		return 0; // failure
 	}
 
+	private int sampleAction(GameState gs) {
+		if (gs.priorSampleExists(gs.getCurrentPlayer(), gs.getCurrentInformationSetId())) {
+			return gs.getPriorSample(gs.getCurrentPlayer(), gs.getCurrentInformationSetId());
+		} else {
+			double randomNumber = distribution.sample();
+			int action = 0;
+			double sum = 0;
+			while (sum <= randomNumber) {
+				if (gs.getCurrentPlayer() == nature) {
+					try {
+						sum += game.getProbabilityOfNatureAction(gs, action);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					sum += currentStrategy[gs.getCurrentPlayer()][gs.getCurrentInformationSetId()][action];
+				}
+				action++;
+			}
+			
+			action -= 1;
+			gs.addSample(gs.getCurrentPlayer(), gs.getCurrentInformationSetId(), action);
+			return action;
+		}
+	}
 }
 
 

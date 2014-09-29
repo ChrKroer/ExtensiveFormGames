@@ -15,7 +15,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import org.apache.commons.lang3.*;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-public class Game {
+public class Game implements GameGenerator {
 	public class Action {
 		private String name;
 		private int childId; // id of the node lead to by taking this action
@@ -51,7 +51,7 @@ public class Game {
 		private int signalGroupPlayer1; // TODO, useful for abstraction algorithms
 		private int signalGroupPlayer2; // TODO, useful for abstraction algorithms
 		private Action[] actions; 
-		private int value; // payoff at node, if node is a leaf node (player == 2) 
+		private double value; // payoff at node, if node is a leaf node (player == -2) 
 		public int getNodeId() {
 			return nodeId;
 		}
@@ -79,13 +79,16 @@ public class Game {
 		public Action[] getActions() {
 			return actions;
 		}
-		public int getValue() {
+		public double getValue() {
 			return value;
 		}
 		public boolean isLeaf() {
 			return player == -2;
 		}
 	}
+	
+	int player1 = 0;
+	int player2 = 1;
 	
 	private TIntArrayList [] [] informationSets; // indexed as [player][information set]
 	private boolean [] [] informationSetsSeen; // indexed as [player]
@@ -267,7 +270,7 @@ public class Game {
 		node.nodeId= Integer.parseInt(line[0]);
 		node.name = line[1];
 		node.player = -2;
-		node.value = Integer.parseInt(line[2]);
+		node.value = Double.parseDouble(line[2]);
 		if (node.value < smallestPayoff) {
 			smallestPayoff = node.value;
 		}
@@ -497,6 +500,18 @@ public class Game {
 		return informationSets[player-1][informationSetId];
 	}
 
+	public int getNumActionsAtInformationSet(int player, int informationSetId) {
+		return nodes[informationSets[player-1][informationSetId].get(0)].getActions().length;
+	}
+
+	public Action[] getActionsAtInformationSet(int player, int informationSetId) {
+		return nodes[informationSets[player-1][informationSetId].get(0)].getActions();
+	}
+	
+	public int getNumActionsForNature(GameState gs) {
+		return nodes[gs.getCurrentNodeId()].getActions().length;
+	}
+
 	
 	public boolean[][] getInformationSetsSeen() {
 		return informationSetsSeen;
@@ -588,6 +603,73 @@ public class Game {
 	
 	public int getSmallestInformationSetId(int player) {
 		return smallestInformationSetId[player-1];
+	}
+
+
+	@Override
+	public GameState getInitialGameState() {
+		GameState gs = new GameState();
+		gs.currentNodeId = getRoot();
+		gs.currentPlayer = nodes[getRoot()].getPlayer();
+		gs.currentInformationSetId = nodes[getRoot()].getInformationSet();
+		gs.nodeIdHistory.add(getRoot());
+		return gs;
+	}
+
+	@Override
+	public int getNumActionsAtInformationSet(GameState gs) {
+		return getNumActionsAtInformationSet(gs.getCurrentPlayer(), gs.getCurrentInformationSetId());
+	}
+
+	@Override
+	public void updateGameStateWithAction(GameState gs, int actionId, double probability) {
+		gs.addHistory(gs.getCurrentPlayer(), actionId);
+		gs.addProbability(gs.getCurrentPlayer(), probability);
+		int childNodeId = nodes[gs.nodeIdHistory.get(gs.nodeIdHistory.size()-1)].actions[actionId].getChildId();
+		gs.nodeIdHistory.add(childNodeId);
+		updateGameStateInfo(gs);
+	}
+
+	@Override
+	public void removeActionFromGameState(GameState gs, int action, int player) {
+		gs.popAction(player);
+		gs.popProbability(player);
+		gs.nodeIdHistory.remove(gs.nodeIdHistory.size()-1, 1);
+		updateGameStateInfo(gs);
+	}
+
+	private void updateGameStateInfo(GameState gs) {
+		gs.currentNodeId = gs.nodeIdHistory.get(gs.nodeIdHistory.size()-1);
+		Node newNode = nodes[gs.currentNodeId];
+		
+		//gs.nodeIdHistory.add(newNode.getNodeId());
+		gs.currentInformationSetId = newNode.getInformationSet();
+		gs.currentPlayer = newNode.getPlayer();
+		
+		if (newNode.isLeaf()) {
+			gs.isLeaf = true;
+			gs.value = newNode.getValue();
+		} else {
+			gs.isLeaf = false;
+		}
+	}
+	
+	@Override
+	public double getProbabilityOfNatureAction(GameState gs, int action) throws Exception {
+		if (gs.getCurrentPlayer() != 0) {
+			throw new Exception("Not a nature state");
+		}
+		return this.nodes[gs.currentNodeId].actions[action].getProbability();
+	}
+
+	@Override
+	public int getNumInformationSets(int player) {
+		if (player == 1) {
+			return numInformationSetsPlayer1;
+		} else if (player == 2) {
+			return numInformationSetsPlayer2;
+		}
+		return 0;
 	}
 	
 	
