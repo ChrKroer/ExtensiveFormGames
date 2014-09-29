@@ -56,11 +56,45 @@ public class TestCounterFactualRegretSolver {
 		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
 		
 		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(kuhnGame);
-		solver.solveGame(10);
+		//solver.solveGame(10);
 		
-		int iterations = 100;
+		int iterations = 1;
 		
-		for (int iteration = 1; iteration < iterations; iteration++) {
+		for (int iteration = 1; iteration <= iterations; iteration++) {
+			System.out.print("Starting Kuhn convergence test no " + iteration + ": ");
+			solver.runCFR(1000000);
+			System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
+			System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
+		}
+	}
+
+	@Test
+	public void testStengelConvergenceWithAbstraction() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
+		
+		// Make information set abstraction
+		int[][] abstraction = new int[3][];
+		abstraction[1] = new int[] {0, 0};
+		abstraction[2] = new int[] {0};
+		// Make action mapping for above abstraction
+		int[][][] actionMapping = new int[3][][];
+		actionMapping[1] = new int[game.getNumInformationSets(1)][];
+		actionMapping[2] = new int[game.getNumInformationSets(2)][];
+		
+		actionMapping[1][0] = new int[] {0, 1};
+		actionMapping[1][1] = new int[] {1, 0};
+		actionMapping[2][0] = new int[] {0, 1};
+		
+		game.addInformationSetAbstraction(abstraction, actionMapping);
+		
+		
+		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
+		//solver.solveGame(10);
+		
+		int iterations = 1;
+		
+		for (int iteration = 1; iteration <= iterations; iteration++) {
 			System.out.print("Starting Kuhn convergence test no " + iteration + ": ");
 			solver.runCFR(1000000);
 			System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");

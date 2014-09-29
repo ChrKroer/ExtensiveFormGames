@@ -68,6 +68,7 @@ public class Game implements GameGenerator {
 			return playerReceivingSignal;
 		}
 		public int getInformationSet() {
+			//return getAbstractInformationSetId(player, informationSet);
 			return informationSet;
 		}
 		public int getSignalGroupPlayer1() {
@@ -114,6 +115,10 @@ public class Game implements GameGenerator {
 	
 	private double smallestPayoff;
 	private double biggestPayoff;
+	
+	private boolean hasAbstraction;
+	private int[][] abstraction; 
+	private int[][][] actionAbstractionMapping;
 	
 	public Game() {
 		informationSets = new TIntArrayList [2] [];
@@ -497,6 +502,9 @@ public class Game implements GameGenerator {
 	
 	
 	public TIntArrayList getInformationSet(int player, int informationSetId) {
+		if (hasAbstraction) {
+			System.out.println("Warning: abstraction exists, getInformationSet not updated to reflect this");
+		}
 		return informationSets[player-1][informationSetId];
 	}
 
@@ -609,10 +617,15 @@ public class Game implements GameGenerator {
 	@Override
 	public GameState getInitialGameState() {
 		GameState gs = new GameState();
-		gs.currentNodeId = getRoot();
-		gs.currentPlayer = nodes[getRoot()].getPlayer();
-		gs.currentInformationSetId = nodes[getRoot()].getInformationSet();
+//		gs.setCurrentNodeId(getRoot());
+//		gs.setCurrentPlayer(nodes[getRoot()].getPlayer());
+//		if (hasAbstraction) {
+//			gs.setCurrentInformationSetId(abstraction[nodes[getRoot()].getInformationSet()]);
+//		} else {
+//			gs.setCurrentInformationSetId(nodes[getRoot()].getInformationSet());
+//		}
 		gs.nodeIdHistory.add(getRoot());
+		updateGameStateInfo(gs);
 		return gs;
 	}
 
@@ -639,18 +652,26 @@ public class Game implements GameGenerator {
 	}
 
 	private void updateGameStateInfo(GameState gs) {
-		gs.currentNodeId = gs.nodeIdHistory.get(gs.nodeIdHistory.size()-1);
-		Node newNode = nodes[gs.currentNodeId];
+		gs.setCurrentNodeId(gs.nodeIdHistory.get(gs.nodeIdHistory.size()-1));
+		Node newNode = nodes[gs.getCurrentNodeId()];
 		
 		//gs.nodeIdHistory.add(newNode.getNodeId());
-		gs.currentInformationSetId = newNode.getInformationSet();
-		gs.currentPlayer = newNode.getPlayer();
+		if (!newNode.isLeaf() && hasAbstraction && newNode.player != 0) {
+			gs.setCurrentInformationSetId(abstraction[newNode.getPlayer()][newNode.getInformationSet()]);
+			gs.setOriginalInformationSetId(newNode.getInformationSet());
+		} else if (!newNode.isLeaf() && newNode.player != 0){
+			gs.setCurrentInformationSetId(newNode.getInformationSet());
+			gs.setOriginalInformationSetId(newNode.getInformationSet());
+		}
+		//gs.setCurrentInformationSetId(newNode.getInformationSet());
+		
+		gs.setCurrentPlayer(newNode.getPlayer());
 		
 		if (newNode.isLeaf()) {
-			gs.isLeaf = true;
-			gs.value = newNode.getValue();
+			gs.setIsLeaf(true);
+			gs.setValue(newNode.getValue());
 		} else {
-			gs.isLeaf = false;
+			gs.setIsLeaf(false);
 		}
 	}
 	
@@ -659,7 +680,7 @@ public class Game implements GameGenerator {
 		if (gs.getCurrentPlayer() != 0) {
 			throw new Exception("Not a nature state");
 		}
-		return this.nodes[gs.currentNodeId].actions[action].getProbability();
+		return this.nodes[gs.getCurrentNodeId()].actions[action].getProbability();
 	}
 
 	@Override
@@ -670,6 +691,50 @@ public class Game implements GameGenerator {
 			return numInformationSetsPlayer2;
 		}
 		return 0;
+	}
+
+
+	@Override
+	public boolean informationSetAbstracted(int player, int informationSetId) {
+		if (hasAbstraction) {
+			return informationSetId != abstraction[player][informationSetId];
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int getAbstractInformationSetId(int player, int informationSetId) {
+		if (hasAbstraction) {
+			return abstraction[player][informationSetId];
+		} else {
+			return informationSetId;
+		}
+	}
+
+	@Override
+	public void addInformationSetAbstraction(int[][] informationSetAbstraction,	int[][][] actionMapping) {
+		this.hasAbstraction = true;
+		this.abstraction = informationSetAbstraction;
+		this.actionAbstractionMapping = actionMapping;
+	}
+
+	@Override
+	public int getAbstractActionMapping(int player, int originalInformationSetId, int originalAction) {
+		if (informationSetAbstracted(player, originalInformationSetId)) {
+			return actionAbstractionMapping[player][originalInformationSetId][originalAction];
+		} else {
+			return originalAction;
+		}
+	}
+	
+	@Override
+	public int getAbstractActionMapping(GameState gs, int action) {
+		if (informationSetAbstracted(gs.getCurrentPlayer(), gs.getOriginalInformationSetId())) {
+			return actionAbstractionMapping[gs.getCurrentPlayer()][gs.getOriginalInformationSetId()][action];
+		} else {
+			return action;
+		}
 	}
 	
 	

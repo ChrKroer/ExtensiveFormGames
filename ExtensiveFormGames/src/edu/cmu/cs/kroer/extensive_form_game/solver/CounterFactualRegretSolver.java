@@ -89,14 +89,19 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		int numInformationSets = game.getNumInformationSets(player);
 		TIntDoubleMap[] map = new TIntDoubleHashMap[numInformationSets];
 		for (int informationSetId = 0; informationSetId < numInformationSets; informationSetId++) {
+			int abstractInformationSetId = game.getAbstractInformationSetId(player, informationSetId);
+			
 			map[informationSetId] = new TIntDoubleHashMap();
 			double sum = 0;
 			for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
-				sum += averagedStrategy[player][informationSetId][actionId]; 
+				int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+				sum += averagedStrategy[player][abstractInformationSetId][abstractActionId]; 
 			}
+			
 			for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+				int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
 				if (sum > 0) {
-					map[informationSetId].put(actionId, averagedStrategy[player][informationSetId][actionId] / sum);
+					map[informationSetId].put(actionId, averagedStrategy[player][game.getAbstractInformationSetId(player, informationSetId)][abstractActionId] / sum);
 				} else {
 					map[informationSetId].put(actionId, 0);
 				}
@@ -128,6 +133,9 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		// This currently assumes that information set IDs are consecutively numbered starting from 0
 		// Initialize each information set for Player 1
 		for (int informationSetId = 0; informationSetId < numInfoSetsP1; informationSetId++) {
+			if (game.informationSetAbstracted(player1, informationSetId)) {
+				continue;
+			}
 			int numActions = game.getNumActionsAtInformationSet(1, informationSetId);
 			averagedStrategy[1][informationSetId] = new double[numActions]; 
 			//Arrays.fill(averagedStrategy[1][informationSetId], 1.0 / numActions);
@@ -137,6 +145,9 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		}
 		// Initialize each information set for Player 2
 		for (int informationSetId = 0; informationSetId < numInfoSetsP2; informationSetId++) {
+			if (game.informationSetAbstracted(player2, informationSetId)) {
+				continue;
+			}
 			int numActions = game.getNumActionsAtInformationSet(2, informationSetId);
 			averagedStrategy[2][informationSetId] = new double[numActions]; 
 			//Arrays.fill(averagedStrategy[2][informationSetId], 1.0 / numActions);
@@ -165,7 +176,6 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	 * @return
 	 */
 	private double traverseGameState(GameState gs) {
-		gs.setNodesTraversed(gs.getNodesTraversed() + 1);
 		if (gs.isLeaf()) {
 			return gs.getValue();
 		} else if (gs.getCurrentPlayer() == nature){
@@ -196,17 +206,25 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		double sumOfUtilities = 0;
 		double[] actionUtilities = new double[numActions];
 		
-		for (int action = 0; action < numActions; action++) {
-			double probabilityOfAction = getProbabilityOfAction(gs, action);
-			game.updateGameStateWithAction(gs, action, probabilityOfAction);
-			actionUtilities[action] = traverseGameState(gs);
-			game.removeActionFromGameState(gs, action, currentPlayer);
-			sumOfUtilities += probabilityOfAction * actionUtilities[action];
+		for (int originalAction = 0; originalAction < numActions; originalAction++) {
+			int abstractAction = game.getAbstractActionMapping(gs, originalAction);
+			// use the abstract action probability
+			double probabilityOfAction = getProbabilityOfAction(gs, abstractAction);
+			// take original action in game tree
+			game.updateGameStateWithAction(gs, originalAction, probabilityOfAction);
+			// treat as abstract action when calculating regrets
+			actionUtilities[abstractAction] = traverseGameState(gs);
+			// remove original action from game tree
+			game.removeActionFromGameState(gs, originalAction, currentPlayer);
+			// treat as abstract action when calculating regrets
+			sumOfUtilities += probabilityOfAction * actionUtilities[abstractAction];
 		}
 		// Perform second loop to update regret table
 		if (gs.getCurrentPlayer() != nature) {
 			int utilityMultiplier = currentPlayer == player1 ? 1 : -1;
-			for (int action = 0; action < numActions; action++) {
+			for (int originalAction = 0; originalAction < numActions; originalAction++) {
+				// treat as abstract action when calculating regrets
+				int action = game.getAbstractActionMapping(gs, originalAction);
 				regretTable[currentPlayer][gs.getCurrentInformationSetId()][action] += utilityMultiplier * gs.getProbabilityWithoutPlayer(currentPlayer) * (actionUtilities[action] - sumOfUtilities);
 				
 				informationSetProbabilityForPlayer[currentPlayer][gs.getCurrentInformationSetId()] = gs.getProbabilityWithPlayer(currentPlayer);
@@ -224,6 +242,11 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		int t = 1;
 		for (int player = 1; player < 3; player++) {
 			for (int informationSetId = 0; informationSetId < game.getNumInformationSets(player); informationSetId++) {
+				// We only need to update regret for abstracted information sets
+				if (game.informationSetAbstracted(player, informationSetId)) {
+					continue;
+				}
+				
 				double regretSum = 0;
 				int numActions = game.getNumActionsAtInformationSet(player, informationSetId);
 				
@@ -246,6 +269,15 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		}
 	}
 
+	/**
+	 * Uses gs.getCurrentInformationSetId() to look up the information set id, which will pull the abstracted information set if an abstraction is used.
+	 * However, action is assumed to be the correct one, so no abstraction map lookup is done. Thus, calling methods should performing mapping if needed.
+	 * Consider changing this in the future.
+	 * @param gs
+	 * @param action The action for which the probability is desired, explicitly looked up, with no abstraction mapping performed.
+	 * @return
+	 */
+	// 
 	private double getProbabilityOfAction(GameState gs, int action) {
 		if (gs.getCurrentPlayer() == nature) {
 			try {

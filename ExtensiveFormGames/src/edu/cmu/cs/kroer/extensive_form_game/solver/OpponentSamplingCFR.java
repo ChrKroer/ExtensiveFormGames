@@ -162,7 +162,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 			traverseGameState(1, gs);
 			traverseGameState(2, gs);
 			
-			totalNodesTraversed += gs.getNodesTraversed();
 		}
 	}
 
@@ -174,7 +173,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	 * @return
 	 */
 	private double traverseGameState(int player, GameState gs) {
-		gs.setNodesTraversed(gs.getNodesTraversed() + 1);
 		if (gs.isLeaf()) {
 			if (player == player1) {
 				return gs.getValue();

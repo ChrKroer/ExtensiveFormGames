@@ -32,6 +32,12 @@ public interface GameGenerator {
 	public int getNumInformationSets(int player);
 	public int getNumActionsAtInformationSet(int player, int informationSetId);
 	public int getNumActionsForNature(GameState gs);
+	
+	public void addInformationSetAbstraction(int[][] informationSetAbstraction, int[][][] actionMapping);
+	public boolean informationSetAbstracted(int player, int informationSetId);
+	public int getAbstractInformationSetId(int player, int informationSetId);
+	public int getAbstractActionMapping(int player, int originalInformationSetId, int originalActionId);
+	public int getAbstractActionMapping(GameState gs, int action);
 }
 
 

@@ -16,12 +16,12 @@ public class GameState {
 
 	TIntList nodeIdHistory;
 	
-	boolean isLeaf;
-	double value;
-	int nodesTraversed;
-	int currentNodeId;
-	int currentInformationSetId;
-	int currentPlayer;
+	private boolean isLeaf;
+	private double value;
+	private int currentNodeId;
+	private int currentInformationSetId;
+	private int originalInformationSetId;
+	private int currentPlayer;
 	
 	public GameState() {
 		playerProbabilities = new TDoubleList[3];
@@ -111,7 +111,7 @@ public class GameState {
 
 
 
-	public void setLeaf(boolean isLeaf) {
+	public void setIsLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
 	}
 
@@ -127,17 +127,6 @@ public class GameState {
 		this.value = value;
 	}
 
-
-
-	public int getNodesTraversed() {
-		return nodesTraversed;
-	}
-
-
-
-	public void setNodesTraversed(int nodesTraversed) {
-		this.nodesTraversed = nodesTraversed;
-	}
 
 
 	public int getCurrentNodeId() {
@@ -167,6 +156,14 @@ public class GameState {
 
 	public void setCurrentPlayer(int currentPlayer) {
 		this.currentPlayer = currentPlayer;
+	}
+
+	public int getOriginalInformationSetId() {
+		return originalInformationSetId;
+	}
+
+	public void setOriginalInformationSetId(int originalInformationSetId) {
+		this.originalInformationSetId = originalInformationSetId;
 	}
 	
 	
