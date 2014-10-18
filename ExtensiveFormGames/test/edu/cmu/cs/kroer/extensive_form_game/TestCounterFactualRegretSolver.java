@@ -4,12 +4,66 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
 import edu.cmu.cs.kroer.extensive_form_game.solver.CounterFactualRegretSolver;
 import gnu.trove.map.TIntDoubleMap;
 
 public class TestCounterFactualRegretSolver {
+	Game miniKuhnGame;
+	Game kuhnGame;
+	Game coinGame;
+	Game prslGame;
+	Game leducKJGame;
+	Game leducKj1RaiseGame;
+	Game leducGame;
+	Game leducUnabstractedGame;
+	
+	Game stengelGame;
+	
+	
+	Game dieRollPoker3;
+	Game dieRollPoker6;
+	
+	@Before
+	public void setUp() {
+		//TestConfiguration.epsilon = 0;
+		miniKuhnGame = new Game();
+		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");		
+
+		kuhnGame = new Game();
+		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "kuhn.txt");		
+
+		coinGame = new Game();
+		coinGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "coin.txt");		
+
+		prslGame = new Game();
+		prslGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "prsl.txt");		
+
+		leducKJGame = new Game();
+		leducKJGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc_KJ.txt");
+
+		leducKj1RaiseGame = new Game();
+		leducKj1RaiseGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc_Kj1Raise.txt");
+
+		leducGame = new Game();
+		leducGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc.txt");
+
+		leducUnabstractedGame = new Game();
+		leducUnabstractedGame.createGameFromFile(TestConfiguration.gamesFolder + "leduc.txt");
+
+
+		stengelGame = new Game();
+		stengelGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
+
+		dieRollPoker3 = new Game();
+		dieRollPoker3.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3.txt");
+		
+		dieRollPoker6 = new Game();
+		dieRollPoker6.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6.txt");
+	}
 
 	@Test
 	public void testSolveGame() {
@@ -33,39 +87,111 @@ public class TestCounterFactualRegretSolver {
 		}
 	}
 
+		public void testGameConvergence(Game game, double gameValue, int iterations) {
+			testGameConvergence(game, gameValue, iterations, TestConfiguration.epsilon);
+		}
+	
+	public void testGameConvergence(Game game, double gameValue, int iterations, double epsilon) {
+		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
+		//solver.solveGame(10);
+		
+		solver.runCFR(iterations);
+
+		double[][][] strategyProfile = solver.getStrategyProfile();
+		
+		BestResponseLPSolver brSolver = new BestResponseLPSolver(game, 1, strategyProfile[2]);
+		brSolver.solveGame();
+		assertEquals(gameValue, brSolver.getValueOfGame(), epsilon);
+		
+		brSolver = new BestResponseLPSolver(game, 2, strategyProfile[1]);
+		brSolver.solveGame();
+		assertEquals(gameValue, -brSolver.getValueOfGame(), epsilon);
+
+		
+		assertEquals(gameValue, game.computeGameValueForStrategies(strategyProfile), epsilon);
+	}
+
+	
+	
+	public void testGameConvergenceWithExploitabilityPrints(Game game, double gameValue, int iterations, int printInterval) {
+		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
+		//solver.solveGame(10);
+		
+		for  (int numIterations = 0; numIterations < iterations; numIterations += printInterval) {
+			solver.runCFR(printInterval);
+
+			double[][][] strategyProfile = solver.getStrategyProfile();
+
+			System.out.println("\n Iterations: " + numIterations);
+			BestResponseLPSolver brSolver = new BestResponseLPSolver(game, 2, strategyProfile[1]);
+			brSolver.solveGame();
+			double exploitabilityPlayer1 = brSolver.getValueOfGame() + gameValue;
+			System.out.println("Exploitability player1: " + exploitabilityPlayer1);
+			
+			
+			brSolver = new BestResponseLPSolver(game, 1, strategyProfile[2]);
+			brSolver.solveGame();
+			double exploitabilityPlayer2 = brSolver.getValueOfGame() - gameValue;
+			System.out.println("Exploitability player2: " + exploitabilityPlayer2);
+		}
+		
+	}
+
+	@Test
+	public void printCoinConvergence() {
+		testGameConvergenceWithExploitabilityPrints(coinGame, TestConfiguration.coinValueOfGame, 100000, 10000);
+	}
+	
+	@Test
+	public void printLeducKj1RaiseConvergence() {
+		testGameConvergenceWithExploitabilityPrints(leducKj1RaiseGame, TestConfiguration.leducKj1RaiseValueOfGame, 1000000, 100000);
+	}
+	
+	@Test
+	public void testCoinConvergence() {
+		testGameConvergence(coinGame, TestConfiguration.coinValueOfGame, 10000000);
+	}
+
+	@Test
+	public void testPrslConvergence() {
+		testGameConvergence(prslGame, TestConfiguration.prslValueOfGame, 1000000);
+	}
+
+
+	@Test
+	public void testMiniKuhnConvergence() {
+		testGameConvergence(miniKuhnGame, TestConfiguration.miniKuhnValueOfGame, 1000000);
+	}
+	
+	
 	@Test
 	public void testKuhnConvergence() {
-		Game kuhnGame = new Game();
-		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "kuhn.txt");
-		
-		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(kuhnGame);
-		solver.solveGame(10);
-		
-		int iterations = 10;
-		
-		for (int iteration = 1; iteration < iterations; iteration++) {
-			System.out.println("Starting Kuhn convergence test no " + iteration);
-			solver.runCFR(20);
-			
-		}
+		testGameConvergence(kuhnGame, TestConfiguration.kuhnValueOfGame, 1000000);
 	}
 
 	@Test
 	public void testStengelConvergence() {
-		Game kuhnGame = new Game();
-		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
+		testGameConvergence(stengelGame, TestConfiguration.stengelValueOfGame, 10000000);
+	}
+
+	@Test
+	public void testStengelStrategyConvergence() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
 		
-		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(kuhnGame);
+		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
 		//solver.solveGame(10);
 		
-		int iterations = 1;
+		solver.runCFR(1000000);
+		System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
+		System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
+
 		
-		for (int iteration = 1; iteration <= iterations; iteration++) {
-			System.out.print("Starting Kuhn convergence test no " + iteration + ": ");
-			solver.runCFR(1000000);
-			System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
-			System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
-		}
+		double[][][] strategyProfile = solver.getStrategyProfile();
+		assertEquals(0.5, strategyProfile[2][0][0], TestConfiguration.epsilon);
+		assertEquals(0.5, strategyProfile[2][0][1], TestConfiguration.epsilon);
+		
+		assertEquals(TestConfiguration.stengelValueOfGame, stengelGame.computeGameValueForStrategies(strategyProfile),TestConfiguration.epsilon);
 	}
 
 	@Test
@@ -92,15 +218,91 @@ public class TestCounterFactualRegretSolver {
 		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
 		//solver.solveGame(10);
 		
-		int iterations = 1;
+		solver.runCFR(1000000);
 		
-		for (int iteration = 1; iteration <= iterations; iteration++) {
-			System.out.print("Starting Kuhn convergence test no " + iteration + ": ");
-			solver.runCFR(1000000);
-			System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
-			System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
-		}
+		double[][][] strategyProfile = solver.getStrategyProfile();
+		assertEquals(1, strategyProfile[2][0][0], TestConfiguration.epsilon);
+		assertEquals(0, strategyProfile[2][0][1], TestConfiguration.epsilon);
+
+		assertEquals(1, strategyProfile[1][0][0], TestConfiguration.epsilon);
+		assertEquals(0, strategyProfile[1][0][1], TestConfiguration.epsilon);
 	}
+
+	
+	@Test
+	public void testLeducKj1RaiseConvergence() {
+		testGameConvergence(leducKj1RaiseGame, TestConfiguration.leducKj1RaiseValueOfGame, 1000000);
+	}
+
+	
+	@Test
+	public void testDRP3Convergence() {
+		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 5000000);
+	}
+
+	@Test
+	public void testDRP6Convergence() {
+		testGameConvergence(dieRollPoker6, TestConfiguration.drp6ValueOfGame, 100000);
+	}
+	
+//	
+//	@Test
+//	public void testDRP3Convergence() {
+//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker3);
+//		//solver.solveGame(10);
+//
+//		solver.runCFR(100000);
+//		System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
+//		System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
+//
+//		double[][][] strategyProfile = solver.getStrategyProfile();
+//		
+//		double computedValue = dieRollPoker3.computeGameValueForStrategies(strategyProfile);
+//		
+//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp3ValueOfGame);
+//		
+//		assertEquals(TestConfiguration.drp3ValueOfGame, computedValue, TestConfiguration.epsilon);
+//	}
+
+//	@Test
+//	public void testDRP3ConvergenceWithBestResponse() {
+//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker3);
+//		//solver.solveGame(10);
+//
+//		solver.runCFR(100000);
+//		//System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
+//		//System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
+//
+//		double[][][] strategyProfile = solver.getStrategyProfile();
+//		
+//		//double computedValue = dieRollPoker3.computeGameValueForStrategies(strategyProfile);
+//		BestResponseLPSolver brSolver = new BestResponseLPSolver(dieRollPoker3, 1, strategyProfile[2]);
+//		brSolver.solveGame();
+//		double computedValue = brSolver.getValueOfGame();
+//		
+//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp3ValueOfGame);
+//		
+//		assertEquals(TestConfiguration.drp3ValueOfGame, computedValue, TestConfiguration.epsilon);
+//	}
+	
+	
+//	@Test
+//	public void testDRP6Convergence() {
+//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker6);
+//		//solver.solveGame(10);
+//
+//		solver.runCFR(1000000);
+//		System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
+//		System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
+//
+//		double[][][] strategyProfile = solver.getStrategyProfile();
+//		
+//		double computedValue = dieRollPoker6.computeGameValueForStrategies(strategyProfile);
+//		
+//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp6ValueOfGame);
+//		
+//		assertEquals(TestConfiguration.drp6ValueOfGame, computedValue, TestConfiguration.epsilon);
+//	}
 	
 }
 

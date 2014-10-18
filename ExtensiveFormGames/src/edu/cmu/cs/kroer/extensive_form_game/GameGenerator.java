@@ -32,12 +32,24 @@ public interface GameGenerator {
 	public int getNumInformationSets(int player);
 	public int getNumActionsAtInformationSet(int player, int informationSetId);
 	public int getNumActionsForNature(GameState gs);
+	public int getNumActions(GameState gs);
 	
+	// Abstraction methods
 	public void addInformationSetAbstraction(int[][] informationSetAbstraction, int[][][] actionMapping);
 	public boolean informationSetAbstracted(int player, int informationSetId);
 	public int getAbstractInformationSetId(int player, int informationSetId);
 	public int getAbstractActionMapping(int player, int originalInformationSetId, int originalActionId);
 	public int getAbstractActionMapping(GameState gs, int action);
+	
+	// Methods for computing game values
+	/**
+	 * Computes the expected value of the game under the given strategies. Computes value from the perspective of Player 1
+	 * @param strategyProfile indexed as strategyProfile[player][informationSetId][actionId]
+	 * @return
+	 */
+	public double computeGameValueForStrategies(double[][][] strategyProfile);
+	
+	public double getLargestPayoff();
 }
 
 

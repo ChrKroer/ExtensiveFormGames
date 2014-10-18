@@ -6,6 +6,11 @@ import gnu.trove.map.TObjectDoubleMap;
 
 
 public abstract class ZeroSumGameSolver {
+	
+	int nature = 0;
+	int player1 = 1;
+	int player2 = 2;
+	
 	double valueOfGame;
 	double [] strategyVars;
 	GameGenerator game;
@@ -31,5 +36,5 @@ public abstract class ZeroSumGameSolver {
 	}
 
 	//public abstract TObjectDoubleMap<String>[] getInformationSetActionProbabilities();
-	public abstract TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId();
+	public abstract double[][][] getStrategyProfile();
 }

@@ -18,6 +18,11 @@ public class TestSequenceFormLPSolver {
 	Game leducKj1RaiseGame;
 	Game leducGame;
 	Game leducUnabstractedGame;
+	Game stengelGame;
+	Game dieRollPoker3;
+	Game dieRollPoker6;
+	Game dieRollPoker3Private;
+	Game dieRollPoker6Private;
 	
 	@Before
 	public void setUp() {
@@ -44,6 +49,21 @@ public class TestSequenceFormLPSolver {
 
 		leducUnabstractedGame = new Game();
 		leducUnabstractedGame.createGameFromFile(TestConfiguration.gamesFolder + "leduc.txt");
+
+		stengelGame = new Game();
+		stengelGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "stengel.txt");
+
+		dieRollPoker3 = new Game();
+		dieRollPoker3.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3.txt");
+		
+		dieRollPoker6 = new Game();
+		dieRollPoker6.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6.txt");
+
+		dieRollPoker3Private = new Game();
+		dieRollPoker3Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");
+
+		dieRollPoker6Private = new Game();
+		dieRollPoker6Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6_private.txt");
 	}
 
 	@Test
@@ -192,7 +212,47 @@ public class TestSequenceFormLPSolver {
 		assertEquals(0.0856064, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
+	@Test
+	public void testSolveStengel() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(stengelGame, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "stengelP1.lp");
+		solver.solveGame();
+		assertEquals(1, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+	
+	@Test
+	public void testSolveDieRollPoker3() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker3, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp3p1.lp");
+		solver.solveGame();
+		assertEquals(-0.158025, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+	
+	@Test
+	public void testSolveDieRollPoker6() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker6, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp6p1.lp");
+		solver.solveGame();
+		assertEquals(-0.0395062, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
 
+	@Test
+	public void testSolveDieRollPoker3Private() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker3Private, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp3Privatep1.lp");
+		solver.solveGame();
+		assertEquals(TestConfiguration.drp3PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+	
+	@Test
+	public void testSolveDieRollPoker6Private() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker6Private, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp6Privatep1.lp");
+		solver.solveGame();
+		assertEquals(TestConfiguration.drp6PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+	
+	
 	public void testForProbabilityZeroNonFoldActionsLeduc() {
 		SequenceFormLPSolver solverP1 = new SequenceFormLPSolver(leducGame, 1);
 		SequenceFormLPSolver solverP2 = new SequenceFormLPSolver(leducGame, 2);
@@ -231,7 +291,18 @@ public class TestSequenceFormLPSolver {
 		}
 		
 	}
-	
+
+	@Test
+	public void testComputeGameValueForStrategies() {
+		SequenceFormLPSolver lpsolverP1 = new SequenceFormLPSolver(dieRollPoker3, 1);
+		SequenceFormLPSolver lpsolverP2 = new SequenceFormLPSolver(dieRollPoker3, 2);
+		lpsolverP1.solveGame();
+		lpsolverP2.solveGame();
+
+		double[][][] lpstrat = new double[][][] {new double[0][0], lpsolverP1.getStrategyProfile()[1], lpsolverP2.getStrategyProfile()[2] };
+
+		assertEquals(TestConfiguration.drp3ValueOfGame, dieRollPoker3.computeGameValueForStrategies(lpstrat) , 0.01);
+	}
 }
 
 

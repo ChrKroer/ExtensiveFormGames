@@ -14,11 +14,10 @@ public class GameState {
 	// The sample histories are used to remember what was sampled at each information set across iterations for the players
 	TIntIntMap[] playerSampleHistories;
 
-	TIntList nodeIdHistory;
+	TIntArrayList nodeIdHistory;
 	
 	private boolean isLeaf;
 	private double value;
-	private int currentNodeId;
 	private int currentInformationSetId;
 	private int originalInformationSetId;
 	private int currentPlayer;
@@ -130,13 +129,9 @@ public class GameState {
 
 
 	public int getCurrentNodeId() {
-		return currentNodeId;
+		return nodeIdHistory.get(nodeIdHistory.size()-1);
 	}
 
-
-	public void setCurrentNodeId(int currentNodeId) {
-		this.currentNodeId = currentNodeId;
-	}
 
 
 	public int getCurrentInformationSetId() {

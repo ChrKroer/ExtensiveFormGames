@@ -630,6 +630,15 @@ public class Game implements GameGenerator {
 	}
 
 	@Override
+	public int getNumActions(GameState gs) {
+		if (gs.getCurrentPlayer() == 0) {
+			return getNumActionsForNature(gs);
+		} else {
+			return getNumActionsAtInformationSet(gs.getCurrentPlayer(), gs.getCurrentInformationSetId());
+		}
+	}
+
+	@Override
 	public int getNumActionsAtInformationSet(GameState gs) {
 		return getNumActionsAtInformationSet(gs.getCurrentPlayer(), gs.getCurrentInformationSetId());
 	}
@@ -652,7 +661,6 @@ public class Game implements GameGenerator {
 	}
 
 	private void updateGameStateInfo(GameState gs) {
-		gs.setCurrentNodeId(gs.nodeIdHistory.get(gs.nodeIdHistory.size()-1));
 		Node newNode = nodes[gs.getCurrentNodeId()];
 		
 		//gs.nodeIdHistory.add(newNode.getNodeId());
@@ -735,6 +743,32 @@ public class Game implements GameGenerator {
 		} else {
 			return action;
 		}
+	}
+
+	@Override
+	public double computeGameValueForStrategies(double[][][] strategyProfile) {
+		return computeGameValueRecursive(getRoot(), strategyProfile);
+	}
+
+	private double computeGameValueRecursive(int currentNodeId, double[][][] strategyProfile) {
+		Node currentNode = getNodeById(currentNodeId);
+		if (currentNode.isLeaf()) {
+			return currentNode.getValue();
+		}
+		
+		double value = 0;
+		for (int actionId = 0; actionId < currentNode.getActions().length; actionId++) {
+			Action action = currentNode.actions[actionId];
+			double probability = currentNode.player == 0 ? action.getProbability() : strategyProfile[currentNode.getPlayer()][currentNode.getInformationSet()][actionId];
+			value += probability * computeGameValueRecursive(action.getChildId(), strategyProfile);
+		}
+		
+		return value;
+	}
+
+	@Override
+	public double getLargestPayoff() {
+		return biggestPayoff;
 	}
 	
 	

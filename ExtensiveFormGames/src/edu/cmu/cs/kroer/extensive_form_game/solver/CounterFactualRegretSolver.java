@@ -4,14 +4,10 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game;
 import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
 import edu.cmu.cs.kroer.extensive_form_game.GameState;
-import edu.cmu.cs.kroer.extensive_form_game.TestConfiguration;
 import gnu.trove.map.TIntDoubleMap;
-import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
-import gnu.trove.map.hash.TObjectDoubleHashMap;
 
 public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	int nature = 0;
@@ -80,7 +76,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 //		return map;
 //	}
 	
-	@Override
+	
 	public TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId() {
 		return getInformationSetActionProbabilitiesByActionId(1);
 	}
@@ -109,6 +105,36 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		}
 		return map;
 	}
+
+	@Override
+	public double[][][] getStrategyProfile() {
+		double[][][] map = new double[3][][];
+		for (int player =1; player < 3; player++) {
+			int numInformationSets = game.getNumInformationSets(player);
+			map[player] = new double[numInformationSets][];
+			for (int informationSetId = 0; informationSetId < numInformationSets; informationSetId++) {
+				int abstractInformationSetId = game.getAbstractInformationSetId(player, informationSetId);
+
+				map[player][informationSetId] = new double[game.getNumActionsAtInformationSet(player, informationSetId)];
+				double sum = 0;
+				for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+					int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+					sum += averagedStrategy[player][abstractInformationSetId][abstractActionId]; 
+				}
+
+				for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+					int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+					if (sum > 0) {
+						map[player][informationSetId][actionId] = averagedStrategy[player][game.getAbstractInformationSetId(player, informationSetId)][abstractActionId] / sum;
+					} else {
+						map[player][informationSetId][actionId] = 0;
+					}
+				}
+			}
+		}
+		return map;
+	}
+	
 	
 	private void initializeDataStructures() {
 		// Initialize the tables for each player
@@ -183,7 +209,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 			for (int action = 0; action < game.getNumActionsForNature(gs); action++) {
 				double probabilityOfAction = getProbabilityOfAction(gs, action);
 				game.updateGameStateWithAction(gs, action, probabilityOfAction);
-				value = probabilityOfAction * traverseGameState(gs);
+				value += probabilityOfAction * traverseGameState(gs);
 				game.removeActionFromGameState(gs, action, nature);
 			}
 			return value;
@@ -193,7 +219,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	}
 
 	/**
-	 * Perform iteration for updating player. This updates regrets.
+	 * Perform iteration for non-nature playerplayer. This updates regrets.
 	 * @param player
 	 * @param gs
 	 * @param iteration
@@ -219,7 +245,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 			// treat as abstract action when calculating regrets
 			sumOfUtilities += probabilityOfAction * actionUtilities[abstractAction];
 		}
-		// Perform second loop to update regret table
+		// Perform second loop to update regret table, redundant check for whether player is nature
 		if (gs.getCurrentPlayer() != nature) {
 			int utilityMultiplier = currentPlayer == player1 ? 1 : -1;
 			for (int originalAction = 0; originalAction < numActions; originalAction++) {
@@ -233,13 +259,13 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 
 		return sumOfUtilities;
 	}
+	
 
 	/**
 	 * Updates the current strategy for gs.getCurrentPlayer() based on the regret tables
 	 * @param gs
 	 */
 	private void regretMatch() {
-		int t = 1;
 		for (int player = 1; player < 3; player++) {
 			for (int informationSetId = 0; informationSetId < game.getNumInformationSets(player); informationSetId++) {
 				// We only need to update regret for abstracted information sets

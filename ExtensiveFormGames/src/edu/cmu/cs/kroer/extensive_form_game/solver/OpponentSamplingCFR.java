@@ -80,7 +80,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 //		return map;
 //	}
 	
-	@Override
 	public TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId() {
 		return getInformationSetActionProbabilitiesByActionId(1);
 	}
@@ -89,16 +88,50 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 		int numInformationSets = game.getNumInformationSets(player);
 		TIntDoubleMap[] map = new TIntDoubleHashMap[numInformationSets];
 		for (int informationSetId = 0; informationSetId < numInformationSets; informationSetId++) {
+			int abstractInformationSetId = game.getAbstractInformationSetId(player, informationSetId);
+			
 			map[informationSetId] = new TIntDoubleHashMap();
 			double sum = 0;
 			for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
-				sum += averagedStrategy[player][informationSetId][actionId]; 
+				int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+				sum += averagedStrategy[player][abstractInformationSetId][abstractActionId]; 
 			}
+			
 			for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+				int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
 				if (sum > 0) {
-					map[informationSetId].put(actionId, averagedStrategy[player][informationSetId][actionId] / sum);
+					map[informationSetId].put(actionId, averagedStrategy[player][game.getAbstractInformationSetId(player, informationSetId)][abstractActionId] / sum);
 				} else {
 					map[informationSetId].put(actionId, 0);
+				}
+			}
+		}
+		return map;
+	}
+
+	@Override
+	public double[][][] getStrategyProfile() {
+		double[][][] map = new double[3][][];
+		for (int player =1; player < 3; player++) {
+			int numInformationSets = game.getNumInformationSets(player);
+			map[player] = new double[numInformationSets][];
+			for (int informationSetId = 0; informationSetId < numInformationSets; informationSetId++) {
+				int abstractInformationSetId = game.getAbstractInformationSetId(player, informationSetId);
+
+				map[player][informationSetId] = new double[game.getNumActionsAtInformationSet(player, informationSetId)];
+				double sum = 0;
+				for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+					int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+					sum += averagedStrategy[player][abstractInformationSetId][abstractActionId]; 
+				}
+
+				for (int actionId = 0; actionId < game.getNumActionsAtInformationSet(player, informationSetId); actionId++) {
+					int abstractActionId = game.getAbstractActionMapping(player, informationSetId, actionId);
+					if (sum > 0) {
+						map[player][informationSetId][actionId] = averagedStrategy[player][game.getAbstractInformationSetId(player, informationSetId)][abstractActionId] / sum;
+					} else {
+						map[player][informationSetId][actionId] = 0;
+					}
 				}
 			}
 		}
