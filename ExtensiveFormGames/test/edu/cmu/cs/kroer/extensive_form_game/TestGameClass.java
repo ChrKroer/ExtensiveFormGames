@@ -1,6 +1,8 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import edu.cmu.cs.kroer.extensive_form_game.Game;
@@ -80,4 +82,45 @@ public class TestGameClass {
 		assertNotNull(game.getNodes()[50]);
 	}
 
+	@Test
+	public void testExtractObservedActionsFromNodeName() {
+		List<String> extracted = Game.extractObservedActionsFromNodeName("/n;0;3/n;1;3/0;a;c/1;a;c/n;0;2/n;1;2/", 0);
+		assertEquals("3", extracted.get(0));
+		assertEquals("c", extracted.get(1));
+		assertEquals("c", extracted.get(2));
+		assertEquals("2", extracted.get(3));
+
+		extracted = Game.extractObservedActionsFromNodeName("/n;0;3/n;1;3/0;a;c/0;a;c/n;0;2/n;1;3/", 1);
+		assertEquals("3", extracted.get(0));
+		assertEquals("c", extracted.get(1));
+		assertEquals("c", extracted.get(2));
+		assertEquals("3", extracted.get(3));
+	}
+
+	@Test
+	public void testExtractObservedNatureActionsFromNodeName() {
+		List<String> extracted = Game.extractObservedNatureActionsFromNodeName("/n;0;3/n;1;3/0;a;c/1;a;c/n;0;2/n;1;2/", 0);
+		assertEquals("3", extracted.get(0));
+		assertEquals("2", extracted.get(1));
+
+		extracted = Game.extractObservedNatureActionsFromNodeName("/n;0;3/n;1;3/0;a;c/0;a;c/n;0;2/n;1;3/", 1);
+		assertEquals("3", extracted.get(0));
+		assertEquals("3", extracted.get(1));
+	}
+
+	@Test
+	public void testExtractObservedPlayerActionsFromNodeName() {
+		List<String> extracted = Game.extractObservedPlayerActionsFromNodeName("/n;0;3/n;1;3/0;a;c/1;a;c/n;0;2/n;1;2/", 0);
+		assertEquals("c", extracted.get(0));
+		assertEquals("c", extracted.get(1));
+
+		extracted = Game.extractObservedPlayerActionsFromNodeName("/n;0;3/n;1;3/0;a;c/0;a;c/n;0;2/n;1;3/", 1);
+		assertEquals("c", extracted.get(0));
+		assertEquals("c", extracted.get(1));
+	}
+	
+	@Test
+	public void testApplySignalAbstraction() {
+		
+	}
 }

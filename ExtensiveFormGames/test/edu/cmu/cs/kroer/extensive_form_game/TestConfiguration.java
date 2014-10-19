@@ -18,6 +18,9 @@ public final class TestConfiguration {
 	static final double stengelValueOfGame = 1;
 	static final double drp3ValueOfGame = -0.158025;
 	static final double drp6ValueOfGame = -0.0395062;
+	
+	static final double drp1PrivateValueOfGame = 0;
+	static final double drp2PrivateValueOfGame = -0.05144101876675597;
 	static final double drp3PrivateValueOfGame = -0.0384817;
 	static final double drp6PrivateValueOfGame = -0.0773881;
 }

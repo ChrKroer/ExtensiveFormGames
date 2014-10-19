@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
+import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.*;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -48,6 +50,7 @@ public class Game implements GameGenerator {
 		private boolean publicSignal; // TODO, useful for abstraction algorithms
 		private int playerReceivingSignal; // TODO, useful for abstraction algorithms
 		private int informationSet;
+		private int abstractInformationSet;
 		private int signalGroupPlayer1; // TODO, useful for abstraction algorithms
 		private int signalGroupPlayer2; // TODO, useful for abstraction algorithms
 		private Action[] actions; 
@@ -68,8 +71,16 @@ public class Game implements GameGenerator {
 			return playerReceivingSignal;
 		}
 		public int getInformationSet() {
-			//return getAbstractInformationSetId(player, informationSet);
 			return informationSet;
+		}
+		public int getRealInformationSet() {
+			return informationSet;
+		}
+		public int getAbstractInformationSet() {
+			return abstractInformationSet;
+		}
+		public void setAbstractInformationSet(int abstractInformationSet) {
+			this.abstractInformationSet = abstractInformationSet;
 		}
 		public int getSignalGroupPlayer1() {
 			return signalGroupPlayer1;
@@ -96,6 +107,8 @@ public class Game implements GameGenerator {
 	private Node [] nodes;
 	private TIntIntMap [] childNodeIdBySignalId; // indexed as [nodeId][signalId], returns the child node reached when nature selects the signal
 	private TIntIntMap [] actionIdBySignalId;// indexed as [nodeId][signalId], returns the index of the signal in the action vector at the node
+	@SuppressWarnings("unchecked")
+	private HashMap<List<String>, Integer>[] observedActionsToInformationSetId = new HashMap[3];
 	
 	private int root;
 	private int numChanceHistories;
@@ -119,6 +132,9 @@ public class Game implements GameGenerator {
 	private boolean hasAbstraction;
 	private int[][] abstraction; 
 	private int[][][] actionAbstractionMapping;
+	private boolean useIdentityActionMap;
+
+	SignalAbstraction signalAbstraction;
 	
 	public Game() {
 		informationSets = new TIntArrayList [2] [];
@@ -132,11 +148,61 @@ public class Game implements GameGenerator {
 		smallestInformationSetId[1] = Integer.MAX_VALUE;
 		smallestPayoff = Double.MAX_VALUE;
 		biggestPayoff = -Double.MAX_VALUE;
+		observedActionsToInformationSetId[1] = new HashMap<List<String>, Integer>();
+		observedActionsToInformationSetId[2] = new HashMap<List<String>, Integer>();
 	}
 	
 	public Game(String filename) {
 		this();
 		createGameFromFile(filename);
+	}
+	
+	public void applySignalAbstraction(SignalAbstraction signalAbstraction) {
+		for (int nodeId = 0; nodeId < getNumNodes(); nodeId++) {
+			Node node = getNodeById(nodeId);
+			if (node.getPlayer() == 1 || node.getPlayer() == 2) {
+				// Get observed nature actions, then concatenate observed player actions
+				List<String> observedActions = extractObservedNatureActionsFromNodeName(node.getName(), node.getPlayer());
+				observedActions.addAll(extractObservedPlayerActionsFromNodeName(node.getName(), node.getPlayer()));
+				// Uniquely identify each information set by the (out of order) list of observed actions. This works for signal-decomposable games.
+				observedActionsToInformationSetId[node.getPlayer()].put(observedActions, node.getInformationSet());
+			}
+		}
+		this.signalAbstraction = signalAbstraction;
+		abstraction = new int[3][];
+		abstraction[1] = new int[getNumInformationSetsPlayer1()];
+		abstraction[2]= new int[getNumInformationSetsPlayer2()];
+		applySignalAbstractionRecursive(getRoot(), new ArrayList<Integer>());
+		hasAbstraction = true;
+		useIdentityActionMap = true;
+	}
+	
+	private void applySignalAbstractionRecursive(int currentNodeId, List<Integer> natureIndices) {
+		Node node = getNodeById(currentNodeId);
+		if (node.isLeaf()) {
+			return;
+		}
+		
+		if (node.getPlayer() == 1 || node.getPlayer() ==2) {
+			List<String> natureSignals = extractObservedNatureActionsFromNodeName(node.getName(), node.getPlayer());
+			List<String> abstractNatureSignals = signalAbstraction.getAbstractSignalsByName(natureSignals);
+			List<String> observedPlayerActions = extractObservedPlayerActionsFromNodeName(node.getName(), node.getPlayer());
+			// Make abstract observed list
+			List<String> abstractActions = new ArrayList<String>(abstractNatureSignals);
+			abstractActions.addAll(observedPlayerActions);
+			int abstractInformationSetId = observedActionsToInformationSetId[node.getPlayer()].get(abstractActions);
+			node.setAbstractInformationSet(abstractInformationSetId);
+			abstraction[node.getPlayer()][node.getInformationSet()] = abstractInformationSetId;
+		}
+		for (Action action : node.getActions()) {
+			if (node.getPlayer() == 0) {
+				natureIndices.add(depth);
+				applySignalAbstractionRecursive(action.getChildId(), natureIndices);
+				natureIndices.remove(natureIndices.size()-1);
+			} else {
+				applySignalAbstractionRecursive(action.getChildId(), natureIndices);
+			}			
+		}
 	}
 	
 	public void createGameFromFileZerosumPackageFormat(String filename) {
@@ -295,6 +361,7 @@ public class Game implements GameGenerator {
 		node.nodeId = Integer.parseInt(line[0]);
 		node.player = Integer.parseInt(line[2]) + 1;
 		node.informationSet = Integer.parseInt(line[3]);
+		node.setAbstractInformationSet(Integer.parseInt(line[3]));
 		if (node.informationSet < smallestInformationSetId[node.player-1]) {
 			smallestInformationSetId[node.player-1] = node.informationSet;
 		}
@@ -321,6 +388,71 @@ public class Game implements GameGenerator {
 		}
 		nodes[node.nodeId] = node;
 	}
+	
+	
+	/**
+	 * Assumes that the name of a node is the string of actions performed to reach the node. Returns the subset of actions that are observed by player i.
+	 * Assumes that actions are split by '/' and values are written [01a];actionName, where [01a] indicates whether the observer is 0,1, or a
+	 * @param node
+	 * @param player observing player
+	 * @return
+	 */
+	public static List<String> extractObservedActionsFromNodeName(String name, int player) {
+		List<String> observed = new ArrayList<String>();
+		String[] actions = name.split("/");
+		// start at 1, since the first action is the empty action at the root
+		for (int i = 1; i < actions.length; i++) {
+			String[] splitAction = actions[i].split(";");
+			if (splitAction[1].equals("a") || Integer.parseInt(splitAction[1]) == player-1) {
+				observed.add(splitAction[2]);
+			}
+		}
+		
+		return observed;
+	}
+	
+	/**
+	 * Assumes that the name of a node is the string of actions performed to reach the node. Returns the subset of actions that are observed by player i.
+	 * Assumes that actions are split by '/' and values are written [01a];actionName, where [01a] indicates whether the observer is 0,1, or a
+	 * @param node
+	 * @param player observing player
+	 * @return
+	 */
+	public static List<String> extractObservedNatureActionsFromNodeName(String name, int player) {
+		List<String> observed = new ArrayList<String>();
+		String[] actions = name.split("/");
+		// start at 1, since the first action is the empty action at the root
+		for (int i = 1; i < actions.length; i++) {
+			String[] splitAction = actions[i].split(";");
+			if (splitAction[0].equals("n") && (splitAction[1].equals("a") || Integer.parseInt(splitAction[1]) == player-1)) {
+				observed.add(splitAction[2]);
+			}
+		}
+		
+		return observed;
+	}
+
+	/**
+	 * Assumes that the name of a node is the string of actions performed to reach the node. Returns the subset of actions that are observed by player i.
+	 * Assumes that actions are split by '/' and values are written [01a];actionName, where [01a] indicates whether the observer is 0,1, or a
+	 * @param node
+	 * @param player observing player
+	 * @return
+	 */
+	public static List<String> extractObservedPlayerActionsFromNodeName(String name, int player) {
+		List<String> observed = new ArrayList<String>();
+		String[] actions = name.split("/");
+		// start at 1, since the first action is the empty action at the root
+		for (int i = 1; i < actions.length; i++) {
+			String[] splitAction = actions[i].split(";");
+			if (!splitAction[0].equals("n") && (splitAction[1].equals("a") || Integer.parseInt(splitAction[1]) == player-1)) {
+				observed.add(splitAction[2]);
+			}
+		}
+		
+		return observed;
+	}
+
 	
 	private void CreateZeroSumPackageStyleNatureNode(String[] line) {
 		Node node = new Node();
@@ -723,13 +855,14 @@ public class Game implements GameGenerator {
 	@Override
 	public void addInformationSetAbstraction(int[][] informationSetAbstraction,	int[][][] actionMapping) {
 		this.hasAbstraction = true;
+		this.useIdentityActionMap = false;
 		this.abstraction = informationSetAbstraction;
 		this.actionAbstractionMapping = actionMapping;
 	}
 
 	@Override
 	public int getAbstractActionMapping(int player, int originalInformationSetId, int originalAction) {
-		if (informationSetAbstracted(player, originalInformationSetId)) {
+		if (informationSetAbstracted(player, originalInformationSetId) && !useIdentityActionMap) {
 			return actionAbstractionMapping[player][originalInformationSetId][originalAction];
 		} else {
 			return originalAction;
@@ -738,7 +871,7 @@ public class Game implements GameGenerator {
 	
 	@Override
 	public int getAbstractActionMapping(GameState gs, int action) {
-		if (informationSetAbstracted(gs.getCurrentPlayer(), gs.getOriginalInformationSetId())) {
+		if (informationSetAbstracted(gs.getCurrentPlayer(), gs.getOriginalInformationSetId()) && !useIdentityActionMap) {
 			return actionAbstractionMapping[gs.getCurrentPlayer()][gs.getOriginalInformationSetId()][action];
 		} else {
 			return action;

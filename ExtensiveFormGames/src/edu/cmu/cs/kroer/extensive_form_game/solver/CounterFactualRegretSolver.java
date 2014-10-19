@@ -219,7 +219,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	}
 
 	/**
-	 * Perform iteration for non-nature playerplayer. This updates regrets.
+	 * Perform iteration for non-nature player. This updates regrets.
 	 * @param player
 	 * @param gs
 	 * @param iteration

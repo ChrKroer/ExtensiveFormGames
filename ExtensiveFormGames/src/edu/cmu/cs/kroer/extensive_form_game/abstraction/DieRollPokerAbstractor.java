@@ -79,7 +79,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 	}
 	
 
-	public SignalAbstraction getAbstraction() throws IloException {
+	public SignalAbstraction getAbstraction() {
 		String[] signalNames = new String[numSides];
 		for (int side = 1; side <= numSides; side++) {
 			signalNames[side-1] = Integer.toString(side);
@@ -92,10 +92,13 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			buckets[bucket] = new ArrayList<ArrayList<Integer>>();
 			for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 			for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
-				
-				if (cplex.getValue(secondRollAbstractionVariables[firstRoll][secondRoll][bucket]) > 1-cplexEpsilon) {
-					ArrayList<Integer> signals = new ArrayList<Integer>(Arrays.asList(firstRoll-1, secondRoll-1));
-					buckets[bucket].add(signals);
+				try {
+					if (cplex.getValue(secondRollAbstractionVariables[firstRoll][secondRoll][bucket]) > 1-cplexEpsilon) {
+						ArrayList<Integer> signals = new ArrayList<Integer>(Arrays.asList(firstRoll-1, secondRoll-1));
+						buckets[bucket].add(signals);
+					}
+				} catch (IloException e) {
+					e.printStackTrace();
 				}
 			}}
 		}	

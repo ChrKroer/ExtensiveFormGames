@@ -21,8 +21,11 @@ public class TestSequenceFormLPSolver {
 	Game stengelGame;
 	Game dieRollPoker3;
 	Game dieRollPoker6;
+	Game dieRollPoker1Private;
+	Game dieRollPoker2Private;
 	Game dieRollPoker3Private;
 	Game dieRollPoker6Private;
+	
 	
 	@Before
 	public void setUp() {
@@ -58,6 +61,12 @@ public class TestSequenceFormLPSolver {
 		
 		dieRollPoker6 = new Game();
 		dieRollPoker6.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6.txt");
+
+		dieRollPoker1Private = new Game();
+		dieRollPoker1Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-1_private.txt");
+
+		dieRollPoker2Private = new Game();
+		dieRollPoker2Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-2_private.txt");
 
 		dieRollPoker3Private = new Game();
 		dieRollPoker3Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");
@@ -234,6 +243,22 @@ public class TestSequenceFormLPSolver {
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp6p1.lp");
 		solver.solveGame();
 		assertEquals(-0.0395062, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
+	public void testSolveDieRollPoker1Private() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker1Private, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp1Privatep1.lp");
+		solver.solveGame();
+		assertEquals(TestConfiguration.drp2PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
+	}
+
+	@Test
+	public void testSolveDieRollPoker2Private() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker2Private, 1);
+		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp2Privatep1.lp");
+		solver.solveGame();
+		assertEquals(TestConfiguration.drp2PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test

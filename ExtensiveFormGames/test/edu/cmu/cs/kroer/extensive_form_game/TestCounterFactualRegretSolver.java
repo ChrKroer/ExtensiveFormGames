@@ -7,6 +7,8 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.cmu.cs.kroer.extensive_form_game.abstraction.DieRollPokerAbstractor;
+import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
 import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
 import edu.cmu.cs.kroer.extensive_form_game.solver.CounterFactualRegretSolver;
 import gnu.trove.map.TIntDoubleMap;
@@ -26,6 +28,11 @@ public class TestCounterFactualRegretSolver {
 	
 	Game dieRollPoker3;
 	Game dieRollPoker6;
+	Game dieRollPoker1Private;
+	Game dieRollPoker2Private;
+	Game dieRollPoker3Private;
+	Game dieRollPoker6Private;
+
 	
 	@Before
 	public void setUp() {
@@ -63,6 +70,20 @@ public class TestCounterFactualRegretSolver {
 		
 		dieRollPoker6 = new Game();
 		dieRollPoker6.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6.txt");
+
+		dieRollPoker1Private = new Game();
+		dieRollPoker1Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-1_private.txt");
+
+		dieRollPoker2Private = new Game();
+		dieRollPoker2Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-2_private.txt");
+
+		
+		dieRollPoker3Private = new Game();
+		dieRollPoker3Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");
+
+		dieRollPoker6Private = new Game();
+		dieRollPoker6Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6_private.txt");
+
 	}
 
 	@Test
@@ -241,11 +262,59 @@ public class TestCounterFactualRegretSolver {
 	}
 
 	@Test
+	public void testDRP3WithSignalAbstractionConvergence() {
+		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 5000000);
+	}
+	
+	
+	@Test
 	public void testDRP6Convergence() {
 		testGameConvergence(dieRollPoker6, TestConfiguration.drp6ValueOfGame, 100000);
 	}
+
+	@Test
+	public void testDRP2PrivateConvergence() {
+		testGameConvergence(dieRollPoker2Private, TestConfiguration.drp2PrivateValueOfGame, 10000);
+	}
 	
-//	
+
+	public void testSolveDieRollPokerPrivateLosslessAbstraction(Game game, int numSides, int iterations, double valueOfGame, double convergenceBound) {
+		DieRollPokerAbstractor abstractor = new DieRollPokerAbstractor(game, numSides, 2*numSides - 1);
+		abstractor.solveModel();
+		double value = abstractor.getObjectiveValue();
+		assertEquals(0, value, TestConfiguration.epsilon);
+		
+		SignalAbstraction abstraction = abstractor.getAbstraction();
+		game.applySignalAbstraction(abstraction);
+
+		testGameConvergence(game, valueOfGame, iterations, convergenceBound);	
+	}	
+	
+	@Test
+	public void testSolveDieRollPoker3PrivateLosslessAbstraction() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");
+		
+		testSolveDieRollPokerPrivateLosslessAbstraction(dieRollPoker3Private, 3, 5000000, TestConfiguration.drp3PrivateValueOfGame, 0.01);
+	}
+
+	@Test
+	public void testSolveDieRollPoker1PrivateLosslessAbstraction() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-1_private.txt");
+		
+		testSolveDieRollPokerPrivateLosslessAbstraction(game, 1, 10000, TestConfiguration.drp1PrivateValueOfGame, 0.001);
+	}
+	
+	@Test
+	public void testSolveDieRollPoker2PrivateLosslessAbstraction() {
+		Game game = new Game();
+		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-2_private.txt");
+		
+		testSolveDieRollPokerPrivateLosslessAbstraction(game, 2, 10000, TestConfiguration.drp2PrivateValueOfGame, 0.001);
+	}
+
+	//	
 //	@Test
 //	public void testDRP3Convergence() {
 //		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker3);

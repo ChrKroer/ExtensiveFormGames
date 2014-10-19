@@ -33,18 +33,34 @@ public class SignalAbstraction {
 		abstraction.put(abstractList, keepList);
 	}
 	
+	/**
+	 * Returns a list of signals as string
+	 * @param signals The list of signal strings that one wishes to know the mapping of
+	 * @return
+	 */
 	public List<String> getAbstractSignalsByName(List<String> signals) {
 		List<Integer> signalsList = new ArrayList<Integer>();
 		for (String name : signals) {
 			signalsList.add(namesToSignalId.get(name));
 		}
-		
+		if (!abstraction.containsKey(signalsList)) {
+			return signals;
+		}
 		List<String> abstractSignalsList = new ArrayList<String>();
-		for (Integer id : abstraction.get(signals)) {
+		for (Integer id : abstraction.get(signalsList)) {
 			abstractSignalsList.add(signalNames[id]);
 		}
 		
 		return abstractSignalsList;
+	}
+	
+	/**
+	 * Returns a list of Integer objects, referring to the  indices of the signals into signalNames.
+	 * @param signals The list of signal indices that one wishes to know the mapping of
+	 * @return
+	 */
+	public List<Integer> getAbstractSignalsById(List<Integer> signals) {
+		return abstraction.get(signals);
 	}
 	
 }

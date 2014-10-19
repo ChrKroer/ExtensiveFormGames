@@ -14,6 +14,7 @@ public abstract class CplexSolver {
 		try {
 			cplex = new IloCplex();
 			objective = cplex.linearNumExpr();
+			setCplexParameters();
 		} catch (IloException e) {
 			System.out.println("Error CplexSolver(): CPLEX setup failed");
 		}
@@ -55,6 +56,18 @@ public abstract class CplexSolver {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	private void setCplexParameters() throws IloException {
+		cplex.setParam(IloCplex.IntParam.SimDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.MIPDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.MIPInterval, -1);
+		cplex.setParam(IloCplex.IntParam.TuningDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.BarDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.SiftDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.ConflictDisplay, 0);
+		cplex.setParam(IloCplex.IntParam.NetDisplay, 0);
+		cplex.setParam(IloCplex.DoubleParam.TiLim, 1e+75);
 	}
 
 }
