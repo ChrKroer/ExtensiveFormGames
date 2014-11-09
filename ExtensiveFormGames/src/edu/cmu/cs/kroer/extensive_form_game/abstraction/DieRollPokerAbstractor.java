@@ -10,7 +10,6 @@ import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
-import ilog.cplex.IloCplex;
 import edu.cmu.cs.kroer.extensive_form_game.Game;
 import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
 
@@ -48,6 +47,10 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		this.numSides= numSides;
 		this.numAbstractionInformationSets = numAbstractInformationSets;
 		
+		sideProbabilities = new double[numSides+1];
+		for (int side = 0; side < numSides+1; side++) {
+			sideProbabilities[side] = 1.0 / numSides;
+		}
 		
 		try {
 			initializeDataStructures();
@@ -61,10 +64,6 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			e.printStackTrace();
 		}
 		
-		sideProbabilities = new double[numSides];
-		for (int side = 0; side < numSides; side++) {
-			sideProbabilities[side] = 1.0 / numSides;
-		}
 		try {
 			cplex.addMinimize(objective);
 		} catch (IloException e) {
@@ -76,6 +75,12 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		this(game, numSides, numAbstractInformationSets);
 		
 		this.sideProbabilities = sideProbabilities;
+		
+		double sum = 0;
+		for (double probability : sideProbabilities) {
+			sum += probability;
+		}
+		assert(sum > 0.999 && sum < 1.001);
 	}
 	
 
@@ -87,7 +92,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		SignalAbstraction abstraction = new SignalAbstraction(signalNames);
 		@SuppressWarnings("unchecked")
 		ArrayList<ArrayList<Integer> >[] buckets = new ArrayList[numAbstractionInformationSets];
-		// Construct a list containint the buckets, where each item in the bucket is a List of the integer indices of the signals (e.g.  {0,3} would mean rolling 1 followed by 4)
+		// Construct a list containing the buckets, where each item in the bucket is a List of the integer indices of the signals (e.g.  {0,3} would mean rolling 1 followed by 4)
 		for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
 			buckets[bucket] = new ArrayList<ArrayList<Integer>>();
 			for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
@@ -192,16 +197,18 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		double lower = Math.min(sum1, sum2);
 		double higher = Math.max(sum1, sum2);		
 		double error = 0;
-		double probabilityOfSingleRoll = 1.0 / (numSides * numSides) ; 
+		
 		for (int opponentRoll1 = 1; opponentRoll1 <= numSides; opponentRoll1++) {
 		for (int opponentRoll2 = 1; opponentRoll2 <= numSides; opponentRoll2++) {
+			double probabilityOfSingleRoll = sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1]; 
 			int sum = opponentRoll1 + opponentRoll2;
 			// if the opponent hand draws with one and wins or loses against the other, we have a swing of largestPayoff, if it beats one and loses to the other, we have a swing of 2 * largestPayoff
 			double offValue = (sum == lower || sum == higher ? 1 : 0) + (sum > lower && sum < higher ? 2: 0); 
-			error += probabilityOfSingleRoll * offValue * game.getLargestPayoff(); 
+			error += probabilityOfSingleRoll * 2 * offValue * game.getLargestPayoff();
+			error += 2 * offValue * Math.abs(sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1] - sideProbabilities[firstRoll2] * sideProbabilities[secondRoll2]);
 		}}
 		
-		return error;
+		return error * sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1];
 	}
 
 	private void addCostsToObjective() throws IloException {

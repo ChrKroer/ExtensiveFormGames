@@ -158,12 +158,12 @@ public class TestCounterFactualRegretSolver {
 		
 	}
 
-	@Test
+
 	public void printCoinConvergence() {
 		testGameConvergenceWithExploitabilityPrints(coinGame, TestConfiguration.coinValueOfGame, 100000, 10000);
 	}
 	
-	@Test
+
 	public void printLeducKj1RaiseConvergence() {
 		testGameConvergenceWithExploitabilityPrints(leducKj1RaiseGame, TestConfiguration.leducKj1RaiseValueOfGame, 1000000, 100000);
 	}
@@ -252,18 +252,18 @@ public class TestCounterFactualRegretSolver {
 	
 	@Test
 	public void testLeducKj1RaiseConvergence() {
-		testGameConvergence(leducKj1RaiseGame, TestConfiguration.leducKj1RaiseValueOfGame, 1000000);
+		testGameConvergence(leducKj1RaiseGame, TestConfiguration.leducKj1RaiseValueOfGame, 100000);
 	}
 
 	
 	@Test
 	public void testDRP3Convergence() {
-		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 5000000);
+		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 100000);
 	}
 
 	@Test
 	public void testDRP3WithSignalAbstractionConvergence() {
-		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 5000000);
+		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 100000);
 	}
 	
 	
@@ -276,7 +276,12 @@ public class TestCounterFactualRegretSolver {
 	public void testDRP2PrivateConvergence() {
 		testGameConvergence(dieRollPoker2Private, TestConfiguration.drp2PrivateValueOfGame, 10000);
 	}
-	
+
+	@Test
+	public void testDRP3PrivateConvergence() {
+		testGameConvergence(dieRollPoker3Private, TestConfiguration.drp3PrivateValueOfGame, 10000);
+	}
+
 
 	public void testSolveDieRollPokerPrivateLosslessAbstraction(Game game, int numSides, int iterations, double valueOfGame, double convergenceBound) {
 		DieRollPokerAbstractor abstractor = new DieRollPokerAbstractor(game, numSides, 2*numSides - 1);
@@ -295,7 +300,7 @@ public class TestCounterFactualRegretSolver {
 		Game game = new Game();
 		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");
 		
-		testSolveDieRollPokerPrivateLosslessAbstraction(dieRollPoker3Private, 3, 5000000, TestConfiguration.drp3PrivateValueOfGame, 0.01);
+		testSolveDieRollPokerPrivateLosslessAbstraction(dieRollPoker3Private, 3, 10000, TestConfiguration.drp3PrivateValueOfGame, 0.01);
 	}
 
 	@Test

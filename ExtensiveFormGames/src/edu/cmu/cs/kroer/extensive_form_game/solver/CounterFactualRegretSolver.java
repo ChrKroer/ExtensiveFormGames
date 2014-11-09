@@ -188,6 +188,8 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		totalIterationsRun += iterations;
 		// TODO update existing averagedStrategy
 		for (int iteration = 1; iteration < iterations; iteration++) {
+			Arrays.fill(informationSetProbabilityForPlayer[1], 0);
+			Arrays.fill(informationSetProbabilityForPlayer[2], 0);
 			GameState gs = game.getInitialGameState();
 			traverseGameState(gs);
 			regretMatch();
@@ -249,11 +251,12 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		if (gs.getCurrentPlayer() != nature) {
 			int utilityMultiplier = currentPlayer == player1 ? 1 : -1;
 			for (int originalAction = 0; originalAction < numActions; originalAction++) {
+				int informationSetId = gs.getCurrentInformationSetId();
 				// treat as abstract action when calculating regrets
 				int action = game.getAbstractActionMapping(gs, originalAction);
 				regretTable[currentPlayer][gs.getCurrentInformationSetId()][action] += utilityMultiplier * gs.getProbabilityWithoutPlayer(currentPlayer) * (actionUtilities[action] - sumOfUtilities);
-				
-				informationSetProbabilityForPlayer[currentPlayer][gs.getCurrentInformationSetId()] = gs.getProbabilityWithPlayer(currentPlayer);
+				// TODO should this be a sum of some sorts? Imperfect recall may cause some funky behavior
+				informationSetProbabilityForPlayer[currentPlayer][gs.getCurrentInformationSetId()] += gs.getProbabilityWithPlayer(currentPlayer);
 			}
 		}
 

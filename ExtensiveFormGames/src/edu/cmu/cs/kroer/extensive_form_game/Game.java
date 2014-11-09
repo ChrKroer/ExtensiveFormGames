@@ -796,7 +796,7 @@ public class Game implements GameGenerator {
 		Node newNode = nodes[gs.getCurrentNodeId()];
 		
 		//gs.nodeIdHistory.add(newNode.getNodeId());
-		if (!newNode.isLeaf() && hasAbstraction && newNode.player != 0) {
+		if (!newNode.isLeaf() && hasAbstraction && newNode.player != 0 && abstraction[newNode.getPlayer()][newNode.getInformationSet()] != newNode.getInformationSet()) {
 			gs.setCurrentInformationSetId(abstraction[newNode.getPlayer()][newNode.getInformationSet()]);
 			gs.setOriginalInformationSetId(newNode.getInformationSet());
 		} else if (!newNode.isLeaf() && newNode.player != 0){
