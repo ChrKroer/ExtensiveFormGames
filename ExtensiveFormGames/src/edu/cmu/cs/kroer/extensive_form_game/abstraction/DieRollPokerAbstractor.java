@@ -249,9 +249,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
 		for (int bucket = 0; bucket <= numAbstractionInformationSets; bucket++) {
-			//if (firstRoll != secondRoll) {
-				objective.addTerm(1, costVariablesSecondRoll[firstRoll][secondRoll]);
-			//}
+			objective.addTerm(1, costVariablesSecondRoll[firstRoll][secondRoll]);
 		}}}
 	}
 	
