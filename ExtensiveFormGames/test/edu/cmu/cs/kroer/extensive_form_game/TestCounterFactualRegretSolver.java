@@ -258,7 +258,7 @@ public class TestCounterFactualRegretSolver {
 	
 	@Test
 	public void testDRP3Convergence() {
-		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 100000);
+		testGameConvergence(dieRollPoker3, TestConfiguration.drp3ValueOfGame, 10000);
 	}
 
 	@Test
@@ -269,7 +269,7 @@ public class TestCounterFactualRegretSolver {
 	
 	@Test
 	public void testDRP6Convergence() {
-		testGameConvergence(dieRollPoker6, TestConfiguration.drp6ValueOfGame, 100000);
+		testGameConvergence(dieRollPoker6, TestConfiguration.drp6ValueOfGame, 10000);
 	}
 
 	@Test

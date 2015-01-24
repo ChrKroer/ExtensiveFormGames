@@ -18,7 +18,7 @@ import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
  * This die-roll poker class assumes that the Game instance contains a DRP game where each player rolls one private die, betting happens, and then they each roll another private die, followed by betting
  * A symmetric abstraction is computed, satisfying the constraints specified in Kroer & Sandholm 14: Extensive-Form Game Imperfect-Recall Abstractions with Bounds, such that an abstraction with bounded solution quality is found 
  * @author Christian Kroer
- *
+ * TODO: currently computes abstractions only for the second level
  */
 public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 
@@ -26,7 +26,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 	int numSides;
 	int numAbstractionInformationSets;
 	double[] sideProbabilities;
-	
+	double rollDistanceError = 0; // default value is that there is no correlation between rolls 
 	
 
 	
@@ -42,10 +42,15 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 	int[][][] actionMapping;
 	
 	public DieRollPokerAbstractor(GameGenerator game, int numSides, int numAbstractInformationSets) {
+		this(game, numSides, numAbstractInformationSets, 0);
+	}
+	
+	public DieRollPokerAbstractor(GameGenerator game, int numSides, int numAbstractInformationSets, double rollDistanceError) {
 		super();
 		this.game = game;
 		this.numSides= numSides;
 		this.numAbstractionInformationSets = numAbstractInformationSets;
+		this.rollDistanceError = rollDistanceError;
 		
 		sideProbabilities = new double[numSides+1];
 		for (int side = 0; side < numSides+1; side++) {
@@ -170,27 +175,34 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		
 	}
 
+	// firstRoll/secondRoll denotes the first and second die roll for the same info set. The 1 or 2 after denotes different info sets
 	private void addObjectiveCostSecondRoll() throws IloException {
 		for (int firstRoll1 = 1; firstRoll1 <= numSides; firstRoll1++) {
-		for (int firstRoll2 = 1; firstRoll2 <= numSides; firstRoll2++) {
 		for (int secondRoll1 = 1; secondRoll1 <= numSides; secondRoll1++) {
+		for (int firstRoll2 = 1; firstRoll2 <= numSides; firstRoll2++) {
 		for (int secondRoll2 = 1; secondRoll2 <= numSides; secondRoll2++) {
-		for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
 			double cost = computeCostOfAbstractingSecondRollPair(firstRoll1, firstRoll2, secondRoll1, secondRoll2);
-			//objective.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
-			IloLinearNumExpr expr = cplex.linearNumExpr();
-			expr.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
-			expr.addTerm(cost, secondRollAbstractionVariables[firstRoll2][secondRoll2][bucket]);
-			expr.setConstant(-cost);
-			cplex.addLe(expr, costVariablesSecondRoll[firstRoll1][secondRoll1]);
-			cplex.addLe(expr, costVariablesSecondRoll[firstRoll2][secondRoll2]);
-		}}}}}		
+			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
+			
+				//objective.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
+				IloLinearNumExpr expr = cplex.linearNumExpr();
+				expr.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
+				expr.addTerm(cost, secondRollAbstractionVariables[firstRoll2][secondRoll2][bucket]);
+				expr.setConstant(-cost);
+				cplex.addLe(expr, costVariablesSecondRoll[firstRoll1][secondRoll1]);
+				cplex.addLe(expr, costVariablesSecondRoll[firstRoll2][secondRoll2]);
+			}
+		}}}}		
 	}
 	
 	private double computeCostOfAbstractingSecondRollPair(int firstRoll1, int firstRoll2, int secondRoll1, int secondRoll2) {
+		return computePayoffErrorCostOfAbstractingSecondRollPair(firstRoll1, firstRoll2, secondRoll1, secondRoll2) + computeNatureErrorCostOfAbstractingSecondRollPair(firstRoll1, firstRoll2, secondRoll1, secondRoll2);
+	}
+	
+	private double computePayoffErrorCostOfAbstractingSecondRollPair(int firstRoll1, int firstRoll2, int secondRoll1, int secondRoll2) {
 		double sum1 = firstRoll1 + secondRoll1;
 		double sum2 = firstRoll2 + secondRoll2;
-		if (sum1 == sum2) { // if the information sets have the same sum, then abstracting them is lossless
+		if (sum1 == sum2) { // if the information sets have the same sum, then abstracting them is lossless from a payoff error perspective
 			return 0;
 		}
 		
@@ -198,10 +210,10 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		double higher = Math.max(sum1, sum2);		
 		double error = 0;
 		
-		for (int opponentRoll1 = 1; opponentRoll1 <= numSides; opponentRoll1++) {
-		for (int opponentRoll2 = 1; opponentRoll2 <= numSides; opponentRoll2++) {
+		for (int opponentFirstRoll = 1; opponentFirstRoll <= numSides; opponentFirstRoll++) {
+		for (int opponentSecondRoll = 1; opponentSecondRoll <= numSides; opponentSecondRoll++) {
 			double probabilityOfSingleRoll = sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1]; 
-			int sum = opponentRoll1 + opponentRoll2;
+			int sum = opponentFirstRoll + opponentSecondRoll;
 			// if the opponent hand draws with one and wins or loses against the other, we have a swing of largestPayoff, if it beats one and loses to the other, we have a swing of 2 * largestPayoff
 			double offValue = (sum == lower || sum == higher ? 1 : 0) + (sum > lower && sum < higher ? 2: 0); 
 			error += probabilityOfSingleRoll * 2 * offValue * game.getLargestPayoff();
@@ -210,12 +222,36 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		
 		return error * sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1];
 	}
+	
+	private double computeNatureErrorCostOfAbstractingSecondRollPair(int firstRollInfoSet1, int firstRollInfoSet2, int secondRollInfoSet1, int secondRollInfoSet2) {
+		double error = 0;
+		for (int opponentFirstRoll = 1; opponentFirstRoll <= numSides; opponentFirstRoll++) {
+		for (int opponentSecondRoll = 1; opponentSecondRoll <= numSides; opponentSecondRoll++) {
+			double probabilityFirstRollInformationSet1 = (1.0 / numSides - rollDistanceError * Math.abs(firstRollInfoSet1 - opponentFirstRoll)) / computeNormalizationFactor(firstRollInfoSet1); 
+			double probabilityFirstRollInformationSet2 = (1.0 / numSides - rollDistanceError * Math.abs(firstRollInfoSet2 - opponentFirstRoll)) / computeNormalizationFactor(firstRollInfoSet2); 
+			double probabilitySecondRollInformationSet1 = (1.0 / numSides - rollDistanceError * Math.abs(secondRollInfoSet1 - opponentSecondRoll)) / computeNormalizationFactor(secondRollInfoSet1); 
+			double probabilitySecondRollInformationSet2 = (1.0 / numSides - rollDistanceError * Math.abs(secondRollInfoSet2 - opponentSecondRoll)) / computeNormalizationFactor(secondRollInfoSet2);
+			
+			error += Math.abs(probabilityFirstRollInformationSet1 * probabilitySecondRollInformationSet1 - probabilityFirstRollInformationSet2 * probabilitySecondRollInformationSet2);
+		}}
+		return sideProbabilities[firstRollInfoSet1] * sideProbabilities[secondRollInfoSet1] * error * 2*game.getLargestPayoff();
+	}
 
+	private double computeNormalizationFactor(int roll) {
+		double factor = 1;
+		for (int side = 1; side <= numSides; side++) {
+			factor -= rollDistanceError * Math.abs(roll - side);
+		}
+		return factor;
+	}
+	
 	private void addCostsToObjective() throws IloException {
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
 		for (int bucket = 0; bucket <= numAbstractionInformationSets; bucket++) {
-			objective.addTerm(1, costVariablesSecondRoll[firstRoll][secondRoll]);
+			//if (firstRoll != secondRoll) {
+				objective.addTerm(1, costVariablesSecondRoll[firstRoll][secondRoll]);
+			//}
 		}}}
 	}
 	

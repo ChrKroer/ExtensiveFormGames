@@ -56,8 +56,41 @@ public class TestDieRollPokerAbstractor {
 			List<Integer> abstractSignals = abstraction.getAbstractSignalsById(signals);
 			assertEquals(firstRoll+secondRoll-2, abstractSignals.get(0) + abstractSignals.get(1));
 		}}
-		
+	}
+	
+	@Test
+	public void testDRP3LossyAbstractionSize1() {
+		int numSides = 3;
+		SignalAbstraction abstraction = getDRPLossyAbstraction(dieRollPoker3Private, numSides, 1);
+		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
+		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
+			List<Integer> signals = new ArrayList<Integer>(Arrays.asList(firstRoll-1, secondRoll-1));
+			List<Integer> abstractSignals = abstraction.getAbstractSignalsById(signals);
+			assertEquals(0, abstractSignals.get(0) + abstractSignals.get(1));
+		}}
+	}
 
+	@Test
+	public void testDRP3LossyAbstractionSize3() {
+		int numSides = 3;
+		SignalAbstraction abstraction = getDRPLossyAbstraction(dieRollPoker3Private, numSides, 3);
+		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
+		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
+			List<Integer> signals = new ArrayList<Integer>(Arrays.asList(firstRoll-1, secondRoll-1));
+			List<Integer> abstractSignals = abstraction.getAbstractSignalsById(signals);
+			assertEquals(0, abstractSignals.get(0) + abstractSignals.get(1));
+		}}
+	}
+
+	private SignalAbstraction getDRPLossyAbstraction(Game game, int numSides, int numBuckets) {
+		DieRollPokerAbstractor abstractor = new DieRollPokerAbstractor(game, numSides, numBuckets);
+		abstractor.writeModelToFile(TestConfiguration.lpModelsFolder + "drp" + numSides + "-private-abstraction.lp");
+		
+		abstractor.solveModel();
+		double value = abstractor.getObjectiveValue();
+		
+		SignalAbstraction abstraction = abstractor.getAbstraction();
+		return abstraction;
 		
 	}
 }
