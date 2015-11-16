@@ -10,6 +10,7 @@ import gnu.trove.map.TIntDoubleMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
 
 public class CounterFactualRegretSolver extends ZeroSumGameSolver {
+	int numNodesTouched;
 	int nature = 0;
 	int player1 = 1;
 	int player2 = 2;
@@ -24,6 +25,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 
 	public CounterFactualRegretSolver (GameGenerator game) {
 		super(game);
+		setNumNodesTouched(0); // this is set in the constructor to signify that it changes as we run more iterations
 		initializeDataStructures();
 	}
 
@@ -48,6 +50,11 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		
 	}
 
+	@Override
+	public double getValueOfGame() {
+		return game.computeGameValueForStrategies(getStrategyProfile());
+	}
+	
 //	@Override
 //	public TObjectDoubleMap<String>[] getInformationSetActionProbabilities() {
 //		int numInformationSets = 1; 
@@ -187,7 +194,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	public void runCFR(int iterations) {
 		totalIterationsRun += iterations;
 		// TODO update existing averagedStrategy
-		for (int iteration = 1; iteration < iterations; iteration++) {
+		for (int iteration = 0; iteration < iterations; iteration++) {
 			Arrays.fill(informationSetProbabilityForPlayer[1], 0);
 			Arrays.fill(informationSetProbabilityForPlayer[2], 0);
 			GameState gs = game.getInitialGameState();
@@ -204,6 +211,7 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 	 * @return
 	 */
 	private double traverseGameState(GameState gs) {
+		numNodesTouched++;
 		if (gs.isLeaf()) {
 			return gs.getValue();
 		} else if (gs.getCurrentPlayer() == nature){
@@ -318,6 +326,14 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 			return currentStrategy[gs.getCurrentPlayer()][gs.getCurrentInformationSetId()][action];
 		}
 		return 0; // failure
+	}
+
+	public int getNumNodesTouched() {
+		return numNodesTouched;
+	}
+
+	public void setNumNodesTouched(int numNodesTouched) {
+		this.numNodesTouched = numNodesTouched;
 	}
 
 }

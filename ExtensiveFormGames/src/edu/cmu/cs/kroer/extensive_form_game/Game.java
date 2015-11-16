@@ -42,6 +42,10 @@ public class Game implements GameGenerator {
 		public int hashCode() {
 			return name.hashCode();
 		}
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 	public class Node {
 		private int nodeId;
@@ -96,6 +100,10 @@ public class Game implements GameGenerator {
 		}
 		public boolean isLeaf() {
 			return player == -2;
+		}
+		@Override
+		public String toString() {
+			return name;
 		}
 	}
 	
@@ -192,6 +200,9 @@ public class Game implements GameGenerator {
 			abstractActions.addAll(observedPlayerActions);
 			int abstractInformationSetId = observedActionsToInformationSetId[node.getPlayer()].get(abstractActions);
 			node.setAbstractInformationSet(abstractInformationSetId);
+			if (node.getInformationSet() != abstractInformationSetId) {
+				int t = 1;
+			}
 			abstraction[node.getPlayer()][node.getInformationSet()] = abstractInformationSetId;
 		}
 		for (Action action : node.getActions()) {
@@ -466,13 +477,12 @@ public class Game implements GameGenerator {
 			Action action = new Action();
 			action.name = line[3+3*i];
 			action.childId = Integer.parseInt(line[4+3*i]);
-			action.rem = Integer.parseInt(line[5+3*i]);
-			sum += action.rem;
+			action.probability = Double.parseDouble(line[5+3*i]);
+			sum += action.probability;
 			node.actions[i] = action;			
 		}
-		// update probability field to be an actual probability distribution. rem specifies probabilities as integers
 		for (int i = 0; i < numActions; i++) {
-			node.actions[i].probability = (double) node.actions[i].rem / sum;
+			node.actions[i].probability = (double) node.actions[i].probability / sum;
 		}
 		// the root node is the empty history
 		if (node.name.equals("/")) {
@@ -904,19 +914,22 @@ public class Game implements GameGenerator {
 		return biggestPayoff;
 	}
 	
+	@Override
+	public String toString(){
+		return recursiveToString(getRoot(), "");
+	}
 	
+	private String recursiveToString(int nodeId, String prefix) {
+		Node node = getNodeById(nodeId);
+		String stringRep = prefix + node.getName();
+		if (node.isLeaf()) return stringRep;
+		for (Action action : node.getActions()) {
+			stringRep += " " + action;
+		}
+		stringRep += "\n";
+		for (Action action : node.getActions()) {
+			stringRep += recursiveToString(action.getChildId(), prefix+" ");
+		}
+		return stringRep;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

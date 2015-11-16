@@ -39,15 +39,29 @@ public class CorrelatedDrpExperimentRunner {
                                 .setRequired(true) 
                                 .setShortFlag('i') 
                                 .setLongFlag(JSAP.NO_LONGFLAG);
+		FlaggedOption gameFolder = new FlaggedOption("game_folder")
+                                .setStringParser(JSAP.STRING_PARSER)
+                                .setDefault(TestConfiguration.correlatedDrpGamesFolder) 
+                                .setShortFlag('f') 
+                                .setLongFlag(JSAP.NO_LONGFLAG);
         Switch computeAbstractionValueOption = new Switch("compute_abstraction_value")
                         .setShortFlag('v')
                         .setLongFlag(JSAP.NO_LONGFLAG);
+        FlaggedOption numAbstractRollsOption = new FlaggedOption("num_abstract_rolls")
+                                .setStringParser(JSAP.INTEGER_PARSER)
+                                .setDefault("100") 
+                                .setRequired(true) 
+                                .setShortFlag('a') 
+                                .setLongFlag(JSAP.NO_LONGFLAG);
+
         try {
 			jsap.registerParameter(numSidesOption);
 			jsap.registerParameter(distanceErrorOption);
 			jsap.registerParameter(numRoundsOption);
 			jsap.registerParameter(numIterationsPerRoundOption);
+			jsap.registerParameter(gameFolder);
 			jsap.registerParameter(computeAbstractionValueOption);
+			jsap.registerParameter(numAbstractRollsOption);
 		} catch (JSAPException e) {
 			e.printStackTrace();
 		}
@@ -55,10 +69,11 @@ public class CorrelatedDrpExperimentRunner {
         JSAPResult config = jsap.parse(args);    
 
 		Game drpGame = new Game();
-		drpGame.createGameFromFileZerosumPackageFormat(TestConfiguration.correlatedDrpGamesFolder + "correlated_drp_"+ config.getInt("num_sides") + "sided_point" + Double.toString(config.getDouble("distance_error")).split("\\.")[1] + "error.txt");
+		drpGame.createGameFromFileZerosumPackageFormat(config.getString("game_folder")+ "correlated_drp_"+ config.getInt("num_sides") + "sided_point" + Double.toString(config.getDouble("distance_error")).split("\\.")[1] + "error.txt");
 
 		if (config.getBoolean("compute_abstraction_value")) {
-			getCorrelatedDRPAbstractionValue(drpGame, config.getInt("num_sides"), config.getDouble("distance_error"), config.getInt("num_abstract_rolls"));
+			double value = getCorrelatedDRPAbstractionValue(drpGame, config.getInt("num_sides"), config.getDouble("distance_error"), config.getInt("num_abstract_rolls"));
+			System.out.printf("%.2f\t%.3f\n", config.getDouble("distance_error"), value);
 		} else {
 			solveCorrelatedDieRollPokerPrivate(drpGame, config.getInt("num_sides"), config.getDouble("distance_error"), config.getInt("num_rounds"), config.getInt("num_iterations_per_round"));
 		}
@@ -75,9 +90,13 @@ public class CorrelatedDrpExperimentRunner {
 //		equilibriumSolver.solveGame();
 //		double[][] p1Strategy = equilibriumSolver.getStrategyProfile()[1];
 
-		
-		for (int i = 0; i < numRounds; i++) {
-			cfrSolver.runCFR(numCFRIterationsPerRound);
+		int numIterations = 0;
+		for (double i = 0.25; i <= numRounds; i+=0.25) {
+			//System.out.println("NumIterations: " + ((int)Math.pow(10, i) - numIterations));
+			cfrSolver.runCFR((int)Math.pow(10, i) - numIterations);
+			
+			numIterations += (int)Math.pow(10, i) - numIterations;
+			
 			double[][][] strategyProfile = cfrSolver.getStrategyProfile();
 
 			BestResponseLPSolver brSolverP1 = new BestResponseLPSolver(drpGame, 1, strategyProfile[2]);
@@ -86,8 +105,13 @@ public class CorrelatedDrpExperimentRunner {
 			BestResponseLPSolver brSolverP2 = new BestResponseLPSolver(drpGame, 2, strategyProfile[1]);
 			brSolverP2.solveGame();
 			
+			double cfrGameValue = cfrSolver.getValueOfGame();
+			double brP1Value = brSolverP1.getValueOfGame();
+			double brP2Value = brSolverP2.getValueOfGame();
+			double regretP1 = brP1Value - cfrGameValue;
+			double regretP2 = cfrGameValue - brP2Value;
 			
-			System.out.printf("%d\t%d\t%.3f\t%.3f\t%.3f\n", cfrSolver.getNumNodesTouched(), numCFRIterationsPerRound * (i+1), cfrSolver.getValueOfGame(), brSolverP1.getValueOfGame(), brSolverP2.getValueOfGame());
+			System.out.printf("%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n", cfrSolver.getNumNodesTouched(), numIterations, cfrGameValue, brP1Value, brP2Value, regretP1, regretP2, regretP1+regretP2);
 		}
 	}
 	

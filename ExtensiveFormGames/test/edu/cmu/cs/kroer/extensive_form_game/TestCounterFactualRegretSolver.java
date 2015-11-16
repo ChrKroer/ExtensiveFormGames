@@ -11,6 +11,7 @@ import edu.cmu.cs.kroer.extensive_form_game.abstraction.DieRollPokerAbstractor;
 import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
 import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
 import edu.cmu.cs.kroer.extensive_form_game.solver.CounterFactualRegretSolver;
+import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
 import gnu.trove.map.TIntDoubleMap;
 
 public class TestCounterFactualRegretSolver {
@@ -32,6 +33,7 @@ public class TestCounterFactualRegretSolver {
 	Game dieRollPoker2Private;
 	Game dieRollPoker3Private;
 	Game dieRollPoker6Private;
+	Game correlatedDieRollPoker3Private; 
 
 	
 	@Before
@@ -83,6 +85,9 @@ public class TestCounterFactualRegretSolver {
 
 		dieRollPoker6Private = new Game();
 		dieRollPoker6Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-6_private.txt");
+
+//		correlatedDieRollPoker3Private = new Game();
+//		correlatedDieRollPoker3Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "correlated_drp_private_3sided_point01error.txt");
 
 	}
 
@@ -312,71 +317,95 @@ public class TestCounterFactualRegretSolver {
 	}
 	
 	@Test
-	public void testSolveDieRollPoker2PrivateLosslessAbstraction() {
+	public void testSolveDieRollPoker2PrivateLosslesstAbstraction() {
 		Game game = new Game();
 		game.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-2_private.txt");
 		
-		testSolveDieRollPokerPrivateLosslessAbstraction(game, 2, 10000, TestConfiguration.drp2PrivateValueOfGame, 0.001);
+		testSolveDieRollPokerPrivateLosslessAbstraction(game, 2, 100000, TestConfiguration.drp2PrivateValueOfGame, 0.001);
 	}
 
-	//	
-//	@Test
-//	public void testDRP3Convergence() {
-//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker3);
-//		//solver.solveGame(10);
-//
-//		solver.runCFR(100000);
-//		System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
-//		System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
-//
-//		double[][][] strategyProfile = solver.getStrategyProfile();
-//		
-//		double computedValue = dieRollPoker3.computeGameValueForStrategies(strategyProfile);
-//		
-//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp3ValueOfGame);
-//		
-//		assertEquals(TestConfiguration.drp3ValueOfGame, computedValue, TestConfiguration.epsilon);
-//	}
 
-//	@Test
-//	public void testDRP3ConvergenceWithBestResponse() {
-//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker3);
-//		//solver.solveGame(10);
-//
-//		solver.runCFR(100000);
-//		//System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
-//		//System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
-//
-//		double[][][] strategyProfile = solver.getStrategyProfile();
-//		
-//		//double computedValue = dieRollPoker3.computeGameValueForStrategies(strategyProfile);
-//		BestResponseLPSolver brSolver = new BestResponseLPSolver(dieRollPoker3, 1, strategyProfile[2]);
-//		brSolver.solveGame();
-//		double computedValue = brSolver.getValueOfGame();
-//		
-//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp3ValueOfGame);
-//		
-//		assertEquals(TestConfiguration.drp3ValueOfGame, computedValue, TestConfiguration.epsilon);
-//	}
+
+	@Test
+	public void testSolveCorrelatedDieRollPokerPrivate2sides() {
+		Game drpGame = new Game();
+		drpGame.createGameFromFileZerosumPackageFormat(TestConfiguration.correlatedDrpGamesFolder + "correlated_drp_2sided_point01error.txt");
+
+		testSolveCorrelatedDieRollPokerPrivate(drpGame, 2, 0.1, 100, 2000);
+	}
+
+	@Test
+	public void testSolveCorrelatedDieRollPokerPrivate3sides01error() {
+		Game drpGame = new Game();
+		drpGame.createGameFromFileZerosumPackageFormat(TestConfiguration.correlatedDrpGamesFolder + "correlated_drp_3sided_point01error.txt");
+
+		testSolveCorrelatedDieRollPokerPrivate(drpGame, 3, 0.1, 100, 2000);
+	}
 	
+	@Test
+	public void testSolveCorrelatedDieRollPokerPrivate3sides001error() {
+		Game drpGame = new Game();
+		drpGame.createGameFromFileZerosumPackageFormat(TestConfiguration.correlatedDrpGamesFolder + "correlated_drp_3sided_point01error.txt");
+
+		testSolveCorrelatedDieRollPokerPrivate(drpGame, 3, 0.01, 100, 2000);
+	}
 	
-//	@Test
-//	public void testDRP6Convergence() {
-//		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(dieRollPoker6);
-//		//solver.solveGame(10);
-//
-//		solver.runCFR(1000000);
-//		System.out.print(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(1)) + " + ");
-//		System.out.println(Arrays.toString(solver.getInformationSetActionProbabilitiesByActionId(2)));
-//
-//		double[][][] strategyProfile = solver.getStrategyProfile();
-//		
-//		double computedValue = dieRollPoker6.computeGameValueForStrategies(strategyProfile);
-//		
-//		System.out.println("EV: " + computedValue + ", value of game: " + TestConfiguration.drp6ValueOfGame);
-//		
-//		assertEquals(TestConfiguration.drp6ValueOfGame, computedValue, TestConfiguration.epsilon);
-//	}
+	public void testSolveCorrelatedDieRollPokerPrivate(Game drpGame, int numSides, double error, int numRounds, int numCFRIterationsPerRound) {
+		SignalAbstraction abstraction = getCorrelatedDRPAbstraction(drpGame, numSides, error);
+		drpGame.applySignalAbstraction(abstraction);
+		
+		CounterFactualRegretSolver cfrSolver = new CounterFactualRegretSolver(drpGame);
+		
+		// TODO: LP solver strategy for debugging purposes
+//		SequenceFormLPSolver equilibriumSolver = new SequenceFormLPSolver(drpGame, 1);
+//		equilibriumSolver.solveGame();
+//		double[][] p1Strategy = equilibriumSolver.getStrategyProfile()[1];
+
+		
+		for (int i = 0; i < numRounds; i++) {
+			cfrSolver.runCFR(numCFRIterationsPerRound);
+			double[][][] strategyProfile = cfrSolver.getStrategyProfile();
+
+			BestResponseLPSolver brSolverP1 = new BestResponseLPSolver(drpGame, 1, strategyProfile[2]);
+			brSolverP1.solveGame();
+			
+			BestResponseLPSolver brSolverP2 = new BestResponseLPSolver(drpGame, 2, strategyProfile[1]);
+			brSolverP2.solveGame();
+			
+			
+			System.out.printf("%d\t%d\t%.3f\t%.3f\t%.3f\n", cfrSolver.getNumNodesTouched(), numCFRIterationsPerRound * (i+1), cfrSolver.getValueOfGame(), brSolverP1.getValueOfGame(), brSolverP2.getValueOfGame());
+		}
+	}
+	
+	private SignalAbstraction getCorrelatedDRPAbstraction(Game game, int numSides, double rollDistanceError) {
+		DieRollPokerAbstractor abstractor = new DieRollPokerAbstractor(game, numSides, 2*numSides - 1, rollDistanceError); // lossless size if there were no nature error
+		abstractor.writeModelToFile(TestConfiguration.lpModelsFolder + "drp" + numSides + "-private-abstraction.lp");
+		
+		abstractor.solveModel();
+		double value = abstractor.getObjectiveValue();
+		//System.out.println("Abstraction value: " + value);
+		return abstractor.getAbstraction();
+	}
+
+	public void printGameConvergence(Game game, double gameValue, int iterations, double epsilon) {
+		CounterFactualRegretSolver solver = new CounterFactualRegretSolver(game);
+		//solver.solveGame(10);
+		
+		solver.runCFR(iterations);
+
+		double[][][] strategyProfile = solver.getStrategyProfile();
+		
+		BestResponseLPSolver brSolver = new BestResponseLPSolver(game, 1, strategyProfile[2]);
+		brSolver.solveGame();
+		assertEquals(gameValue, brSolver.getValueOfGame(), epsilon);
+		
+		brSolver = new BestResponseLPSolver(game, 2, strategyProfile[1]);
+		brSolver.solveGame();
+		assertEquals(gameValue, -brSolver.getValueOfGame(), epsilon);
+
+		
+		assertEquals(gameValue, game.computeGameValueForStrategies(strategyProfile), epsilon);
+	}
 	
 }
 

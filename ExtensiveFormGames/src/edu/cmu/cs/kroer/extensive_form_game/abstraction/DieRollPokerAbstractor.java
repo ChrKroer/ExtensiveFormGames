@@ -24,6 +24,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 
 	GameGenerator game;
 	int numSides;
+	int numLevelsPerRoll = 3; // DRP always has at most six information levels for Player 1, no matter the number of possible rolls
 	int numAbstractionInformationSets;
 	double[] sideProbabilities;
 	double rollDistanceError = 0; // default value is that there is no correlation between rolls 
@@ -65,6 +66,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			//createFirstRollImplicationConstraints();
 			addObjectiveCostSecondRoll();
 			addCostsToObjective();
+			//createTieBreakingConstraints();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -156,6 +158,21 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		}}
 	}
 
+	private void createTieBreakingConstraints() throws IloException{
+		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
+		for (int secondRoll = 2; secondRoll <= numSides; secondRoll++) { // start at 2 so previous roll exists
+			for (int bucket = 1; bucket < numAbstractionInformationSets; bucket++) { // only constrain second bucket and higher
+				IloLinearNumExpr expr = cplex.linearNumExpr();
+				expr.addTerm(1, secondRollAbstractionVariables[firstRoll][secondRoll][bucket]);
+				for (int previousFirstRoll = 1; previousFirstRoll < firstRoll; previousFirstRoll++) {
+				for (int previousSecondRoll = 1; previousSecondRoll < secondRoll; previousSecondRoll++) {
+					expr.addTerm(-1, secondRollAbstractionVariables[previousFirstRoll][previousSecondRoll][bucket-1]);
+				}}
+				cplex.addLe(expr, 0);
+			}
+		}}
+	}
+	
 	private void createFirstRollAbstractionVars() throws IloException {
 		for (int side = 1; side <= numSides; side++) {
 			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
@@ -219,7 +236,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			error += probabilityOfSingleRoll * 2 * offValue * game.getLargestPayoff();
 			error += 2 * offValue * Math.abs(sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1] - sideProbabilities[firstRoll2] * sideProbabilities[secondRoll2]);
 		}}
-		
+		// this multiplies by node probability
 		return error * sideProbabilities[firstRoll1] * sideProbabilities[secondRoll1];
 	}
 	
@@ -232,9 +249,13 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			double probabilitySecondRollInformationSet1 = (1.0 / numSides - rollDistanceError * Math.abs(secondRollInfoSet1 - opponentSecondRoll)) / computeNormalizationFactor(secondRollInfoSet1); 
 			double probabilitySecondRollInformationSet2 = (1.0 / numSides - rollDistanceError * Math.abs(secondRollInfoSet2 - opponentSecondRoll)) / computeNormalizationFactor(secondRollInfoSet2);
 			
+			double nodeProbabilityInfoSet1 = probabilityFirstRollInformationSet1 * probabilitySecondRollInformationSet1;
+			double nodeProbabilityInfoSet2 = probabilityFirstRollInformationSet2 * probabilitySecondRollInformationSet2;
+			
 			error += Math.abs(probabilityFirstRollInformationSet1 * probabilitySecondRollInformationSet1 - probabilityFirstRollInformationSet2 * probabilitySecondRollInformationSet2);
 		}}
-		return sideProbabilities[firstRollInfoSet1] * sideProbabilities[secondRollInfoSet1] * error * 2*game.getLargestPayoff();
+		// this multiplies by node probability
+		return sideProbabilities[firstRollInfoSet1] * sideProbabilities[secondRollInfoSet1] * error * 2*game.getLargestPayoff() * numLevelsPerRoll;
 	}
 
 	private double computeNormalizationFactor(int roll) {
@@ -248,9 +269,9 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 	private void addCostsToObjective() throws IloException {
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
-		for (int bucket = 0; bucket <= numAbstractionInformationSets; bucket++) {
-			objective.addTerm(1, costVariablesSecondRoll[firstRoll][secondRoll]);
-		}}}
+		//for (int bucket = 0; bucket <= numAbstractionInformationSets; bucket++) {
+			objective.addTerm(1.0 / (numSides*numSides), costVariablesSecondRoll[firstRoll][secondRoll]);
+		}}
 	}
 	
 	private void addBucketLevelSwitchConstraint(IloIntVar var, int bucket, boolean isPublic) throws IloException {

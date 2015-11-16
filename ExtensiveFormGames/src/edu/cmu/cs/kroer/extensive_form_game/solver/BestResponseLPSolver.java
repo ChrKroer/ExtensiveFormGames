@@ -146,7 +146,7 @@ public class BestResponseLPSolver extends ZeroSumGameSolver {
 					cplex.getValue(v);
 				}*/
 				strategyVars = cplex.getValues(strategyVarsBySequenceId);
-				valueOfGame = cplex.getObjValue();
+				valueOfGame = playerToSolveFor == player1 ? cplex.getObjValue() : -cplex.getObjValue();
 			}
 		} catch (IloException e) {
 			e.printStackTrace();
@@ -296,7 +296,7 @@ public class BestResponseLPSolver extends ZeroSumGameSolver {
 		try {
 			System.out.println("Solve status: " + cplex.getStatus());
 			if	(cplex.getStatus() == IloCplex.Status.Optimal) {
-				System.out.println("Objective value: " + this.valueOfGame);
+				System.out.println("Objective value: " + this.getValueOfGame());
 			} 				
 		} catch (IloException e) {
 			e.printStackTrace();

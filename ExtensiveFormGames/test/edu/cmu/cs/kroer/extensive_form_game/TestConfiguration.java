@@ -5,10 +5,12 @@ public final class TestConfiguration {
 	static final String gamesFolder = "/Users/ckroer/Documents/research/zerosum/games/";
 	// Specifies where game instance files in the zerosum package format are located
 	static final String zerosumGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
+	// Specifies where game instances for correlated drp are located
+	static final String correlatedDrpGamesFolder = zerosumGamesFolder + "correlated_drp_games/";	
 	// Specifies where to save LP models. Each test case dumps its LP model to a file in the specified folder
 	static final String lpModelsFolder = "/Users/ckroer/Documents/research/lp-models/";
 	// Epsilon value for precision of CPLEX
-	static double epsilon = 0.001;
+	static double epsilon = 0.02;
 	
 	static final double miniKuhnValueOfGame = 0.5;
 	static final double kuhnValueOfGame = -0.0555556;

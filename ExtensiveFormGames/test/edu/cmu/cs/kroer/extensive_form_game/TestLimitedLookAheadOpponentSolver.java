@@ -1,6 +1,9 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
 import ilog.concert.IloException;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -248,17 +251,19 @@ public class TestLimitedLookAheadOpponentSolver {
 		
 		// get negated expected values
 		double[] nodeEvaluationTable = kuhnGame.getExpectedValuesForNodes(strategyP1, strategyP2, true);
-
+		System.out.println(Arrays.toString(nodeEvaluationTable));
 		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
-		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(kuhnGame, 1, nodeEvaluationTable, 100);
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(kuhnGame, 1, nodeEvaluationTable, 1);
 		//solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibrium-kuhn-limited-look-ahead.lp");
 		solver.solveGame();
+		System.out.println(kuhnGame);
+		solver.printStrategyVarsAndGameValue();
 		assertEquals(solverP1.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
 	}	
 
 	@Test
-	public void testEquilibriumEvalutationtKuhnP2() {
+	public void testEquilibriumEvalutationKuhnP2() {
 		Game kuhnGame = new Game();
 		kuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "kuhn.txt");
 
@@ -275,7 +280,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		double[] nodeEvaluationTable = kuhnGame.getExpectedValuesForNodes(strategyP1, strategyP2, false);
 
 		// Compute the best strategy to commit to when the limited look-ahead player knows how much can be achieved from a node in (some) equilibrium
-		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(kuhnGame, 2, nodeEvaluationTable, 3);
+		LimitedLookAheadOpponentSolver solver = new LimitedLookAheadOpponentSolver(kuhnGame, 2, nodeEvaluationTable, 1);
 		//solver.writeModelToFile(TestConfiguration.lpModelsFolder + "kuhnp1-limited-look-ahead.lp");
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "equilibrium-kuhnp2-limited-look-ahead.lp");
 		solver.solveGame();
