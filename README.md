@@ -24,4 +24,11 @@ References
 `SequenceFormLPSolver` is an implementation of the sequence form linear program described in:
 Efficient Computation of Behavior Strategies. Bernhard von Stengel. In _Games and Economic Behavior_, 1996
 
+`CounterFactualRegretSolver` is an implementation of the CFR algorithm described in:
+Regret Minimization in Games with Incomplete Information. Martin Zinkevich, Michael Johanson, Michael Bowling, and Carmelo Piccione. In _NIPS_, 2007
 
+`OpponentSamplingCFR` is an implementation of one of the Monte-Carlo-based CFR algorithms described in:
+Monte Carlo Sampling for Regret Minimization in Extensive Games. Marc Lanctot, Kevin Waugh, Martin Zinkevich, and Michael Bowling. In _NIPS_, 2009
+
+`LimitedLookAheadOpponentSolver` is an implementation of the adversarial-case algorithm described in:
+Limited Lookahead in Imperfect-Information Games. Christian Kroer and Tuomas Sandholm. In _IJCAI_, 2015
