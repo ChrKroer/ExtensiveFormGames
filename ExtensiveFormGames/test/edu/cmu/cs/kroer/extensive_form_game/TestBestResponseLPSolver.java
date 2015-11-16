@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
-import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
+import extensive_form_game.Game;
+import extensive_form_game_solver.BestResponseLPSolver;
+import extensive_form_game_solver.SequenceFormLPSolver;
 
 public class TestBestResponseLPSolver {
 	Game miniKuhnGame;

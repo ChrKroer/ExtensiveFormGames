@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game;
+import extensive_form_game.Game;
 
 
 public class TestGameClass {

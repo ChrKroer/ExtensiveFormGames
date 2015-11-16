@@ -1,12 +1,12 @@
-package edu.cmu.cs.kroer.extensive_form_game.solver;
+package extensive_form_game_solver;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game;
-import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
-import edu.cmu.cs.kroer.extensive_form_game.Game.Node;
+import extensive_form_game.Game;
+import extensive_form_game.Game.Action;
+import extensive_form_game.Game.Node;
 import gnu.trove.iterator.TIntDoubleIterator;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;

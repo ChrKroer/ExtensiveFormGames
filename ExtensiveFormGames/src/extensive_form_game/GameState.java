@@ -1,4 +1,4 @@
-package edu.cmu.cs.kroer.extensive_form_game;
+package extensive_form_game;
 
 import gnu.trove.list.TDoubleList;
 import gnu.trove.list.TIntList;

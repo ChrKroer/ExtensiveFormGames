@@ -1,4 +1,4 @@
-package edu.cmu.cs.kroer.extensive_form_game.abstraction;
+package extensive_form_game_abstraction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

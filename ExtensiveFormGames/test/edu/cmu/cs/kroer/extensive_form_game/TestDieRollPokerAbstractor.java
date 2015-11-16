@@ -9,8 +9,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.DieRollPokerAbstractor;
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
+import extensive_form_game.Game;
+import extensive_form_game_abstraction.DieRollPokerAbstractor;
+import extensive_form_game_abstraction.SignalAbstraction;
 
 
 /*

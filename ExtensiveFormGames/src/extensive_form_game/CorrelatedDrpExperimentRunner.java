@@ -1,4 +1,4 @@
-package edu.cmu.cs.kroer.extensive_form_game;
+package extensive_form_game;
 
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -6,10 +6,11 @@ import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.DieRollPokerAbstractor;
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
-import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
-import edu.cmu.cs.kroer.extensive_form_game.solver.CounterFactualRegretSolver;
+import edu.cmu.cs.kroer.extensive_form_game.TestConfiguration;
+import extensive_form_game_abstraction.DieRollPokerAbstractor;
+import extensive_form_game_abstraction.SignalAbstraction;
+import extensive_form_game_solver.BestResponseLPSolver;
+import extensive_form_game_solver.CounterFactualRegretSolver;
 
 public class CorrelatedDrpExperimentRunner {
 	public static void main(String[] args) {

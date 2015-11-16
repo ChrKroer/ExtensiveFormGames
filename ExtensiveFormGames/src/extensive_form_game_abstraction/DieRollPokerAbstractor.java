@@ -1,17 +1,17 @@
-package edu.cmu.cs.kroer.extensive_form_game.abstraction;
+package extensive_form_game_abstraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import cplex.CplexSolver;
+import extensive_form_game.Game;
+import extensive_form_game.GameGenerator;
 import ilog.concert.IloException;
 import ilog.concert.IloIntExpr;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
-import edu.cmu.cs.kroer.extensive_form_game.Game;
-import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
 
 
 /**

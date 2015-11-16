@@ -1,4 +1,4 @@
-package edu.cmu.cs.kroer.extensive_form_game;
+package extensive_form_game;
 
 
 public interface GameGenerator {

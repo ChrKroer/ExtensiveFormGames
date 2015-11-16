@@ -1,13 +1,13 @@
-package edu.cmu.cs.kroer.extensive_form_game.solver;
+package extensive_form_game_solver;
 
 
 import java.util.Arrays;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game;
-import edu.cmu.cs.kroer.extensive_form_game.GameState;
 import edu.cmu.cs.kroer.extensive_form_game.TestConfiguration;
+import extensive_form_game.Game;
+import extensive_form_game.GameState;
 import gnu.trove.map.TIntDoubleMap;
 import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;

@@ -1,7 +1,7 @@
-package edu.cmu.cs.kroer.extensive_form_game.solver;
+package extensive_form_game_solver;
 
-import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
-import edu.cmu.cs.kroer.extensive_form_game.GameState;
+import extensive_form_game.GameGenerator;
+import extensive_form_game.GameState;
 
 public class BestResponseTreeTraversalSolver extends ZeroSumGameSolver {
 	

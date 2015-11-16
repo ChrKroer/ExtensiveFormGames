@@ -1,4 +1,4 @@
-package edu.cmu.cs.kroer.extensive_form_game;
+package extensive_form_game;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
+import extensive_form_game_abstraction.SignalAbstraction;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.*;
 import gnu.trove.map.hash.TIntIntHashMap;

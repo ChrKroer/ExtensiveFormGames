@@ -1,8 +1,11 @@
-package edu.cmu.cs.kroer.extensive_form_game.solver;
+package extensive_form_game_solver;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
+import extensive_form_game.Game;
+import extensive_form_game.Game.Action;
+import extensive_form_game.Game.Node;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
@@ -14,9 +17,6 @@ import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.concert.IloRange;
 import ilog.cplex.IloCplex.UnknownObjectException;
-import edu.cmu.cs.kroer.extensive_form_game.Game;
-import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
-import edu.cmu.cs.kroer.extensive_form_game.Game.Node;
 
 public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	

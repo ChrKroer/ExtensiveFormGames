@@ -8,8 +8,9 @@ import java.util.Arrays;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.random.MersenneTwister;
 
-import edu.cmu.cs.kroer.extensive_form_game.solver.LimitedLookAheadOpponentSolver;
-import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
+import extensive_form_game.Game;
+import extensive_form_game_solver.LimitedLookAheadOpponentSolver;
+import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
 
 public class Experiments {

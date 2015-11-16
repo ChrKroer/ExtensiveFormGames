@@ -1,6 +1,6 @@
-package edu.cmu.cs.kroer.extensive_form_game.solver;
+package extensive_form_game_solver;
 
-import edu.cmu.cs.kroer.extensive_form_game.GameGenerator;
+import extensive_form_game.GameGenerator;
 import gnu.trove.map.TIntDoubleMap;
 import gnu.trove.map.TObjectDoubleMap;
 

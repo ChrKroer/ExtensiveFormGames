@@ -7,11 +7,12 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.DieRollPokerAbstractor;
-import edu.cmu.cs.kroer.extensive_form_game.abstraction.SignalAbstraction;
-import edu.cmu.cs.kroer.extensive_form_game.solver.BestResponseLPSolver;
-import edu.cmu.cs.kroer.extensive_form_game.solver.CounterFactualRegretSolver;
-import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
+import extensive_form_game.Game;
+import extensive_form_game_abstraction.DieRollPokerAbstractor;
+import extensive_form_game_abstraction.SignalAbstraction;
+import extensive_form_game_solver.BestResponseLPSolver;
+import extensive_form_game_solver.CounterFactualRegretSolver;
+import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TIntDoubleMap;
 
 public class TestCounterFactualRegretSolver {

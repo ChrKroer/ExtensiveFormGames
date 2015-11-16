@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-import edu.cmu.cs.kroer.extensive_form_game.Game.Action;
-import edu.cmu.cs.kroer.extensive_form_game.Game.Node;
-import edu.cmu.cs.kroer.extensive_form_game.solver.SequenceFormLPSolver;
+import extensive_form_game.Game;
+import extensive_form_game.Game.Action;
+import extensive_form_game.Game.Node;
+import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
 
 public class TestSequenceFormLPSolver {
