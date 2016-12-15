@@ -2,9 +2,9 @@ package edu.cmu.cs.kroer.extensive_form_game;
 
 public final class TestConfiguration {
 	// Specifies where game instance files in the new format are located
-	public static final String gamesFolder = "/Users/ckroer/Documents/research/zerosum/games/";
+	public static final String gamesFolder = "/Users/ckroer/Dropbox/research/equilibrium-finding/zerosum/games/";
 	// Specifies where game instance files in the zerosum package format are located
-	public static final String zerosumGamesFolder = "/Users/ckroer/Documents/research/zerosum/original_games/";
+	public static final String zerosumGamesFolder = "/Users/ckroer/Dropbox/research/equilibrium-finding/zerosum/original_games/";
 	// Specifies where game instances for correlated drp are located
 	public static final String correlatedDrpGamesFolder = zerosumGamesFolder + "correlated_drp_games/";	
 	// Specifies where to save LP models. Each test case dumps its LP model to a file in the specified folder

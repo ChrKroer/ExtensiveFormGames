@@ -60,6 +60,10 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
     int[] sequenceIdForNodeP2; // indexed as [nodeId]. Returns the sequenceId of the last sequence belonging to Player 2 on the path to the node.
 
     public SequenceFormLPSolver(Game game, int playerToSolveFor) {
+        this(game, playerToSolveFor, 1e-6);
+    }
+
+    public SequenceFormLPSolver(Game game, int playerToSolveFor, double tol) {
         super(game);
         this.game = game;
         try {
@@ -78,7 +82,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
         //strategyVarsByRealGameSequences = new ArrayList<IloNumVar>();
 
         try {
-            setUpModel();
+            setUpModel(tol);
         } catch (IloException e) {
             e.printStackTrace();
         }
@@ -312,16 +316,20 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
     /**
      * Sets the parameters of CPLEX such that minimal output is produced.
      */
-    private void setCplexParameters() {
+    private void setCplexParameters(double tol) {
         try {
-            cplex.setParam(IloCplex.IntParam.SimDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.MIPDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.MIPInterval, -1);
-            cplex.setParam(IloCplex.IntParam.TuningDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.BarDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.SiftDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.ConflictDisplay, 0);
-            cplex.setParam(IloCplex.IntParam.NetDisplay, 0);
+            cplex.setParam(IloCplex.IntParam.RootAlg, IloCplex.Algorithm.Barrier);
+            cplex.setParam(IloCplex.DoubleParam.EpOpt, tol);
+            cplex.setParam(IloCplex.DoubleParam.BarEpComp, tol);
+            cplex.setParam(IloCplex.IntParam.BarCrossAlg, -1);
+//            cplex.setParam(IloCplex.IntParam.SimDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.MIPDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.MIPInterval, -1);
+//            cplex.setParam(IloCplex.IntParam.TuningDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.BarDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.SiftDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.ConflictDisplay, 0);
+//            cplex.setParam(IloCplex.IntParam.NetDisplay, 0);
             cplex.setParam(IloCplex.DoubleParam.TiLim, 1e+75);
         } catch (IloException e) {
             e.printStackTrace();
@@ -332,8 +340,8 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
      * Builds the LP model based on the game instance.
      * @throws IloException
      */
-    private void setUpModel() throws IloException {
-        setCplexParameters();
+    private void setUpModel(double tol) throws IloException {
+        setCplexParameters(tol);
 
         // The empty sequence is the 0'th sequence for each player
         numSequencesP1 = numSequencesP2 = 1;

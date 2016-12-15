@@ -13,7 +13,7 @@ import extensive_form_game_solver.LimitedLookAheadOpponentSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
 
-public class Experiments {
+public class LimitedLookaheadExperiments {
 
 	public static void main(String[] args) {
 		//runIncreasingLookAheadGameValues(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt", 100, 2, 0.1, 1);

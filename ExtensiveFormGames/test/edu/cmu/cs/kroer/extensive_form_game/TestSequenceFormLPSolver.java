@@ -7,6 +7,7 @@ import org.junit.*;
 import extensive_form_game.Game;
 import extensive_form_game.Game.Action;
 import extensive_form_game.Game.Node;
+import extensive_form_game_solver.BestResponseLPSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
 
@@ -18,6 +19,7 @@ public class TestSequenceFormLPSolver {
 	Game leducKJGame;
 	Game leducKj1RaiseGame;
 	Game leducGame;
+	Game leduc4RaisesGame;
 	Game leducUnabstractedGame;
 	Game stengelGame;
 	Game dieRollPoker3;
@@ -50,6 +52,9 @@ public class TestSequenceFormLPSolver {
 
 		leducGame = new Game();
 		leducGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc.txt");
+
+		leduc4RaisesGame = new Game();
+		leduc4RaisesGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "leduc_4betsizes.txt");
 
 		leducUnabstractedGame = new Game();
 		leducUnabstractedGame.createGameFromFile(TestConfiguration.gamesFolder + "leduc.txt");
@@ -223,6 +228,28 @@ public class TestSequenceFormLPSolver {
 	}
 
 	@Test
+	public void testSolveLeducBig() {
+		SequenceFormLPSolver solver = new SequenceFormLPSolver(leduc4RaisesGame, 1, 0.01);
+		solver.solveGame();
+
+		double[][] p1Strategy = solver.getStrategyProfile()[1];
+		
+		BestResponseLPSolver brSolver = new BestResponseLPSolver(leduc4RaisesGame, 2, p1Strategy);
+		brSolver.solveGame();
+		double gap1 = brSolver.getValueOfGame() - solver.getValueOfGame();
+
+		solver = new SequenceFormLPSolver(leduc4RaisesGame, 1, 0.00000001);
+		solver.solveGame();
+
+		p1Strategy = solver.getStrategyProfile()[1];
+		
+		brSolver = new BestResponseLPSolver(leduc4RaisesGame, 2, p1Strategy);
+		brSolver.solveGame();
+		double gap2 = brSolver.getValueOfGame() - solver.getValueOfGame();
+		System.out.println("Gap1: " + gap1 + ", gap2: " + gap2);
+	}
+
+	@Test
 	public void testSolveStengel() {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(stengelGame, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "stengelP1.lp");
@@ -251,7 +278,7 @@ public class TestSequenceFormLPSolver {
 		SequenceFormLPSolver solver = new SequenceFormLPSolver(dieRollPoker1Private, 1);
 		solver.writeModelToFile(TestConfiguration.lpModelsFolder + "drp1Privatep1.lp");
 		solver.solveGame();
-		assertEquals(TestConfiguration.drp2PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
+		assertEquals(TestConfiguration.drp1PrivateValueOfGame, solver.getValueOfGame(), TestConfiguration.epsilon);
 	}
 
 	@Test

@@ -223,7 +223,7 @@ public class Game implements GameGenerator {
 			in= new CSVReader(new FileReader(filename), ' ', '\'');
 			//in = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			System.out.println("ExtensiveFormGame::CreateGameFromFile: File not found");
+			System.out.println("Game::CreateGameFromFile: File not found");
 			System.out.println("filename: " + filename);
 			System.exit(0);
 		}
@@ -257,7 +257,7 @@ public class Game implements GameGenerator {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("ExtensiveFormGame::CreateGameFromFile: Read exception");
+			System.out.println("Game::CreateGameFromFile: Read exception");
 		}
 		
 	}
@@ -270,7 +270,7 @@ public class Game implements GameGenerator {
 			in= new CSVReader(new FileReader(filename), ' ', '\'');
 			//in = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			System.out.println("ExtensiveFormGame::CreateGameFromFile: File not found");
+			System.out.println("Game::CreateGameFromFile: File not found");
 			System.out.println("filename: " + filename);
 			System.exit(0);
 		}
@@ -297,7 +297,7 @@ public class Game implements GameGenerator {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("ExtensiveFormGame::CreateGameFromFile: Read exception");
+			System.out.println("Game::CreateGameFromFile: Read exception");
 		}
 		
 	}

@@ -310,8 +310,8 @@ public class LimitedLookaheadUncertaintySolver extends SequenceFormLPSolver {
         if (depth == lookAhead || node.isLeaf()) {
             int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
             IloLinearNumExpr expr = cplex.linearNumExpr();
-            expr.addTerm(-nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId],
-                         strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+            //expr.addTerm(-nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId],
+                         //strategyVarsBySequenceId[sequenceIdForRationalPlayer]); // TODO: comment this back in and fix it
             cplex.addToExpr(parentRange, expr);
             return;
         }
@@ -384,15 +384,16 @@ public class LimitedLookaheadUncertaintySolver extends SequenceFormLPSolver {
             int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
             // The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player
             IloLinearNumExpr nodeValueExpr = cplex.linearNumExpr();
-            nodeValueExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId],
-                                  strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
-
-            IloLinearNumExpr nodeActiveExpr = cplex.linearNumExpr();
-            nodeActiveExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId], parentSequence);
+//            nodeValueExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId],
+//                                  strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
+//
+//            IloLinearNumExpr nodeActiveExpr = cplex.linearNumExpr();
+//            nodeActiveExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationMean[currentNodeId], parentSequence);
+            // TODO: comment the above back in and fix it
             // the nodeValueVar is equal to the value of the node
             cplex.addLe(nodeValueVar, nodeValueExpr, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
             // but it is only active if the parent sequence is active
-            cplex.addLe(nodeValueVar, nodeActiveExpr, "NodeActive;"+incentivizedName+"("+node.getNodeId()+")");
+            //cplex.addLe(nodeValueVar, nodeActiveExpr, "NodeActive;"+incentivizedName+"("+node.getNodeId()+")"); // TODO comment back in
 
             // finally, we add the value of the node to the expression representing the value of the incentivized action
             actionExpr.addTerm(1, nodeValueVar);
@@ -459,11 +460,12 @@ public class LimitedLookaheadUncertaintySolver extends SequenceFormLPSolver {
 
     private void computeMaxEvaluationForAction(int nodeId, int sequenceId, int depth) {
         Node node = game.getNodeById(nodeId);
-        if (depth == lookAhead || node.isLeaf()) {
-            if (nodeEvaluationMean[nodeId] > maxEvaluationValueForSequence[sequenceId])
-                maxEvaluationValueForSequence[sequenceId] = nodeEvaluationMean[nodeId];
-            return;
-        }
+//        if (depth == lookAhead || node.isLeaf()) {
+//            if (nodeEvaluationMean[nodeId] > maxEvaluationValueForSequence[sequenceId])
+//                maxEvaluationValueForSequence[sequenceId] = nodeEvaluationMean[nodeId];
+//            return;
+//        }
+        // TODO comment above back in and fix.
 
         for (Action action : node.getActions()) {
             computeMaxEvaluationForAction(action.getChildId(), sequenceId, depth+1);

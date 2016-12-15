@@ -16,7 +16,7 @@ import ilog.concert.IloNumVar;
 
 /**
  * This die-roll poker class assumes that the Game instance contains a DRP game where each player rolls one private die, betting happens, and then they each roll another private die, followed by betting
- * A symmetric abstraction is computed, satisfying the constraints specified in Kroer & Sandholm 14: Extensive-Form Game Imperfect-Recall Abstractions with Bounds, such that an abstraction with bounded solution quality is found 
+ * A symmetric abstraction is computed, satisfying the constraints specified in Kroer & Sandholm 16: Extensive-Form Game Imperfect-Recall Abstractions with Bounds, such that an abstraction with bounded solution quality is found 
  * @author Christian Kroer
  * TODO: currently computes abstractions only for the second level
  */
