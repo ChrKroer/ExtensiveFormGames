@@ -129,6 +129,7 @@ public class DieRollPokerAbstractor extends GurobiSolver implements Abstractor {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
 			costVariablesSecondRoll[firstRoll][secondRoll] = model.addVar(0.0, 2*game.getLargestPayoff(), 0.0, GRB.CONTINUOUS, "Cost("+firstRoll+";"+secondRoll+")");
 		}}
+		model.update();
 		bucketLevelSwitch = new GRBVar[numAbstractionInformationSets];
 	}
 
@@ -136,7 +137,7 @@ public class DieRollPokerAbstractor extends GurobiSolver implements Abstractor {
 		for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
 			bucketLevelSwitch[bucket] = model.addVar(0, 1, 0, GRB.BINARY, "S("+bucket+")");
 		}
-		
+	    model.update();
 	}
 
 	private void createSecondRollAbstractionVars() throws GRBException {
@@ -149,6 +150,7 @@ public class DieRollPokerAbstractor extends GurobiSolver implements Abstractor {
 				expr.addTerm(1, secondRollAbstractionVariables[firstRoll][secondRoll][bucket]);
 				//addBucketLevelSwitchConstraint(secondRollAbstractionVariables[firstRoll][secondRoll][bucket], bucket, true);
 			}
+			model.update();
 			model.addConstr(expr, '=', 1, "");
 		}}
 	}
@@ -172,6 +174,7 @@ public class DieRollPokerAbstractor extends GurobiSolver implements Abstractor {
 		for (int side = 1; side <= numSides; side++) {
 			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
 				firstRollAbstractionVariables[side][bucket] = model.addVar(0,1,0, GRB.BINARY,"B("+side+";"+bucket+")");
+				model.update();
 				addBucketLevelSwitchConstraint(firstRollAbstractionVariables[side][bucket], bucket, true);
 			}
 		}

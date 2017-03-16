@@ -423,6 +423,7 @@ public class BestResponseLPSolver extends ZeroSumGameSolver {
 			for (Action action : node.getActions()) {
 				// real-valued variable in (0,1)
                 GRBVar v = model.addVar(0, 1, 0, GRB.CONTINUOUS, "X" + node.getInformationSet() + action.getName());
+                model.update();
 				strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
 				int sequenceId = getSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName());
 				strategyVarsBySequenceId[sequenceId] = v;

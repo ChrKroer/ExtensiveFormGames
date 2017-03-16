@@ -400,6 +400,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
             for (Action action : node.getActions()) {
                 // real-valued variable in (0,1)
                 GRBVar v = model.addVar(0, 1, 0, GRB.CONTINUOUS, "X" + node.getInformationSet() + action.getName());
+                model.update();
                 strategyVarsByInformationSet[node.getInformationSet()].put(action.getName(), v);
                 int sequenceId = getSequenceIdForPlayerToSolveFor(node.getInformationSet(), action.getName());
                 strategyVarsBySequenceId[sequenceId] = v;
@@ -437,6 +438,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
         Arrays.fill(lb, -Double.MAX_VALUE);
         Arrays.fill(types, GRB.CONTINUOUS);
         this.dualVars = model.addVars(lb, null, null, types, names);
+        model.update();
 
 
         InitializeDualSequenceMatrix();
