@@ -20,6 +20,7 @@ import gurobi.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -406,7 +407,7 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
                 sum.addTerm(1, v);
                 CreateSequenceFormVariablesAndConstraints(action.getChildId(), v, visited);
             }
-            // sum_{sequences} = parent_sequence. gurobi.addEq returns a reference to the range object describing the constraint. This is useful for dynamically modifying the model in derived classes.
+            // sum_{sequences} = parent_sequence. addConstr returns a reference to the range object describing the constraint. This is useful for dynamically modifying the model in derived classes.
             primalConstraints.put(node.getInformationSet(), model.addConstr(sum, '=', parentSequence,"Primal"+node.getInformationSet()));
         } else {
             for (Action action : node.getActions()) {
@@ -431,7 +432,11 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
         }
         String[] names = new String[numVars];
         for (int i = 0; i < numVars; i++) names[i] = "Y" + i;
-        this.dualVars = model.addVars(numVars, GRB.CONTINUOUS);
+        double[] lb = new double[numVars];
+        char[] types = new char[numVars];
+        Arrays.fill(lb, -Double.MAX_VALUE);
+        Arrays.fill(types, GRB.CONTINUOUS);
+        this.dualVars = model.addVars(lb, null, null, types, names);
 
 
         InitializeDualSequenceMatrix();
@@ -501,7 +506,6 @@ public class SequenceFormLPSolver extends ZeroSumGameSolver {
             lhs.addTerm(valueMultiplier, dualVars[informationSetId]);
         }
 
-        //IloLinearNumExpr rhs = gurobi.linearNumExpr();
         TIntDoubleIterator it = dualPayoffMatrix[sequenceId].iterator();
         for ( int i = dualPayoffMatrix[sequenceId].size(); i-- > 0; ) {
             it.advance();
