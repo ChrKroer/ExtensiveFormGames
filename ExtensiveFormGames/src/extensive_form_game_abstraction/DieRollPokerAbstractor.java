@@ -3,15 +3,10 @@ package extensive_form_game_abstraction;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import cplex.CplexSolver;
+import gurobi.GurobiSolver;
+import gurobi.*;
 import extensive_form_game.Game;
 import extensive_form_game.GameGenerator;
-import ilog.concert.IloException;
-import ilog.concert.IloIntExpr;
-import ilog.concert.IloIntVar;
-import ilog.concert.IloLinearIntExpr;
-import ilog.concert.IloLinearNumExpr;
-import ilog.concert.IloNumVar;
 
 
 /**
@@ -20,7 +15,7 @@ import ilog.concert.IloNumVar;
  * @author Christian Kroer
  * TODO: currently computes abstractions only for the second level
  */
-public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
+public class DieRollPokerAbstractor extends GurobiSolver implements Abstractor {
 
 	GameGenerator game;
 	int numSides;
@@ -32,12 +27,12 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 
 	
 	// Indexed as [roll value][bucket]
-	IloIntVar[][] firstRollAbstractionVariables;
+	GRBVar[][] firstRollAbstractionVariables;
 	// Indexed as [first roll ][second roll][bucket]
-	IloIntVar[][][] secondRollAbstractionVariables;
+	GRBVar[][][] secondRollAbstractionVariables;
 	// boolean variables designating whether bucket i is a bucket for private cards (bucketLevelSwitch[i] == 0) or public cards (bucketLevelSwitch[i] == 1) 
-	IloIntVar[] bucketLevelSwitch;
-	IloNumVar costVariablesSecondRoll[][];
+	GRBVar[] bucketLevelSwitch;
+	GRBVar costVariablesSecondRoll[][];
 	
 	int[][] informationSetMapping;
 	int[][][] actionMapping;
@@ -67,13 +62,13 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			addObjectiveCostSecondRoll();
 			addCostsToObjective();
 			//createTieBreakingConstraints();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			cplex.addMinimize(objective);
-		} catch (IloException e) {
+			model.setObjective(objective, GRB.MINIMIZE);
+		} catch (GRBException e) {
 			e.printStackTrace();
 		}
 	}
@@ -105,11 +100,11 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 			for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
 				try {
-					if (cplex.getValue(secondRollAbstractionVariables[firstRoll][secondRoll][bucket]) > 1-cplexEpsilon) {
+					if (secondRollAbstractionVariables[firstRoll][secondRoll][bucket].get(GRB.DoubleAttr.X) > 1-cplexEpsilon) {
 						ArrayList<Integer> signals = new ArrayList<Integer>(Arrays.asList(firstRoll-1, secondRoll-1));
 						buckets[bucket].add(signals);
 					}
-				} catch (IloException e) {
+				} catch (GRBException e) {
 					e.printStackTrace();
 				}
 			}}
@@ -126,74 +121,74 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		return abstraction;
 	}
 	
-	private void initializeDataStructures() throws IloException {
-		firstRollAbstractionVariables = new IloIntVar[numSides+1][numAbstractionInformationSets];
-		secondRollAbstractionVariables = new IloIntVar[numSides+1][numSides+1][numAbstractionInformationSets];
-		costVariablesSecondRoll = new IloNumVar[numSides+1][numSides+1];
+	private void initializeDataStructures() throws GRBException {
+		firstRollAbstractionVariables = new GRBVar[numSides+1][numAbstractionInformationSets];
+		secondRollAbstractionVariables = new GRBVar[numSides+1][numSides+1][numAbstractionInformationSets];
+		costVariablesSecondRoll = new GRBVar[numSides+1][numSides+1];
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
-			costVariablesSecondRoll[firstRoll][secondRoll] = cplex.numVar(0, 2*game.getLargestPayoff(), "Cost("+firstRoll+";"+secondRoll+")");
+			costVariablesSecondRoll[firstRoll][secondRoll] = model.addVar(0.0, 2*game.getLargestPayoff(), 0.0, GRB.CONTINUOUS, "Cost("+firstRoll+";"+secondRoll+")");
 		}}
-		bucketLevelSwitch = new IloIntVar[numAbstractionInformationSets];
+		bucketLevelSwitch = new GRBVar[numAbstractionInformationSets];
 	}
 
-	private void createBucketLevelSwitchVars() throws IloException {
+	private void createBucketLevelSwitchVars() throws GRBException {
 		for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
-			bucketLevelSwitch[bucket] = cplex.boolVar("S("+bucket+")");
+			bucketLevelSwitch[bucket] = model.addVar(0, 1, 0, GRB.BINARY, "S("+bucket+")");
 		}
 		
 	}
 
-	private void createSecondRollAbstractionVars() throws IloException {
+	private void createSecondRollAbstractionVars() throws GRBException {
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
-			IloLinearNumExpr expr = cplex.linearNumExpr();
+			GRBLinExpr expr = new GRBLinExpr();
 			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
-				secondRollAbstractionVariables[firstRoll][secondRoll][bucket] = cplex.boolVar("B("+firstRoll+";"+secondRoll+";"+bucket+")");
+				secondRollAbstractionVariables[firstRoll][secondRoll][bucket] = model.addVar(0,1,0, GRB.BINARY,"B("+firstRoll+";"+secondRoll+";"+bucket+")");
 				// Ensure that the variable is only added to one bucket
 				expr.addTerm(1, secondRollAbstractionVariables[firstRoll][secondRoll][bucket]);
 				//addBucketLevelSwitchConstraint(secondRollAbstractionVariables[firstRoll][secondRoll][bucket], bucket, true);
 			}
-			cplex.addEq(expr, 1);
+			model.addConstr(expr, '=', 1, "");
 		}}
 	}
 
-	private void createTieBreakingConstraints() throws IloException{
+	private void createTieBreakingConstraints() throws GRBException{
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 2; secondRoll <= numSides; secondRoll++) { // start at 2 so previous roll exists
 			for (int bucket = 1; bucket < numAbstractionInformationSets; bucket++) { // only constrain second bucket and higher
-				IloLinearNumExpr expr = cplex.linearNumExpr();
+				GRBLinExpr expr = new GRBLinExpr();
 				expr.addTerm(1, secondRollAbstractionVariables[firstRoll][secondRoll][bucket]);
 				for (int previousFirstRoll = 1; previousFirstRoll < firstRoll; previousFirstRoll++) {
 				for (int previousSecondRoll = 1; previousSecondRoll < secondRoll; previousSecondRoll++) {
 					expr.addTerm(-1, secondRollAbstractionVariables[previousFirstRoll][previousSecondRoll][bucket-1]);
 				}}
-				cplex.addLe(expr, 0);
+				model.addConstr(expr, GRB.LESS_EQUAL, 0, "");
 			}
 		}}
 	}
 	
-	private void createFirstRollAbstractionVars() throws IloException {
+	private void createFirstRollAbstractionVars() throws GRBException {
 		for (int side = 1; side <= numSides; side++) {
 			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
-				firstRollAbstractionVariables[side][bucket] = cplex.boolVar("B("+side+";"+bucket+")");
+				firstRollAbstractionVariables[side][bucket] = model.addVar(0,1,0, GRB.BINARY,"B("+side+";"+bucket+")");
 				addBucketLevelSwitchConstraint(firstRollAbstractionVariables[side][bucket], bucket, true);
 			}
 		}
 	}
 
 		
-	private void createFirstRollImplicationConstraints() throws IloException {
-		for (int firstRoll1 = 1; firstRoll1 <= numSides; firstRoll1++) {
-		for (int firstRoll2 = 1; firstRoll2 <= numSides; firstRoll2++) {
-			IloLinearIntExpr expr = cplex.linearIntExpr();
-			//expr.addTerm(arg0, arg1);
-		}}
-		
-	}
+//	private void createFirstRollImplicationConstraints() throws GRBException {
+//		for (int firstRoll1 = 1; firstRoll1 <= numSides; firstRoll1++) {
+//		for (int firstRoll2 = 1; firstRoll2 <= numSides; firstRoll2++) {
+//			GRBLinExpr expr = new GRBLinExpr();
+//			//expr.addTerm(arg0, arg1);
+//		}}
+//
+//	}
 
 	// firstRoll/secondRoll denotes the first and second die roll for the same info set. The 1 or 2 after denotes different info sets
-	private void addObjectiveCostSecondRoll() throws IloException {
+	private void addObjectiveCostSecondRoll() throws GRBException {
 		for (int firstRoll1 = 1; firstRoll1 <= numSides; firstRoll1++) {
 		for (int secondRoll1 = 1; secondRoll1 <= numSides; secondRoll1++) {
 		for (int firstRoll2 = 1; firstRoll2 <= numSides; firstRoll2++) {
@@ -202,12 +197,12 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			for (int bucket = 0; bucket < numAbstractionInformationSets; bucket++) {
 			
 				//objective.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
-				IloLinearNumExpr expr = cplex.linearNumExpr();
+				GRBLinExpr expr = new GRBLinExpr();
 				expr.addTerm(cost, secondRollAbstractionVariables[firstRoll1][secondRoll1][bucket]);
 				expr.addTerm(cost, secondRollAbstractionVariables[firstRoll2][secondRoll2][bucket]);
-				expr.setConstant(-cost);
-				cplex.addLe(expr, costVariablesSecondRoll[firstRoll1][secondRoll1]);
-				cplex.addLe(expr, costVariablesSecondRoll[firstRoll2][secondRoll2]);
+				expr.addConstant(-cost);
+				model.addConstr(expr, GRB.LESS_EQUAL, costVariablesSecondRoll[firstRoll1][secondRoll1], "");
+				model.addConstr(expr, GRB.LESS_EQUAL, costVariablesSecondRoll[firstRoll2][secondRoll2], "");
 			}
 		}}}}		
 	}
@@ -266,7 +261,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		return factor;
 	}
 	
-	private void addCostsToObjective() throws IloException {
+	private void addCostsToObjective() throws GRBException {
 		for (int firstRoll = 1; firstRoll <= numSides; firstRoll++) {
 		for (int secondRoll = 1; secondRoll <= numSides; secondRoll++) {
 		//for (int bucket = 0; bucket <= numAbstractionInformationSets; bucket++) {
@@ -274,8 +269,8 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 		}}
 	}
 	
-	private void addBucketLevelSwitchConstraint(IloIntVar var, int bucket, boolean isPublic) throws IloException {
-		IloLinearIntExpr expr = cplex.linearIntExpr();
+	private void addBucketLevelSwitchConstraint(GRBVar var, int bucket, boolean isPublic) throws GRBException {
+		GRBLinExpr expr = new GRBLinExpr();
 		if (isPublic) {
 			expr.addTerm(2, var);
 			expr.addTerm(-1, bucketLevelSwitch[bucket]);
@@ -283,7 +278,7 @@ public class DieRollPokerAbstractor extends CplexSolver implements Abstractor {
 			expr.addTerm(1, var);
 			expr.addTerm(1, bucketLevelSwitch[bucket]);
 		}
-		cplex.addLe(expr, 1);
+		model.addConstr(expr, GRB.LESS_EQUAL, 1, "");
 	}
 	
 	@Override
