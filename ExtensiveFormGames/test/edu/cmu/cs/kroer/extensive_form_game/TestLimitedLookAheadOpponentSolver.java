@@ -1,19 +1,20 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
-import ilog.concert.IloException;
-
+import gurobi.GRBException;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.random.MersenneTwister;
-import org.junit.Test;
 
 import extensive_form_game.Game;
 import extensive_form_game_solver.LimitedLookAheadOpponentSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestLimitedLookAheadOpponentSolver {
 
@@ -29,7 +30,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -49,7 +50,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -69,7 +70,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -91,7 +92,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -111,7 +112,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -131,7 +132,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -151,7 +152,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -171,7 +172,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.solveGame();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -229,7 +230,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		solver.printGameValue();
 		try {
 			solver.printSequenceActivationValues();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			e.printStackTrace();
 		}
 		assertEquals(solverP2.getValueOfGame(), solver.getValueOfGame(), TestConfiguration.epsilon);
@@ -339,7 +340,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		try {
 			solver.printSequenceActivationValues();
 			solver.printGameValue();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -371,7 +372,7 @@ public class TestLimitedLookAheadOpponentSolver {
 		try {
 			solver.printSequenceActivationValues();
 			solver.printGameValue();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -1,13 +1,13 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import extensive_form_game.Game;
 import extensive_form_game_solver.BestResponseLPSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestBestResponseLPSolver {
 	Game miniKuhnGame;
@@ -22,7 +22,7 @@ public class TestBestResponseLPSolver {
 	Game dieRollPoker3;
 	Game dieRollPoker6;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		miniKuhnGame = new Game();
 		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");		

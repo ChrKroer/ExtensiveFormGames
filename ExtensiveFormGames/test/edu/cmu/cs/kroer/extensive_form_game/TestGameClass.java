@@ -1,11 +1,13 @@
 package edu.cmu.cs.kroer.extensive_form_game;
-import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.junit.Test;
 
 import extensive_form_game.Game;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class TestGameClass {

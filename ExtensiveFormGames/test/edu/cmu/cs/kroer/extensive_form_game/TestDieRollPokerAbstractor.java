@@ -1,17 +1,17 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import extensive_form_game.Game;
 import extensive_form_game_abstraction.DieRollPokerAbstractor;
 import extensive_form_game_abstraction.SignalAbstraction;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /*
@@ -23,7 +23,7 @@ public class TestDieRollPokerAbstractor {
 	Game correlatedDieRollPoker3Private;
 	Game correlatedDieRollPoker6Private;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		dieRollPoker3Private = new Game();
 		dieRollPoker3Private.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "drp-3_private.txt");

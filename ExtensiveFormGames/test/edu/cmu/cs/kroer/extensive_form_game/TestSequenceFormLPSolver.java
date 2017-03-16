@@ -1,8 +1,7 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
-import static org.junit.Assert.*;
-
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import extensive_form_game.Game;
 import extensive_form_game.Game.Action;
@@ -10,6 +9,8 @@ import extensive_form_game.Game.Node;
 import extensive_form_game_solver.BestResponseLPSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TObjectDoubleMap;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestSequenceFormLPSolver {
 	Game miniKuhnGame;
@@ -30,7 +31,7 @@ public class TestSequenceFormLPSolver {
 	Game dieRollPoker6Private;
 	
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		miniKuhnGame = new Game();
 		miniKuhnGame.createGameFromFileZerosumPackageFormat(TestConfiguration.zerosumGamesFolder + "mini_kuhn.txt");		

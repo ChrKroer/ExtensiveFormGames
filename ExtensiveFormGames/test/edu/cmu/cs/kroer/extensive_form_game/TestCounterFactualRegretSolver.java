@@ -1,11 +1,7 @@
 package edu.cmu.cs.kroer.extensive_form_game;
 
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import extensive_form_game.Game;
 import extensive_form_game_abstraction.DieRollPokerAbstractor;
@@ -14,6 +10,11 @@ import extensive_form_game_solver.BestResponseLPSolver;
 import extensive_form_game_solver.CounterFactualRegretSolver;
 import extensive_form_game_solver.SequenceFormLPSolver;
 import gnu.trove.map.TIntDoubleMap;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestCounterFactualRegretSolver {
 	Game miniKuhnGame;
@@ -37,7 +38,7 @@ public class TestCounterFactualRegretSolver {
 	Game correlatedDieRollPoker3Private; 
 
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		//TestConfiguration.epsilon = 0;
 		miniKuhnGame = new Game();
