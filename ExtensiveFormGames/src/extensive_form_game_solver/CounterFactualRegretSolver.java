@@ -55,35 +55,6 @@ public class CounterFactualRegretSolver extends ZeroSumGameSolver {
 		return game.computeGameValueForStrategies(getStrategyProfile());
 	}
 	
-//	@Override
-//	public TObjectDoubleMap<String>[] getInformationSetActionProbabilities() {
-//		int numInformationSets = 1; 
-//		TObjectDoubleMap<String>[] map = new TObjectDoubleHashMap[numInformationSets];
-//		for (int informationSetId = 0; informationSetId < numInformationSets; informationSetId++) {
-//			map[informationSetId] = new TObjectDoubleHashMap<>();
-//			double sum = 0;
-//			int numActions = game.getNumActionsAtInformationSet(1, informationSetId);
-//			
-//			for (int action = 0; action < numActions; action++) {
-//				String actionName = game.
-//				try {
-//					sum += cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName));
-//				} catch (IloException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			for (String actionName : strategyVarsByInformationSet[informationSetId].keySet()) {
-//				if (sum > 0) {
-//					map[informationSetId].put(actionName, cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName)) / sum);
-//				} else {
-//					map[informationSetId].put(actionName, 0);
-//				}
-//			}
-//		}
-//		return map;
-//	}
-	
-	
 	public TIntDoubleMap[] getInformationSetActionProbabilitiesByActionId() {
 		return getInformationSetActionProbabilitiesByActionId(1);
 	}
