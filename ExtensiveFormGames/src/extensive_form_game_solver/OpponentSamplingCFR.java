@@ -5,13 +5,10 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 
-import edu.cmu.cs.kroer.extensive_form_game.TestConfiguration;
 import extensive_form_game.Game;
 import extensive_form_game.GameState;
 import gnu.trove.map.TIntDoubleMap;
-import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
-import gnu.trove.map.hash.TObjectDoubleHashMap;
 
 public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	int nature = 0;
@@ -64,14 +61,14 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 //			for (int action = 0; action < numActions; action++) {
 //				String actionName = game.
 //				try {
-//					sum += cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName));
-//				} catch (IloException e) {
+//					sum += gurobi.getValue(strategyVarsByInformationSet[informationSetId].get(actionName));
+//				} catch (GRBException e) {
 //					e.printStackTrace();
 //				}
 //			}
 //			for (String actionName : strategyVarsByInformationSet[informationSetId].keySet()) {
 //				if (sum > 0) {
-//					map[informationSetId].put(actionName, cplex.getValue(strategyVarsByInformationSet[informationSetId].get(actionName)) / sum);
+//					map[informationSetId].put(actionName, gurobi.getValue(strategyVarsByInformationSet[informationSetId].get(actionName)) / sum);
 //				} else {
 //					map[informationSetId].put(actionName, 0);
 //				}
@@ -202,7 +199,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	 * Dispatch method for performing an iteration. 
 	 * @param player
 	 * @param gs
-	 * @param iteration
 	 * @return
 	 */
 	private double traverseGameState(int player, GameState gs) {
@@ -225,7 +221,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	 * Perform iteration for updating player. This updates regrets.
 	 * @param player
 	 * @param gs
-	 * @param iteration
 	 * @return
 	 */
 	private double traverseGameStateForUpdatingPlayer(int player, GameState gs) {
@@ -281,7 +276,6 @@ public class OpponentSamplingCFR extends ZeroSumGameSolver {
 	 * Performs an iteration for the passive player. This method merely samples an action, updates the cumulative strategy, and recurses.
 	 * @param player
 	 * @param gs
-	 * @param iteration
 	 * @return
 	 */
 	private double traverseGameStateForPassivePlayer(int player, GameState gs) {
