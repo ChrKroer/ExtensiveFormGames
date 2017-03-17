@@ -12,22 +12,18 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
-import ilog.concert.IloException;
-import ilog.concert.IloLinearNumExpr;
-import ilog.concert.IloNumVar;
-import ilog.concert.IloRange;
-import ilog.cplex.IloCplex.UnknownObjectException;
+import gurobi.*;
 
 public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	
 	double[] nodeEvaluationTable;
 	int lookAhead;
 	
-	IloNumVar[] sequenceDeactivationVars; // Variables denoting whether a given sequence is deactivated
-	IloNumVar[] sequenceLookAheadVars;  // Variables denoting the choice of descendant sequences at depth i + k, for some non-deactivated sequence at depth i
-	IloNumVar[] informationSetValueVars; // Variables denoting the maximum utility achieved at an information set for the limited look ahead player
+	GRBVar[] sequenceDeactivationVars; // Variables denoting whether a given sequence is deactivated
+	GRBVar[] sequenceLookAheadVars;  // Variables denoting the choice of descendant sequences at depth i + k, for some non-deactivated sequence at depth i
+	GRBVar[] informationSetValueVars; // Variables denoting the maximum utility achieved at an information set for the limited look ahead player
 	
-	IloLinearNumExpr[] evaluationSum; // indexed as [dualSequenceId]. [dualSequenceId] contains a weighted sum over primal sequences that lead to to nodes k levels below the dual sequence, where the weights are the evaluation of the node(s) times the chance probability.
+	GRBLinExpr[] evaluationSum; // indexed as [dualSequenceId]. [dualSequenceId] contains a weighted sum over primal sequences that lead to to nodes k levels below the dual sequence, where the weights are the evaluation of the node(s) times the chance probability.
 	
 	double[] dualUpperBounds; // TODO: compute these, diagonal matrix M for deactivating dual constraints
 	double[] primalUpperBounds; // TODO: compute these, diagonal matrix M for deactivating primal incentive constraints
@@ -47,7 +43,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		this.epsilon = epsilon;
 		try {
 			setUpModel();
-		} catch (IloException e) {
+		} catch (GRBException e) {
 			System.out.println("LimitedLookAheadOpponentSolver error, setUpModel() exception");
 			e.printStackTrace();
 		}
@@ -67,43 +63,48 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 	}
 	
-	private void setUpModel() throws IloException {
+	private void setUpModel() throws GRBException {
 		initializeDataStructures();
 		
 		computeAuxiliaryInformationForNodes();
 		
 		createInformationSetValueVars();
-		createInformationSetValueConstraints();
 		createBooleanDualVars();
+		model.update();
+		createInformationSetValueConstraints();
 		computeMaxMinPayoff(game.getRoot());
 		computeMaxEvaluation();
 		
 		addDualConstraintRemoval();
 		addPrimalIncentiveConstraints();
-		cplex.addEq(sequenceDeactivationVars[0], 0);
+		model.addConstr(sequenceDeactivationVars[0], '=', 0, "");
 		CreateDeactivationSequenceFormConstraints(game.getRoot(), sequenceDeactivationVars[0], new TIntHashSet());
 	}
 	
 	private void initializeDataStructures() {
 		maxPayoff = -Double.MAX_VALUE;
 		minPayoff = Double.MAX_VALUE;
-		//sequenceDeactivationVars = new IloNumVar[getNumDualSequences()];
-		//sequenceLookAheadVars = new IloNumVar[getNumDualSequences()];		
+		//sequenceDeactivationVars = new GRBVar[getNumDualSequences()];
+		//sequenceLookAheadVars = new GRBVar[getNumDualSequences()];
 		dualUpperBounds = new double[getNumDualSequences()];
 		maxEvaluationValueForSequence = new double[getNumDualSequences()];
 		for (int dualSequence = 0; dualSequence < getNumDualSequences(); dualSequence++) maxEvaluationValueForSequence[dualSequence] = -Double.MAX_VALUE;
 	}
 	
-	public void printSequenceActivationValues() throws UnknownObjectException, IloException {
+	public void printSequenceActivationValues() throws GRBException {
 		for (int i = 1; i < numDualSequences; i++) {
-			System.out.println("D" + dualSequenceNames[i] + " = " + cplex.getValue(sequenceDeactivationVars[i]));
+			System.out.println("D" + dualSequenceNames[i] + " = " + sequenceDeactivationVars[i].get(GRB.DoubleAttr.X));
 		}
 	}
 	
-	private void createInformationSetValueVars() throws IloException {
+	private void createInformationSetValueVars() throws GRBException {
 		String[] names = new String[numDualInformationSets];
 		for (int i = 0; i < numDualInformationSets; i++) names[i] = "V" + i;
-		informationSetValueVars = cplex.numVarArray(numDualInformationSets, -Double.MAX_VALUE, Double.MAX_VALUE, names);
+		double[] lb = new double[numDualInformationSets];
+		char[] types = new char[numDualInformationSets];
+		Arrays.fill(lb, -Double.MAX_VALUE);
+		Arrays.fill(types, GRB.CONTINUOUS);
+		informationSetValueVars = model.addVars(lb, null, null, types, names);
 	}
 	
 	private void createInformationSetValueConstraints() {
@@ -129,44 +130,48 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 	}
 	
-	private void createBooleanDualVars() throws IloException {
+	private void createBooleanDualVars() throws GRBException {
 		String[] namesDeactivationVars = new String[numDualSequences];
 		String[] namesLookAheadVars = new String[numDualSequences];
 		for (int i = 0; i < numDualSequences; i++) {
 			namesDeactivationVars[i] = "D" + dualSequenceNames[i];
 			namesLookAheadVars[i] = "T" + dualSequenceNames[i];
 		}
-		sequenceDeactivationVars = cplex.boolVarArray(numDualSequences, namesDeactivationVars);
-		sequenceLookAheadVars = cplex.boolVarArray(numDualSequences, namesLookAheadVars);
+		double[] lb = new double[numDualSequences];
+		char[] types = new char[numDualSequences];
+		Arrays.fill(lb, 0);
+		Arrays.fill(types, GRB.BINARY);
+		sequenceDeactivationVars = model.addVars(lb, null, null, types, namesDeactivationVars);
+		sequenceLookAheadVars = model.addVars(lb, null, null, types, namesLookAheadVars);
 	}
 	
-	private void CreateDeactivationSequenceFormConstraints(int currentNodeId, IloNumVar parentSequence, TIntSet visited) throws IloException{
+	private void CreateDeactivationSequenceFormConstraints(int currentNodeId, GRBVar parentSequence, TIntSet visited) throws GRBException{
 		Node node = game.getNodeById(currentNodeId);
 		if (node.isLeaf()) return;
 		
 		if (node.getPlayer() == playerNotToSolveFor && !visited.contains(node.getInformationSet())) {
 			visited.add(node.getInformationSet());
-			IloLinearNumExpr sum = cplex.linearNumExpr();
+			GRBLinExpr sum = new GRBLinExpr();
 			//sum.addTerm(-1, parentSequence);
 			for (Action action : node.getActions()) {
 				// real-valued variable in (0,1)
 				int sequenceId = getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName());
-				IloNumVar v = sequenceDeactivationVars[sequenceId];
+				GRBVar v = sequenceDeactivationVars[sequenceId];
 				// add 1*v to the sum over all the sequences at the information set
 				sum.addTerm(1, v);
 				CreateDeactivationSequenceFormConstraints(action.getChildId(), v, visited);
-				cplex.addGe(v, parentSequence);
+				model.addConstr(v, GRB.GREATER_EQUAL, parentSequence, "");
 			}
 			// if parent sequence is deactived, it subtracts one from the sum
 			sum.addTerm(-1, parentSequence);
 			// if parent sequence is NOT deactivated, this requires at least one action to not be deactivated
-			cplex.addLe(sum, node.getActions().length - 1);
+			model.addConstr(sum, GRB.LESS_EQUAL, node.getActions().length - 1, "");
 		} else {
 			for (Action action : node.getActions()) {
 				if (node.getPlayer() == playerNotToSolveFor) {
 					// update parentSequence to be the current sequence
 					int sequenceId = getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName());
-					IloNumVar v = sequenceDeactivationVars[sequenceId]; 
+					GRBVar v = sequenceDeactivationVars[sequenceId];
 					CreateDeactivationSequenceFormConstraints(action.getChildId(), v, visited);
 				} else {
 					CreateDeactivationSequenceFormConstraints(action.getChildId(), parentSequence, visited);
@@ -176,67 +181,68 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	}
 
 	
-	private void addDualConstraintRemoval() throws IloException {
+	private void addDualConstraintRemoval() throws GRBException {
 		// Start at 1, we do not want to deactivate the empty sequence
 		for (int sequenceId = 1; sequenceId < numDualSequences; sequenceId++) {
 			// expr represents the term (-maxPayoff * sequenceDeactivationsVars[sequenceId])
-			IloLinearNumExpr expr = cplex.linearNumExpr();
+//			GRBLinExpr expr = new GRBLinExpr();
 			double biggestDifferential = maxPayoff - minPayoff;
-			expr.addTerm(biggestDifferential, sequenceDeactivationVars[sequenceId]);
+//			expr.addTerm(biggestDifferential, sequenceDeactivationVars[sequenceId]);
 			// adds the term to the existing dual constraint representing the sequence
-			cplex.addToExpr(dualConstraints.get(sequenceId), expr);
+//			cplex.addToExpr(dualConstraints.get(sequenceId), expr);
+			model.chgCoeff(dualConstraints.get(sequenceId), sequenceDeactivationVars[sequenceId], biggestDifferential);
 		}
 	}
 	
 	/**
 	 * Outer method that loops over all informationSetIds and action pairs for the limited look-ahead player.
-	 * @throws IloException
+	 * @throws GRBException
 	 */
-	private void addPrimalIncentiveConstraints() throws IloException {
-		for (int informationSetId = game.getSmallestInformationSetId(playerNotToSolveFor); informationSetId < (numDualInformationSets + game.getSmallestInformationSetId(playerNotToSolveFor)); informationSetId++) {
-			// We need to access the set of actions available at the information set. To do this, we loop over node.actions on the (arbitrarily picked) first node in the information set.
-			int idOfFirstNodeInSet = game.getInformationSet(playerNotToSolveFor, informationSetId).get(0);
-			Node firstNodeInSet = game.getNodeById(idOfFirstNodeInSet);
-			// Dynamic programming table for expressions representing dominated actions
-			HashMap<Action, IloLinearNumExpr> dominatedActionExpressionTable = new HashMap<Action, IloLinearNumExpr>();
-			for (Action incentivizedAction : firstNodeInSet.getActions()) {
-				// get expr representing value of chosen action
-				IloLinearNumExpr incentiveExpr = getIncentivizedActionExpression(informationSetId, incentivizedAction);
-				
-				IloLinearNumExpr incentiveConstraintLHS = cplex.linearNumExpr();
-				incentiveConstraintLHS.add(incentiveExpr);
-				
-				int incentiveSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
-				// ensure that expression is only active if the sequence is chosen
-				//incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
-		
-				
-				for (Action dominatedAction : firstNodeInSet.getActions()) {
-					if (!incentivizedAction.equals(dominatedAction)) {
-						// get expr representing value of dominated action
-						IloLinearNumExpr dominatedExpr = getDominatedActionExpression(informationSetId, dominatedAction, dominatedActionExpressionTable);
-						IloLinearNumExpr incentiveConstraintRHS = cplex.linearNumExpr();
-						incentiveConstraintRHS.add(dominatedExpr);
-						
-						int dominatedSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, dominatedAction.getName());
-						// ensure that expression is only active is the sequence is deactivated
-						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId]+this.epsilon, sequenceDeactivationVars[dominatedSequenceId]);
-						incentiveConstraintRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
-						// TODO: something needs to be flipped here. Perhaps it needs to be LB of other side
-						incentiveConstraintRHS.setConstant(-maxEvaluationValueForSequence[dominatedSequenceId]);
-						cplex.addGe(incentiveConstraintLHS, incentiveConstraintRHS, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
-						
-						// add constraint requiring equality if both sequences are chosen to be incentivized, here we add one side of the two weak inequalities enforcing equality, since the other direction is also iterated over
-						IloLinearNumExpr equalityRHS = cplex.linearNumExpr();
-						equalityRHS.add(dominatedExpr);
-						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
-						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
-						cplex.addGe(incentiveExpr, equalityRHS, "quality("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
-					}
-				}
-			}
-		}
-	}
+//	private void addPrimalIncentiveConstraints() throws GRBException {
+//		for (int informationSetId = game.getSmallestInformationSetId(playerNotToSolveFor); informationSetId < (numDualInformationSets + game.getSmallestInformationSetId(playerNotToSolveFor)); informationSetId++) {
+//			// We need to access the set of actions available at the information set. To do this, we loop over node.actions on the (arbitrarily picked) first node in the information set.
+//			int idOfFirstNodeInSet = game.getInformationSet(playerNotToSolveFor, informationSetId).get(0);
+//			Node firstNodeInSet = game.getNodeById(idOfFirstNodeInSet);
+//			// Dynamic programming table for expressions representing dominated actions
+//			HashMap<Action, GRBLinExpr> dominatedActionExpressionTable = new HashMap<Action, GRBLinExpr>();
+//			for (Action incentivizedAction : firstNodeInSet.getActions()) {
+//				// get expr representing value of chosen action
+//				GRBLinExpr incentiveExpr = getIncentivizedActionExpression(informationSetId, incentivizedAction);
+//
+//				GRBLinExpr incentiveConstraintLHS = new GRBLinExpr();
+//				incentiveConstraintLHS.add(incentiveExpr);
+//
+//				int incentiveSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
+//				// ensure that expression is only active if the sequence is chosen
+//				//incentiveConstraintLHS.addTerm(maxEvaluationValueForSequence[incentiveSequenceId]+this.epsilon, sequenceDeactivationVars[incentiveSequenceId]);
+//
+//
+//				for (Action dominatedAction : firstNodeInSet.getActions()) {
+//					if (!incentivizedAction.equals(dominatedAction)) {
+//						// get expr representing value of dominated action
+//						GRBLinExpr dominatedExpr = getDominatedActionExpression(informationSetId, dominatedAction, dominatedActionExpressionTable);
+//						GRBLinExpr incentiveConstraintRHS = new GRBLinExpr();
+//						incentiveConstraintRHS.add(dominatedExpr);
+//
+//						int dominatedSequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, dominatedAction.getName());
+//						// ensure that expression is only active if the sequence is deactivated
+//						incentiveConstraintRHS.addTerm(maxEvaluationValueForSequence[dominatedSequenceId]+this.epsilon, sequenceDeactivationVars[dominatedSequenceId]);
+//						incentiveConstraintRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
+//						// TODO: something needs to be flipped here. Perhaps it needs to be LB of other side
+//						incentiveConstraintRHS.setConstant(-maxEvaluationValueForSequence[dominatedSequenceId]);
+//						cplex.addGe(incentiveConstraintLHS, incentiveConstraintRHS, "PrimalIncentive("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
+//
+//						// add constraint requiring equality if both sequences are chosen to be incentivized, here we add one side of the two weak inequalities enforcing equality, since the other direction is also iterated over
+//						GRBLinExpr equalityRHS = new GRBLinExpr();
+//						equalityRHS.add(dominatedExpr);
+//						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[dominatedSequenceId]);
+//						equalityRHS.addTerm(-maxEvaluationValueForSequence[dominatedSequenceId], sequenceDeactivationVars[incentiveSequenceId]);
+//						cplex.addGe(incentiveExpr, equalityRHS, "quality("+informationSetId+";"+incentivizedAction.getName()+";"+dominatedAction.getName()+")");
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	/**
 	 * Using dynamic programming, this method computes an expression representing the value of a given action not chosen to be made optimal. This is done by creating an expression whose value is the sum of the value of descendant information sets under the action, according to the evaulation function and strategy for the rational player
@@ -244,17 +250,17 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	 * @param dominatedAction the action to compute a value expression for
 	 * @param dominatedActionExpressionTable dynamic programming table
 	 * @return expression that represents the value of the action
-	 * @throws IloException
+	 * @throws GRBException
 	 */
-	private IloLinearNumExpr getDominatedActionExpression(int informationSetId, Action dominatedAction, HashMap<Action,IloLinearNumExpr> dominatedActionExpressionTable) throws IloException {
+	private GRBLinExpr getDominatedActionExpression(int informationSetId, Action dominatedAction, HashMap<Action,GRBLinExpr> dominatedActionExpressionTable) throws GRBException {
 		if (dominatedActionExpressionTable.containsKey(dominatedAction)) {
 			return dominatedActionExpressionTable.get(dominatedAction);
 		} else {
 			// this expression represents the value of dominatedAction
-			IloLinearNumExpr expr = cplex.linearNumExpr();
-			//TIntObjectMap<IloNumVar> informationSetToVariableMap = new TIntObjectHashMap<IloNumVar>();
+			GRBLinExpr expr = new GRBLinExpr();
+			//TIntObjectMap<GRBVar> informationSetToVariableMap = new TIntObjectHashMap<GRBVar>();
 			TIntObjectMap<HashMap<String, IloRange>> rangeMap = new TIntObjectHashMap<HashMap<String, IloRange>>();
-			IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "DomActionValue;"+Integer.toString(informationSetId) + dominatedAction.getName());
+			GRBVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "DomActionValue;"+Integer.toString(informationSetId) + dominatedAction.getName());
 			expr.addTerm(1, actionValueVar);
 			IloRange range = cplex.addGe(actionValueVar, 0, actionValueVar.getName());
 			// Iterate over nodes in information set and add value of each node for dominatedAction
@@ -278,11 +284,11 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 	}
 	
-	private void fillDominatedActionRange(IloRange parentRange, int currentNodeId, TIntObjectMap<HashMap<String, IloRange>> rangeMap, int depth, String dominatedName) throws IloException {
+	private void fillDominatedActionRange(IloRange parentRange, int currentNodeId, TIntObjectMap<HashMap<String, IloRange>> rangeMap, int depth, String dominatedName) throws GRBException {
 		Node node = game.getNodeById(currentNodeId);
 		if (depth == lookAhead || node.isLeaf()) {
 			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
-			IloLinearNumExpr expr = cplex.linearNumExpr();
+			GRBLinExpr expr = new GRBLinExpr();
 			expr.addTerm(-nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
 			cplex.addToExpr(parentRange, expr);
 			return;
@@ -290,9 +296,9 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		
 		if (node.getPlayer() == playerNotToSolveFor && !rangeMap.containsKey(node.getInformationSet())) {
 			// Create information set var and action expressions
-			IloNumVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "InfoValueVar;"+dominatedName+"("+node.getInformationSet()+")");
+			GRBVar informationSetValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "InfoValueVar;"+dominatedName+"("+node.getInformationSet()+")");
 			// Add information set value var to the expression describing the value of the parent action
-			IloLinearNumExpr infoValueExpr = cplex.linearNumExpr();
+			GRBLinExpr infoValueExpr = new GRBLinExpr();
 			infoValueExpr.addTerm(-1, informationSetValueVar);
 			cplex.addToExpr(parentRange, infoValueExpr);
 			
@@ -308,7 +314,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 
 		for (Action action : node.getActions()) {
-			//IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
+			//GRBLinExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
 			IloRange newParentRange = node.getPlayer() == playerNotToSolveFor ? rangeMap.get(node.getInformationSet()).get(action.getName()) : parentRange;
 			fillDominatedActionRange(newParentRange, action.getChildId(), rangeMap, depth+1, dominatedName);
 		}
@@ -316,16 +322,16 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	
 
 	
-	private IloLinearNumExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws IloException {
-		IloLinearNumExpr actionExpr = cplex.linearNumExpr(); 
+	private GRBLinExpr getIncentivizedActionExpression(int informationSetId, Action incentivizedAction) throws GRBException {
+		GRBLinExpr actionExpr = new GRBLinExpr();
 		int sequenceId = getSequenceIdForPlayerNotToSolveFor(informationSetId, incentivizedAction.getName());
 		
 		// Iterate over nodes in information set
 		double maxHeuristicAtNode = 0;
-		TIntObjectMap<HashMap<String, IloNumVar>> exprMap = new TIntObjectHashMap<HashMap<String, IloNumVar>>();
+		TIntObjectMap<HashMap<String, GRBVar>> exprMap = new TIntObjectHashMap<HashMap<String, GRBVar>>();
 		TIntArrayList informationSet = game.getInformationSet(playerNotToSolveFor, informationSetId);
 		
-		//IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "IncActionValue;"+Integer.toString(informationSetId) + incentivizedAction.getName());
+		//GRBVar actionValueVar = gurobi.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "IncActionValue;"+Integer.toString(informationSetId) + incentivizedAction.getName());
 		//actionExpr.addTerm(1, actionValueVar);
 
 		for (int i = 0; i < informationSet.size(); i++) {
@@ -335,8 +341,8 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			for (Action action : node.getActions()) {
 				if (action.getName().equals(incentivizedAction.getName())) incentiveActionForNode = action;
 			}
-			IloNumVar actionActiveVar = cplex.boolVar("ActionActive" + Integer.toString(informationSetId) + incentivizedAction.getName());
-			IloLinearNumExpr notDeactivatedExpr = cplex.linearNumExpr();
+			GRBVar actionActiveVar = cplex.boolVar("ActionActive" + Integer.toString(informationSetId) + incentivizedAction.getName());
+			GRBLinExpr notDeactivatedExpr = new GRBLinExpr();
 			notDeactivatedExpr.addTerm(-1, sequenceDeactivationVars[sequenceId]);
 			notDeactivatedExpr.setConstant(1);
 			cplex.addEq(actionActiveVar, notDeactivatedExpr, "NotDeactivated");
@@ -349,16 +355,16 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		return actionExpr;
 	}
 
-	private void fillIncentivizedActionExpression(IloLinearNumExpr actionExpr, IloNumVar parentSequence, int currentNodeId, TIntObjectMap<HashMap<String, IloNumVar>> varActiveMap, int depth, String incentivizedName) throws IloException {
+	private void fillIncentivizedActionExpression(GRBLinExpr actionExpr, GRBVar parentSequence, int currentNodeId, TIntObjectMap<HashMap<String, GRBVar>> varActiveMap, int depth, String incentivizedName) throws GRBException {
 		Node node = game.getNodeById(currentNodeId);
 		if (depth == lookAhead || node.isLeaf()) {
-			IloNumVar nodeValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
+			GRBVar nodeValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
 			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
 			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player
-			IloLinearNumExpr nodeValueExpr = cplex.linearNumExpr();
+			GRBLinExpr nodeValueExpr = new GRBLinExpr();
 			nodeValueExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
 			
-			IloLinearNumExpr nodeActiveExpr = cplex.linearNumExpr();
+			GRBLinExpr nodeActiveExpr = new GRBLinExpr();
 			nodeActiveExpr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], parentSequence);
 			// the nodeValueVar is equal to the value of the node
 			cplex.addLe(nodeValueVar, nodeValueExpr, "NodeVal;"+incentivizedName+"("+node.getNodeId()+")");
@@ -373,10 +379,10 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		boolean visitedInformationSet = varActiveMap.containsKey(node.getInformationSet());
 		
 		if (node.getPlayer() == playerNotToSolveFor && !visitedInformationSet) {
-			HashMap<String,IloNumVar> actionMap = new HashMap<String,IloNumVar>();
-			IloLinearNumExpr sum = cplex.linearNumExpr();
+			HashMap<String,GRBVar> actionMap = new HashMap<String,GRBVar>();
+			GRBLinExpr sum = new GRBLinExpr();
 			for (Action action : node.getActions()) {
-				IloNumVar actionActiveVar = cplex.boolVar("ActionActive" + incentivizedName + node.getInformationSet() + action.getName());
+				GRBVar actionActiveVar = cplex.boolVar("ActionActive" + incentivizedName + node.getInformationSet() + action.getName());
 				// actionActiveVars should sum to 1
 				sum.addTerm(1, actionActiveVar);
 				// actionValueVar represents the value of the action according to the heuristic evaluation k steps ahead
@@ -387,7 +393,7 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 			varActiveMap.put(node.getInformationSet(), actionMap);
 		}
 		for (Action action : node.getActions()) {
-			IloNumVar newParentSequence= node.getPlayer() == playerNotToSolveFor ? varActiveMap.get(node.getInformationSet()).get(action.getName()) : parentSequence;
+			GRBVar newParentSequence= node.getPlayer() == playerNotToSolveFor ? varActiveMap.get(node.getInformationSet()).get(action.getName()) : parentSequence;
 			fillIncentivizedActionExpression(actionExpr, newParentSequence, action.getChildId(), varActiveMap, depth+1, incentivizedName);
 		}
 	}
@@ -398,9 +404,9 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 	 * @param currentNodeId
 	 * @param exprMap
 	 * @param depth
-	 * @throws IloException
+	 * @throws GRBException
 	 */
-	/*private void fillIncentivizedActionExpr(IloLinearNumExpr actionExpr, int currentNodeId, TIntObjectMap<HashMap<String, IloLinearNumExpr>> exprMap, int depth, String incentivizedName) throws IloException {
+	/*private void fillIncentivizedActionExpr(GRBLinExpr actionExpr, int currentNodeId, TIntObjectMap<HashMap<String, GRBLinExpr>> exprMap, int depth, String incentivizedName) throws GRBException {
 		Node node = game.getNodeById(currentNodeId);
 		if (depth == lookAhead || node.isLeaf()) {
 			addLookAheadDepthEvaluationValueToExpression(actionExpr, currentNodeId);
@@ -409,34 +415,34 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		boolean visited = exprMap.containsKey(node.getInformationSet());
 		
 		if (node.getPlayer() == playerNotToSolveFor && !visited) {
-			HashMap<String,IloLinearNumExpr> actionMap = new HashMap<String,IloLinearNumExpr>();
-			IloLinearNumExpr sum = cplex.linearNumExpr();
+			HashMap<String,GRBLinExpr> actionMap = new HashMap<String,GRBLinExpr>();
+			GRBLinExpr sum = gurobi.linearNumExpr();
 			for (Action action : node.getActions()) {
-				IloNumVar actionActiveVar = cplex.boolVar();
+				GRBVar actionActiveVar = gurobi.boolVar();
 				// actionActiveVars should sum to 1
 				sum.addTerm(1, actionActiveVar);
 				// actionValueVar represents the value of the action according to the heuristic evaluation k steps ahead
-				IloNumVar actionValueVar = cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Inc;"+incentivizedName+"("+node.getInformationSet()+";"+action.getName()+")");
+				GRBVar actionValueVar = gurobi.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, "Inc;"+incentivizedName+"("+node.getInformationSet()+";"+action.getName()+")");
 				actionExpr.addTerm(1, actionValueVar);
 				
 				// Expression that takes on value 0 or M, where M is a sufficiently large constant to enable the full value of the action when active
-				IloLinearNumExpr valueExpr = cplex.linearNumExpr();
+				GRBLinExpr valueExpr = gurobi.linearNumExpr();
 				valueExpr.addTerm(maxEvaluationValueForSequence[getSequenceIdForPlayerNotToSolveFor(node.getInformationSet(), action.getName())], actionActiveVar);
 				
 				// Force the real-valued actionValueVar to take on a non-zero value only if actionActiveVar == 1
-				cplex.addLe(actionValueVar, valueExpr);
+				gurobi.addLe(actionValueVar, valueExpr);
 				
 				// Create a new actionExpr to recurse on and let actionValueVar be bounded by its value  
-				IloLinearNumExpr newActionExpr = cplex.linearNumExpr();
-				cplex.addLe(actionValueVar, newActionExpr);
+				GRBLinExpr newActionExpr = gurobi.linearNumExpr();
+				gurobi.addLe(actionValueVar, newActionExpr);
 				actionMap.put(action.getName(), newActionExpr);
 			}
 			// actionActiveVars should sum to 1
-			cplex.addEq(sum, 1);
+			gurobi.addEq(sum, 1);
 			exprMap.put(node.getInformationSet(), actionMap);
 		}
 		for (Action action : node.getActions()) {
-			IloLinearNumExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
+			GRBLinExpr newActionExpr = node.getPlayer() == playerNotToSolveFor ? exprMap.get(node.getInformationSet()).get(action.getName()) : actionExpr;
 				
 			fillIncentivizedActionExpr(newActionExpr, action.getChildId(), exprMap, depth+1, incentivizedName);
 
@@ -447,17 +453,17 @@ public class LimitedLookAheadOpponentSolver extends SequenceFormLPSolver {
 		}
 	}*/
 
-	/*private void addLookAheadDepthEvaluationValueToRange(IloRange range, int currentNodeId) throws IloException {
+	/*private void addLookAheadDepthEvaluationValueToRange(IloRange range, int currentNodeId) throws GRBException {
 			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
 			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player 
 			//expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
-			IloLinearNumExpr expr = cplex.linearNumExpr();
+			GRBLinExpr expr = gurobi.linearNumExpr();
 			expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
-			cplex.addToExpr(range, expr);
+			gurobi.addToExpr(range, expr);
 	}
 	
 	
-	private void addLookAheadDepthEvaluationValueToExpression(IloLinearNumExpr expr, int currentNodeId) throws IloException {
+	private void addLookAheadDepthEvaluationValueToExpression(GRBLinExpr expr, int currentNodeId) throws GRBException {
 			int sequenceIdForRationalPlayer = playerToSolveFor == 1? sequenceIdForNodeP1[currentNodeId] : sequenceIdForNodeP2[currentNodeId];
 			// The heuristic value of a node for the limited look-ahead player is the evaluationTable value, weighted by probability of reaching the node, over both nature and the rational player 
 			expr.addTerm(nodeNatureProbabilities[currentNodeId] * nodeEvaluationTable[currentNodeId], strategyVarsBySequenceId[sequenceIdForRationalPlayer]);
